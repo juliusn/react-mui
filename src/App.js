@@ -1,10 +1,10 @@
 import "./App.css";
-import { Button } from "@mui/material";
+import ResponsiveAppBar from "./AppBar";
 
 function App() {
   return (
     <div className="App">
-      <Button variant="contained">Hello World</Button>
+      <ResponsiveAppBar />
     </div>
   );
 }
