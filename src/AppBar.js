@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -7,17 +8,21 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
+import { AccountCircle } from "@mui/icons-material";
+import { ButtonGroup } from "@mui/material";
+import { logout } from "./firebase";
+import { useUserProfileContext } from "./UserContextProvider";
 
-const pages = ["Products", "Pricing", "Blog"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const pages = ["Page 1", "Page 2", "Page 3"];
 
 const ResponsiveAppBar = () => {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const { userProfile, loadingUserProfile } = useUserProfileContext();
+  const title = "Application";
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -44,9 +49,8 @@ const ResponsiveAppBar = () => {
             component="div"
             sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
           >
-            LOGO
+            {title}
           </Typography>
-
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -87,9 +91,9 @@ const ResponsiveAppBar = () => {
             variant="h6"
             noWrap
             component="div"
-            sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
+            sx={{ flexGrow: 1, display: { xs: "block", md: "none" } }}
           >
-            LOGO
+            {title}
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
@@ -104,33 +108,58 @@ const ResponsiveAppBar = () => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+            {loadingUserProfile ? (
+              <IconButton size="large" disabled color="inherit" sx={{ p: 0 }}>
+                <AccountCircle />
               </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+            ) : userProfile ? (
+              <>
+                <Tooltip title={userProfile.name}>
+                  <IconButton
+                    size="large"
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    color="inherit"
+                    onClick={handleOpenUserMenu}
+                    sx={{ p: 0 }}
+                  >
+                    <AccountCircle />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  <MenuItem key="logout" onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center" onClick={logout}>
+                      Logout
+                    </Typography>
+                  </MenuItem>
+                </Menu>
+              </>
+            ) : (
+              <ButtonGroup variant="text" aria-label="text button group">
+                <Button color="inherit" href="/">
+                  Login
+                </Button>
+                <Button color="inherit" href="/register">
+                  Register
+                </Button>
+              </ButtonGroup>
+            )}
           </Box>
         </Toolbar>
       </Container>
