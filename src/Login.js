@@ -37,15 +37,15 @@ function Login() {
   useEffect(() => {
     if (error) {
       switch (error.code) {
-        case "auth/user-not-found":
-          alert("This email has not been registered.");
-          break;
-        case "auth/wrong-password":
-          alert("Wrong password.");
-          break;
-        default:
-          console.error(error.code, error.message);
-          alert(`Error code "${error.code}". Message: ${error.message}`);
+      case "auth/user-not-found":
+        alert("This email has not been registered.");
+        break;
+      case "auth/wrong-password":
+        alert("Wrong password.");
+        break;
+      default:
+        console.error(error.code, error.message);
+        alert(`Error code "${error.code}". Message: ${error.message}`);
       }
     }
   }, [authUser, error, navigate]);
@@ -94,7 +94,7 @@ function Login() {
               <Link to="/reset">Forgot Password?</Link>
             </div>
             <div>
-              Don't have an account? <Link to="/register">Register here.</Link>
+              Don`&apos;`t have an account? <Link to="/register">Register here.</Link>
             </div>
           </Stack>
         </form>

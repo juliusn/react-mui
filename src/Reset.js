@@ -54,7 +54,7 @@ function Reset() {
               <LinearProgress />
             </Fade>
             <div>
-              Don't have an account? <Link to="/register">Register here.</Link>
+              Don`&apos;`t have an account? <Link to="/register">Register here.</Link>
             </div>
           </Stack>
         </form>

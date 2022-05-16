@@ -26,12 +26,12 @@ function Register() {
   useEffect(() => {
     if (error) {
       switch (error.code) {
-        case "auth/email-already-in-use":
-          alert("A user with this email address has already been registered.");
-          break;
-        default:
-          console.log(error.code, error.message);
-          alert(`Error code "${error.code}". Message: ${error.message}`);
+      case "auth/email-already-in-use":
+        alert("A user with this email address has already been registered.");
+        break;
+      default:
+        console.log(error.code, error.message);
+        alert(`Error code "${error.code}". Message: ${error.message}`);
       }
     }
     if (userCredential && userName) {

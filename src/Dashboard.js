@@ -1,3 +1,4 @@
+import React from "react";
 import { logout } from "./firebase";
 import Button from "@mui/material/Button";
 import { Box, Container, Fade, LinearProgress, Paper, Stack } from "@mui/material";
