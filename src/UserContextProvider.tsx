@@ -1,21 +1,34 @@
-import React from "react";
-import { doc, onSnapshot } from "firebase/firestore";
-import { createContext, useContext, useEffect, useState } from "react";
+import { doc, onSnapshot, FirestoreError, DocumentSnapshot } from "firebase/firestore";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "./firebase";
 
-export const UserProfileContext = createContext({ userProfile: null, loadingUserProfile: true });
+interface UserProfileContextFields{
+  userProfile: UserProfileData | null
+  loadingUserProfile: boolean
+  error?: FirestoreError
+}
+export const UserProfileContext = createContext<UserProfileContextFields>({ userProfile: null, loadingUserProfile: true });
 
 export const useUserProfileContext = () => {
   const context = useContext(UserProfileContext);
   if (!context) throw new Error("useUserContext must be used within a UserContextProvider.");
   return context;
 };
-
-const UserProfileContextProvider = ({ children }) => {
-  const [userProfile, setUserProfile] = useState(null);
+interface UserProfileFields {
+  email: string
+  name: string
+}
+interface UserProfileData extends UserProfileFields {
+  id: string
+}
+interface UserProfileContextProviderProps {
+  children: React.ReactNode
+}
+const UserProfileContextProvider = ( { children }: UserProfileContextProviderProps) => {
+  const [userProfile, setUserProfile] = useState<UserProfileData|null>(null);
   const [loadingUserProfile, setLoadingUserProfile] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<FirestoreError|undefined>();
   const [authUser, loadingAuthState] = useAuthState(auth);
   const userProfileContext = { userProfile, loadingUserProfile, error };
 
@@ -23,20 +36,23 @@ const UserProfileContextProvider = ({ children }) => {
     if (loadingAuthState) return;
 
     if (!authUser) {
-      setUserProfile();
+      setUserProfile(null);
       setLoadingUserProfile(false);
       return;
     }
 
-    function handleNext(snapshot) {
+    function handleNext( snapshot : DocumentSnapshot<UserProfileFields>) {
+      const data = snapshot.data();
+      if(!data) return;
       setUserProfile({
         id: snapshot.id,
-        ...snapshot.data(),
+        name: data.email,
+        email: data.name,
       });
       setLoadingUserProfile(false);
     }
 
-    function handleError(error) {
+    function handleError(error: FirestoreError) {
       setLoadingUserProfile(false);
       setError(error);
     }
