@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "module": "commonjs",
+    "isolatedModules": true,
+    "noUncheckedIndexedAccess": true,
+    "allowJs": true,
+    "strictFunctionTypes": false,
+    "jsx": "react",
+    "checkJs": false
+  },
+  "exclude": ["**/node_modules"],
+  "include": [".eslintrc.js", "./src/**/*"]
+}
