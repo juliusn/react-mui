@@ -92,7 +92,7 @@ function Login() {
                   <Link to="/reset">Forgot Password?</Link>
                 </div>
                 <div>
-                  Don`&#39`t have an account? <Link to="/register">Register here.</Link>
+                  Don&#39;t have an account? <Link to="/register">Register here.</Link>
                 </div>
               </Stack>
             </Form>
