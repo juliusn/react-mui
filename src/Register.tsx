@@ -128,7 +128,7 @@ function Register() {
                   <LinearProgress />
                 </Fade>
                 <div>
-                  Already have an account? <Link to="/">Login here.</Link>
+                  Already have an account? <Link to="/login">Login here.</Link>
                 </div>
               </Stack>
             </Form>

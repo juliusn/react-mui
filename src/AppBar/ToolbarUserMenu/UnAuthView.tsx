@@ -7,7 +7,7 @@ const UnAuthView = () => {
   const navigate = useNavigate();
   return(
     <ButtonGroup variant="text" aria-label="text button group">
-      <Button color="inherit" onClick={() => navigate("/")}>
+      <Button color="inherit" onClick={() => navigate("/login")}>
         Login
       </Button>
       <Button color="inherit" onClick={() => navigate("/register")}>

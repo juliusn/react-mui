@@ -9,18 +9,10 @@ import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import { useUserProfileContext } from "./UserContextProvider";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 
 function Dashboard() {
   const { userProfile, loadingUserProfile } = useUserProfileContext();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (loadingUserProfile) return;
-    if (!userProfile) {
-      navigate("/");
-    }
-  }, [userProfile, loadingUserProfile, navigate]);
 
   return (
     <Container maxWidth="sm" sx={{ pl: 0, pr: 0 }}>
@@ -43,7 +35,7 @@ function Dashboard() {
               disabled={loadingUserProfile}
               onClick={async () => {
                 await logout();
-                navigate("/");
+                navigate("/login");
               }}
             >
               Logout

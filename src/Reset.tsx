@@ -22,7 +22,7 @@ function Reset() {
   const reset = async ({ email }: FormData) => {
     await sendPasswordResetEmail(email);
     alert("Check your email and follow the provided link to reset your password.");
-    navigate("/");
+    navigate("/login");
   };
 
   useEffect(() => {
