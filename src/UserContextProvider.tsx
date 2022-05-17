@@ -19,7 +19,7 @@ interface UserProfileFields {
   email: string
   name: string
 }
-interface UserProfileData extends UserProfileFields {
+export interface UserProfileData extends UserProfileFields {
   id: string
 }
 interface UserProfileContextProviderProps {
