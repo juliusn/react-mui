@@ -1,7 +1,12 @@
 import React from "react";
 import { logout } from "./firebase";
 import Button from "@mui/material/Button";
-import { Box, Container, Fade, LinearProgress, Paper, Stack } from "@mui/material";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import Fade from "@mui/material/Fade";
+import LinearProgress from "@mui/material/LinearProgress";
+import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
 import { useUserProfileContext } from "./UserContextProvider";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";

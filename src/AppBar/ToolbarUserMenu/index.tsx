@@ -2,7 +2,7 @@ import React from "react";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import { useUserProfileContext } from "../../UserContextProvider";
-import { AccountCircle } from "@mui/icons-material";
+import AccountCircle from "@mui/icons-material/AccountCircle";
 import UnAuthView from "./UnAuthView";
 import AuthView from "./AuthView";
 
