@@ -18,7 +18,11 @@ const pages: PageFields[] = [
   {
     name: "Port Events",
     path: "/port-events",
-  }
+  },
+  {
+    name: "Ship Order",
+    path: "/ship-order",
+  },
 ];
 const ResponsiveAppBar = () => {
   const title = "Application";

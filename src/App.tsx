@@ -11,6 +11,7 @@ import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import theme from "./styles/Styles";
 import UserProfileContextProvider, { useUserProfileContext } from "./UserContextProvider";
+import ShipOrder from "./pages/ShipOrder";
 
 function App() {
   return (
@@ -57,6 +58,14 @@ function App() {
                 element={
                   <RequireAuth>
                     <Dashboard />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/ship-order"
+                element={
+                  <RequireAuth>
+                    <ShipOrder />
                   </RequireAuth>
                 }
               />
