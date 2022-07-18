@@ -2,9 +2,7 @@ import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
-import SmallDisplay from "./SmallDisplay";
-import BigDisplay from "./BigDisplay";
-import ToolbarUserMenu from "./ToolbarUserMenu";
+import MediumDisplay from "./MediumDisplay";
 
 export interface PageFields {
   name: string
@@ -30,10 +28,8 @@ const ResponsiveAppBar = () => {
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <SmallDisplay title={title} pages={pages} />
-          <BigDisplay title={title} pages={pages} />
-          <ToolbarUserMenu />
+        <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
+          <MediumDisplay title={title} pages={pages} />
         </Toolbar>
       </Container>
     </AppBar>
