@@ -25,12 +25,13 @@ export default function TemporaryDrawer({ pages } : { pages: PageFields[] }) {
       role="presentation"
       onClick={setClose}
       onKeyDown={setClose}
+      data-testid="drawer-listing"
     >
       <List>
         {pages.map(({ name, path }) => (
           <ListItem key={name} disablePadding>
             <ListItemButton onClick={() => handleNavigate(path)}>
-              <ListItemText primary={name} />
+              <ListItemText data-testid={`drawer-listing-item`} primary={name} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -39,7 +40,7 @@ export default function TemporaryDrawer({ pages } : { pages: PageFields[] }) {
   );
 
   return (
-    <div>
+    <div data-testid="drawer">
       <IconButton
         size="large"
         aria-label="account of current user"
@@ -47,6 +48,7 @@ export default function TemporaryDrawer({ pages } : { pages: PageFields[] }) {
         aria-haspopup="true"
         onClick={setOpen}
         color="inherit"
+        data-testid="drawer-button"
       >
         <MenuIcon />
       </IconButton>
