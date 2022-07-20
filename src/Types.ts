@@ -29,6 +29,7 @@ interface Palveluntarjoaja {
 export interface Order {
   id: number,
   dateBegin: string,
+  event: string,
   dateOrdered: string,
   description?: string,
   from: string,
@@ -54,14 +55,13 @@ export interface OrderTemplateValues {
 }
 export interface OrderTemplate {
   ship: string,
-  ETA: string,
+  dateBegin: string,
   port: string,
-  dock: string,
-  services: Service[],
+  dock?: string,
+  services?: Service[],
 }
 export interface Service {
-  id: number,
+  persons: number,
   place: string,
   service: string,
-  producer?: Palveluntarjoaja
 }

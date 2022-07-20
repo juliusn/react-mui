@@ -7,8 +7,64 @@ function getId() {
 }
 
 let orders: Order[] = [
-  { id: getId(), ship: "Mega Star", dateBegin: "16-6-2022 12:15", dateOrdered: "10-6-2022 09:00", status: false, from: "SFPS", port: "Länsisatama", dock: "LJ6" },
-  { id: getId(), ship: "Europa", dateBegin: "17-6-2022 16:00", dateOrdered:"10-6-2022 09:01", status: true, from: "SFPS", port: "Länsisatama", dock: "Lj6" },
+  {
+    id: getId(),
+    event:"Kiinnitys",
+    ship: "Mega Star",
+    dateBegin: "16/6/2022 12:15",
+    dateOrdered: "10/6/2022 09:00",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quis neque et ex feugiat fermentum. Pellentesque porta purus sed purus porttitor, ac dictum quam rutrum. Etiam ipsum lacus, semper accumsan mollis vitae, dignissim molestie odio. Nullam sed felis libero. Phasellus sed mauris id nisl elementum auctor. Praesent nisl justo, feugiat vel leo imperdiet, posuere faucibus eros. Sed sodales laoreet congue. Maecenas congue odio in efficitur pellentesque.",
+    status: false,
+    from: "SFPS",
+    port: "Länsisatama",
+    dock: "LJ6",
+    services:[
+      {
+        persons: 2,
+        place: "Silta",
+        service: "Sillan ajo"
+      },
+    ]
+  },
+  {
+    id: getId(),
+    event: "Kiinnitys",
+    ship: "Europa",
+    dateBegin: "17/6/2022 16:00",
+    dateOrdered:"10/6/2022 09:01",
+    status: true,
+    from: "SFPS",
+    port: "Länsisatama",
+    dock: "Lj6",
+    services:[
+      {
+        place: "Keula",
+        service: "Narut",
+        persons: 2
+      },
+      {
+        place: "Perä",
+        service: "Narut",
+        persons: 1
+      },
+      {
+        place: "Silta",
+        service: "Sillan ajo",
+        persons: 1
+      },
+    ]
+  },
+  {
+    id: getId(),
+    event: "Irrotus",
+    ship: "Europa",
+    dateBegin: "17/6/2022 18:30",
+    dateOrdered:"10/6/2022 09:01",
+    status: false,
+    from: "SFPS",
+    port: "Länsisatama",
+    dock: "Lj6",
+  }
 ];
 export const getOrders = () => orders;
 
@@ -19,43 +75,38 @@ const orderTemplates: OrderTemplateValues = {
   business_day: {
     templates: [
       {
+        dateBegin: "09:30",
         ship: "XPRS",
-        ETA: "09:30",
         port: "Katajanokka",
         dock: "EK5",
         services: [
           {
-            id: getId(),
+            persons: 2,
             place: "Keula",
             service: "Kiinnitys",
           },
           {
-            id: getId(),
-            place: "Keula",
+            persons: 1,
+            place: "Irrotus",
             service: "Irrotus",
           },
           {
-            id: getId(),
-            place: "Keula",
-            service: "Kiinnitys",
-          },
-          {
-            id: getId(),
+            persons: 1,
             place: "Silta",
             service: "Yläsillan ajo kiinni",
           },
           {
-            id: getId(),
+            persons:1,
             place: "Silta",
             service: "Yläsillan ajo irti",
           },
           {
-            id: getId(),
+            persons: 1,
             place: "Perä",
             service: "Irrotus",
           },
           {
-            id: getId(),
+            persons: 1,
             place: "Perä",
             service: "Kiinnitys",
           },
@@ -63,42 +114,37 @@ const orderTemplates: OrderTemplateValues = {
       },
       {
         ship: "XPRS",
-        ETA: "19:30",
+        dateBegin: "19:30",
         port: "Katajanokka",
         dock: "EK5",
         services: [
           {
-            id: getId(),
+            persons: 2,
             place: "Keula",
             service: "Kiinnitys",
           },
           {
-            id: getId(),
+            persons: 1,
             place: "Keula",
             service: "Irrotus",
           },
           {
-            id: getId(),
-            place: "Keula",
-            service: "Kiinnitys",
-          },
-          {
-            id: getId(),
+            persons: 1,
             place: "Silta",
             service: "Yläsillan ajo kiinni",
           },
           {
-            id: getId(),
+            persons: 1,
             place: "Silta",
             service: "Yläsillan ajo irti",
           },
           {
-            id: getId(),
+            persons: 1,
             place: "Perä",
             service: "Irrotus",
           },
           {
-            id: getId(),
+            persons: 1,
             place: "Perä",
             service: "Kiinnitys",
           },
@@ -106,32 +152,32 @@ const orderTemplates: OrderTemplateValues = {
       },
       {
         ship: "Finlandia",
-        ETA: "8:15",
+        dateBegin: "8:15",
         port: "Länsisatama",
         dock: "LJ6",
         services: [
           {
-            id: getId(),
+            persons: 1,
             place: "Liikenteenohjaus",
             service: "Liput",
           },
           {
-            id: getId(),
+            persons: 1,
             place: "Liikenteenohjaus",
             service: "Rekat",
           },
           {
-            id: getId(),
+            persons: 1,
             place: "Liikenteenohjaus",
             service: "Henkilöautot",
           },
           {
-            id: getId(),
+            persons: 1,
             place: "Silta",
             service: "Sillan ajo kiinni",
           },
           {
-            id: getId(),
+            persons: 1,
             place: "Silta",
             service: "Sillan ajo irti",
           },
