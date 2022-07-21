@@ -11,28 +11,85 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Chip from "@mui/material/Chip";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import IconButton from "@mui/material/IconButton";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+
 import { Order, Service } from "../../Types";
 
+interface RowMenuProps {
+  anchorEl : null | HTMLElement
+  onClose: () => void
+}
+const RowMenu = ({ anchorEl, onClose }: RowMenuProps ) => {
+  const menuOpen = Boolean(anchorEl);
 
+  return(
+    <Menu
+      anchorEl={anchorEl}
+      open={menuOpen}
+      onClose={onClose}
+    >
+      <MenuItem>
+        <ListItemIcon>
+          <EditIcon />
+        </ListItemIcon>
+        <ListItemText>Muokkaa tilausta</ListItemText>
+      </MenuItem>
+      <MenuItem>
+        <ListItemIcon>
+          <DeleteIcon />
+        </ListItemIcon>
+        <ListItemText>Poista tilaus</ListItemText>
+      </MenuItem>
+    </Menu>
+  );
+};
 function Row({ ship, event, dateOrdered, description, from, status, port, dock, services, dateBegin }: Order) {
   const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   //eslint-disable-next-line
   const serviceProviders = services ? services.map<number>(a => a.persons).reduce<number>((a,c) => c + a, 0 as number) : 0;
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
     <React.Fragment>
       <TableRow
         sx={{ "& > *": { borderBottom: "unset" } }}
-        onClick={() => setOpen((a) => !a)}
       >
-        <TableCell> {ship} </TableCell>
-        <TableCell> {dateOrdered} </TableCell>
-        <TableCell> {status? <Chip  color="success" label="Hyväksytty" />:<Chip color="warning" label="Odottaa"/>} </TableCell>
-        <TableCell> {from} </TableCell>
-        <TableCell> {dateBegin} </TableCell>
-        <TableCell> {port} </TableCell>
-        <TableCell> {dock} </TableCell>
-        <TableCell> {event} </TableCell>
-        <TableCell> {serviceProviders} </TableCell>
+        <TableCell>
+          <IconButton
+            onClick={() => setOpen((a) => !a)}
+          >
+            {open ? <ExpandLessIcon /> : <ExpandMoreIcon /> }
+          </IconButton>
+        </TableCell>
+        <TableCell>{ship} </TableCell>
+        <TableCell>{dateOrdered} </TableCell>
+        <TableCell>{status? <Chip  color="success" label="Hyväksytty" />:<Chip color="warning" label="Odottaa"/>} </TableCell>
+        <TableCell>{from} </TableCell>
+        <TableCell>{dateBegin} </TableCell>
+        <TableCell>{port} </TableCell>
+        <TableCell>{dock} </TableCell>
+        <TableCell>{event} </TableCell>
+        <TableCell>{serviceProviders} </TableCell>
+        <TableCell>
+          <IconButton onClick={handleClick}><MoreVertIcon /></IconButton>
+          <RowMenu anchorEl={anchorEl}
+            onClose={handleClose} />
+        </TableCell>
       </TableRow>
       <TableRow>
         <CollapsibleCell description={description} services={services} open={open}/>
@@ -44,7 +101,7 @@ function Row({ ship, event, dateOrdered, description, from, status, port, dock, 
 const CollapsibleCell = ({ services, open, description } : { description?: string, open: boolean, services: Service[]|undefined }) => {
 
   return (
-    <TableCell padding="none" style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={9}>
+    <TableCell padding="none" style={{  borderBottom: "unset", paddingBottom: 0, paddingTop: 0 }} colSpan={11}>
       <Collapse  in={open} timeout="auto" unmountOnExit>
         <Paper sx={{ elevation: 5, margin: 2 }} >
           <Grid sx={{ padding: 2,  marginTop: 3, marginBottom: 2 }} container>
@@ -97,6 +154,7 @@ export default function CollapsibleTable({ orders } :{ orders : Order[] }) {
       <Table aria-label="collapsible table">
         <TableHead>
           <TableRow>
+            <TableCell></TableCell>
             <TableCell>Alus</TableCell>
             <TableCell>Tilattu</TableCell>
             <TableCell>Tila</TableCell>
@@ -106,6 +164,7 @@ export default function CollapsibleTable({ orders } :{ orders : Order[] }) {
             <TableCell>Laituri</TableCell>
             <TableCell>Tapahtuma</TableCell>
             <TableCell>Aluspalvelut</TableCell>
+            <TableCell></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
