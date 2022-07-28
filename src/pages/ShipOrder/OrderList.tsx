@@ -6,9 +6,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Divider from "@mui/material/Divider";
 import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Chip from "@mui/material/Chip";
 import Menu from "@mui/material/Menu";
@@ -21,6 +19,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import DividedCard from "../../components/DividedCard";
 
 import { Order, Service } from "../../Types";
 
@@ -104,8 +103,8 @@ const CollapsibleCell = ({ services, open, description } : { description?: strin
     <TableCell padding="none" style={{  borderBottom: "unset", paddingBottom: 0, paddingTop: 0 }} colSpan={11}>
       <Collapse  in={open} timeout="auto" unmountOnExit>
         <Paper sx={{ elevation: 5, margin: 2 }} >
-          <Grid sx={{ padding: 2,  marginTop: 3, marginBottom: 2 }} container>
-            <Grid item>
+          <DividedCard
+            left={
               <Table size="small" aria-label="services">
                 <TableHead>
                   <TableRow>
@@ -124,23 +123,20 @@ const CollapsibleCell = ({ services, open, description } : { description?: strin
                   ))}
                 </TableBody>
               </Table>
-            </Grid>
-            <Grid item xs={1}>
-              <Divider orientation={"vertical"}  />
-            </Grid>
-            <Grid item xs={1}/>
-            <Grid item xs={6}>
+            }
+            right={
               <TextField
                 id="standard-textarea"
                 label="Huomioitavaa"
                 multiline
+                rows={ description ? 6: 0}
                 fullWidth={ description ? true: false}
                 variant="standard"
                 value={description}
                 disabled
               />
-            </Grid>
-          </Grid>
+            }
+          />
         </Paper>
       </Collapse>
     </TableCell>

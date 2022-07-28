@@ -72,128 +72,152 @@ export const postOrder = ({ order } : {order: Order}) => orders = orders.concat(
 export const getOrderTemplates = () => orderTemplates;
 
 const orderTemplates: OrderTemplateValues = {
-  business_day: {
-    templates: [
-      {
-        dateBegin: "09:30",
-        ship: "XPRS",
-        port: "Katajanokka",
-        dock: "EK5",
-        services: [
-          {
-            persons: 2,
-            place: "Keula",
-            service: "Kiinnitys",
-          },
-          {
-            persons: 1,
-            place: "Irrotus",
-            service: "Irrotus",
-          },
-          {
-            persons: 1,
-            place: "Silta",
-            service: "Yläsillan ajo kiinni",
-          },
-          {
-            persons:1,
-            place: "Silta",
-            service: "Yläsillan ajo irti",
-          },
-          {
-            persons: 1,
-            place: "Perä",
-            service: "Irrotus",
-          },
-          {
-            persons: 1,
-            place: "Perä",
-            service: "Kiinnitys",
-          },
-        ]
-      },
-      {
-        ship: "XPRS",
-        dateBegin: "19:30",
-        port: "Katajanokka",
-        dock: "EK5",
-        services: [
-          {
-            persons: 2,
-            place: "Keula",
-            service: "Kiinnitys",
-          },
-          {
-            persons: 1,
-            place: "Keula",
-            service: "Irrotus",
-          },
-          {
-            persons: 1,
-            place: "Silta",
-            service: "Yläsillan ajo kiinni",
-          },
-          {
-            persons: 1,
-            place: "Silta",
-            service: "Yläsillan ajo irti",
-          },
-          {
-            persons: 1,
-            place: "Perä",
-            service: "Irrotus",
-          },
-          {
-            persons: 1,
-            place: "Perä",
-            service: "Kiinnitys",
-          },
-        ]
-      },
-      {
-        ship: "Finlandia",
-        dateBegin: "8:15",
-        port: "Länsisatama",
-        dock: "LJ6",
-        services: [
-          {
-            persons: 1,
-            place: "Liikenteenohjaus",
-            service: "Liput",
-          },
-          {
-            persons: 1,
-            place: "Liikenteenohjaus",
-            service: "Rekat",
-          },
-          {
-            persons: 1,
-            place: "Liikenteenohjaus",
-            service: "Henkilöautot",
-          },
-          {
-            persons: 1,
-            place: "Silta",
-            service: "Sillan ajo kiinni",
-          },
-          {
-            persons: 1,
-            place: "Silta",
-            service: "Sillan ajo irti",
-          },
-        ]
-      }
-    ]
-  },
-  friday: {
-    templates: []
-  },
-  saturday: {
-    templates: []
-  },
-  sunday: {
-    templates: []
-  },
-
-
+  business_day: [
+    {
+      dateBegin: "09:30",
+      ship: "XPRS",
+      port: "Katajanokka",
+      dock: "EK5",
+      services: [
+        {
+          persons: 2,
+          place: "Keula",
+          service: "Kiinnitys",
+        },
+        {
+          persons: 1,
+          place: "Irrotus",
+          service: "Irrotus",
+        },
+        {
+          persons: 1,
+          place: "Silta",
+          service: "Yläsillan ajo kiinni",
+        },
+        {
+          persons:1,
+          place: "Silta",
+          service: "Yläsillan ajo irti",
+        },
+        {
+          persons: 1,
+          place: "Perä",
+          service: "Irrotus",
+        },
+        {
+          persons: 1,
+          place: "Perä",
+          service: "Kiinnitys",
+        },
+      ]
+    },
+    {
+      ship: "XPRS",
+      dateBegin: "19:30",
+      port: "Katajanokka",
+      dock: "EK5",
+      services: [
+        {
+          persons: 2,
+          place: "Keula",
+          service: "Kiinnitys",
+        },
+        {
+          persons: 1,
+          place: "Keula",
+          service: "Irrotus",
+        },
+        {
+          persons: 1,
+          place: "Silta",
+          service: "Yläsillan ajo kiinni",
+        },
+        {
+          persons: 1,
+          place: "Silta",
+          service: "Yläsillan ajo irti",
+        },
+        {
+          persons: 1,
+          place: "Perä",
+          service: "Irrotus",
+        },
+        {
+          persons: 1,
+          place: "Perä",
+          service: "Kiinnitys",
+        },
+      ]
+    },
+    {
+      ship: "Finlandia",
+      dateBegin: "8:15",
+      port: "Länsisatama",
+      dock: "LJ6",
+      services: [
+        {
+          persons: 1,
+          place: "Liikenteenohjaus",
+          service: "Liput",
+        },
+        {
+          persons: 1,
+          place: "Liikenteenohjaus",
+          service: "Rekat",
+        },
+        {
+          persons: 1,
+          place: "Liikenteenohjaus",
+          service: "Henkilöautot",
+        },
+        {
+          persons: 1,
+          place: "Silta",
+          service: "Sillan ajo kiinni",
+        },
+        {
+          persons: 1,
+          place: "Silta",
+          service: "Sillan ajo irti",
+        },
+      ]
+    }
+  ],
+  friday: [
+    {
+      ship: "Finlandia",
+      dateBegin: "8:15",
+      port: "Länsisatama",
+      dock: "LJ6",
+      services: [
+        {
+          persons: 1,
+          place: "Liikenteenohjaus",
+          service: "Liput",
+        },
+        {
+          persons: 1,
+          place: "Liikenteenohjaus",
+          service: "Rekat",
+        },
+        {
+          persons: 1,
+          place: "Liikenteenohjaus",
+          service: "Henkilöautot",
+        },
+        {
+          persons: 1,
+          place: "Silta",
+          service: "Sillan ajo kiinni",
+        },
+        {
+          persons: 1,
+          place: "Silta",
+          service: "Sillan ajo irti",
+        },
+      ]
+    }
+  ],
+  saturday: [],
+  sunday: []
 };

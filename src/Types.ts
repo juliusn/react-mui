@@ -22,10 +22,6 @@ export interface LaituriTieto {
   laituri?: string
 }
 
-interface Palveluntarjoaja {
-  nimi: string
-  // ...
-}
 export interface Order {
   id: number,
   dateBegin: string,
@@ -40,18 +36,10 @@ export interface Order {
   services?: Service[],
 }
 export interface OrderTemplateValues {
-  business_day: {
-    templates: OrderTemplate[]
-  },
-  friday: {
-    templates: OrderTemplate[]
-  },
-  saturday: {
-    templates: OrderTemplate[]
-  },
-  sunday: {
-    templates: OrderTemplate[]
-  }
+  business_day: OrderTemplate[],
+  friday: OrderTemplate[],
+  saturday: OrderTemplate[],
+  sunday: OrderTemplate[]
 }
 export interface OrderTemplate {
   ship: string,

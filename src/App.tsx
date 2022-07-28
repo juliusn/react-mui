@@ -12,6 +12,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import theme from "./styles/Styles";
 import UserProfileContextProvider, { useUserProfileContext } from "./UserContextProvider";
 import ShipOrder from "./pages/ShipOrder";
+import NewShipOrderForm from "./pages/ShipOrder/NewOrderForm";
 
 function App() {
   return (
@@ -61,14 +62,24 @@ function App() {
                   </RequireAuth>
                 }
               />
-              <Route
-                path="/ship-order"
-                element={
-                  <RequireAuth>
-                    <ShipOrder />
-                  </RequireAuth>
-                }
-              />
+              <Route>
+                <Route
+                  path="/ship-order"
+                  element={
+                    <RequireAuth>
+                      <ShipOrder />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="/create"
+                  element={
+                    <RequireAuth>
+                      <NewShipOrderForm />
+                    </RequireAuth>
+                  }
+                />
+              </Route>
               <Route
                 path="*"
                 element={<Navigate to="/dashboard" replace />}
