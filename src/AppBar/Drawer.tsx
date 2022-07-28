@@ -31,7 +31,7 @@ export default function TemporaryDrawer({ pages } : { pages: PageFields[] }) {
         {pages.map(({ name, path }) => (
           <ListItem key={name} disablePadding>
             <ListItemButton onClick={() => handleNavigate(path)}>
-              <ListItemText data-testid={`drawer-listing-item`} primary={name} />
+              <ListItemText data-testid={"drawer-listing-item"} primary={name} />
             </ListItemButton>
           </ListItem>
         ))}
