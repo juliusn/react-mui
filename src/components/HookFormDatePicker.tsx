@@ -24,7 +24,7 @@ export default function HookFormDatePicker<TFormValues>({ control, name, rules, 
   return(
     <LocalizationProvider
       dateAdapter={AdapterDateFns}
-      locale={locale}
+      adapterLocale={locale}
     >
       <DatePicker
         inputFormat="dd/MM/yyyy"
