@@ -10,7 +10,6 @@ if (locale && locale.options) {
   locale.options.weekStartsOn = 1;
 }
 
-
 type HookFormDatePickerProps<TFormValues> = TextFieldProps & {
   control: Control<TFormValues>;
   name: Path<TFormValues>;
