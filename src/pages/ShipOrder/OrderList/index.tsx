@@ -19,9 +19,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import DividedCard from "../../components/DividedCard";
-
-import { Order, Service } from "../../Types";
+import DividedCard from "../../../components/DividedCard";
+import { Order, Service } from "../../../Types";
 
 interface RowMenuProps {
   anchorEl : null | HTMLElement

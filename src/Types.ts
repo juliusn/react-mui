@@ -43,13 +43,15 @@ export interface OrderTemplateValues {
 }
 export interface OrderTemplate {
   ship: string,
-  dateBegin: string,
+  time: string,
   port: string,
   dock?: string,
-  services?: Service[],
+  event: string,
+  services: Service[],
 }
 export interface Service {
   persons: number,
   place: string,
   service: string,
+  readiness: number,
 }

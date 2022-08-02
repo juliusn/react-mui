@@ -22,7 +22,9 @@ let orders: Order[] = [
       {
         persons: 2,
         place: "Silta",
-        service: "Sillan ajo"
+        service: "Sillan ajo",
+        readiness: 15
+
       },
     ]
   },
@@ -40,17 +42,22 @@ let orders: Order[] = [
       {
         place: "Keula",
         service: "Narut",
-        persons: 2
+        persons: 2,
+        readiness: 15
       },
       {
         place: "Perä",
         service: "Narut",
-        persons: 1
+        persons: 1,
+        readiness: 15
+
       },
       {
         place: "Silta",
         service: "Sillan ajo",
-        persons: 1
+        persons: 1,
+        readiness: 15
+
       },
     ]
   },
@@ -74,111 +81,146 @@ export const getOrderTemplates = () => orderTemplates;
 const orderTemplates: OrderTemplateValues = {
   business_day: [
     {
-      dateBegin: "09:30",
+      time: "09:30",
       ship: "XPRS",
       port: "Katajanokka",
+      event: "Kiinnitys",
       dock: "EK5",
       services: [
         {
           persons: 2,
           place: "Keula",
           service: "Kiinnitys",
-        },
-        {
-          persons: 1,
-          place: "Irrotus",
-          service: "Irrotus",
+          readiness: 15
+
         },
         {
           persons: 1,
           place: "Silta",
           service: "Yläsillan ajo kiinni",
+          readiness: 15
+        },
+        {
+          persons: 1,
+          place: "Perä",
+          service: "Kiinnitys",
+          readiness: 15
+        },
+      ]
+    },
+    {
+      time: "10:30",
+      ship: "XPRS",
+      port: "Katajanokka",
+      event: "Irrotus",
+      dock: "EK5",
+      services: [
+        {
+          persons: 1,
+          place: "Irrotus",
+          service: "Irrotus",
+          readiness: 15
         },
         {
           persons:1,
           place: "Silta",
           service: "Yläsillan ajo irti",
+          readiness: 15
         },
         {
           persons: 1,
           place: "Perä",
           service: "Irrotus",
-        },
-        {
-          persons: 1,
-          place: "Perä",
-          service: "Kiinnitys",
+          readiness: 15
         },
       ]
     },
+
     {
       ship: "XPRS",
-      dateBegin: "19:30",
+      time: "19:30",
       port: "Katajanokka",
+      event: "Kiinnitys",
       dock: "EK5",
       services: [
         {
           persons: 2,
           place: "Keula",
           service: "Kiinnitys",
-        },
-        {
-          persons: 1,
-          place: "Keula",
-          service: "Irrotus",
+          readiness: 15
         },
         {
           persons: 1,
           place: "Silta",
           service: "Yläsillan ajo kiinni",
-        },
-        {
-          persons: 1,
-          place: "Silta",
-          service: "Yläsillan ajo irti",
-        },
-        {
-          persons: 1,
-          place: "Perä",
-          service: "Irrotus",
+          readiness: 15
         },
         {
           persons: 1,
           place: "Perä",
           service: "Kiinnitys",
+          readiness: 15
         },
       ]
     },
     {
+      ship: "XPRS",
+      time: "20:30",
+      port: "Katajanokka",
+      event: "Irrotus",
+      dock: "EK5",
+      services: [
+        {
+          persons: 1,
+          place: "Keula",
+          service: "Irrotus",
+          readiness: 15
+        },
+        {
+          persons: 1,
+          place: "Silta",
+          service: "Yläsillan ajo irti",
+          readiness: 15
+        },
+        {
+          persons: 1,
+          place: "Perä",
+          service: "Irrotus",
+          readiness: 15
+        },
+      ]
+    },
+
+    {
       ship: "Finlandia",
-      dateBegin: "8:15",
+      time: "8:15",
       port: "Länsisatama",
       dock: "LJ6",
+      event: "Kiinnitys",
       services: [
         {
           persons: 1,
           place: "Liikenteenohjaus",
           service: "Liput",
+          readiness: 15
         },
         {
           persons: 1,
           place: "Liikenteenohjaus",
           service: "Rekat",
+          readiness: 15
         },
         {
           persons: 1,
           place: "Liikenteenohjaus",
           service: "Henkilöautot",
+          readiness: 15
         },
         {
           persons: 1,
           place: "Silta",
           service: "Sillan ajo kiinni",
-        },
-        {
-          persons: 1,
-          place: "Silta",
-          service: "Sillan ajo irti",
+          readiness: 15
         },
       ]
     }
@@ -186,34 +228,34 @@ const orderTemplates: OrderTemplateValues = {
   friday: [
     {
       ship: "Finlandia",
-      dateBegin: "8:15",
+      time: "8:15",
       port: "Länsisatama",
       dock: "LJ6",
+      event: "Kiinnitys",
       services: [
         {
           persons: 1,
           place: "Liikenteenohjaus",
           service: "Liput",
+          readiness: 15
         },
         {
           persons: 1,
           place: "Liikenteenohjaus",
           service: "Rekat",
+          readiness: 15
         },
         {
           persons: 1,
           place: "Liikenteenohjaus",
           service: "Henkilöautot",
+          readiness: 15
         },
         {
           persons: 1,
           place: "Silta",
           service: "Sillan ajo kiinni",
-        },
-        {
-          persons: 1,
-          place: "Silta",
-          service: "Sillan ajo irti",
+          readiness: 15
         },
       ]
     }

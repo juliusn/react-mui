@@ -12,7 +12,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import theme from "./styles/Styles";
 import UserProfileContextProvider, { useUserProfileContext } from "./UserContextProvider";
 import ShipOrder from "./pages/ShipOrder";
-import NewShipOrderForm from "./pages/ShipOrder/NewOrderForm";
+import NewShipOrderForm from "./pages/ShipOrder/CreateNewOrderForm";
 
 function App() {
   return (
