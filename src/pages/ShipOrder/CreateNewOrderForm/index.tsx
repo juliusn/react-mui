@@ -19,7 +19,7 @@ import AddServicesToOrdersForm from "./AddServicesToOrderForm";
 import { onPromise } from "../../../utils/utils";
 import OrderServicesTable from "./OrderServicesTable";
 
-export interface OrderFormValues {
+export interface OrderFormValues  {
   date: Date,
   services: Service[],
   ship: string,

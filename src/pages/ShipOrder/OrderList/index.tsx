@@ -50,7 +50,7 @@ const RowMenu = ({ anchorEl, onClose }: RowMenuProps ) => {
     </Menu>
   );
 };
-function Row({ ship, event, dateOrdered, description, from, status, port, dock, services, dateBegin }: Order) {
+function Row({ ship, event, dateOrdered, description, from, status, port, dock, services, dateTime }: Order) {
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   //eslint-disable-next-line
@@ -78,7 +78,7 @@ function Row({ ship, event, dateOrdered, description, from, status, port, dock, 
         <TableCell>{dateOrdered} </TableCell>
         <TableCell>{status? <Chip  color="success" label="Hyväksytty" />:<Chip color="warning" label="Odottaa"/>} </TableCell>
         <TableCell>{from} </TableCell>
-        <TableCell>{dateBegin} </TableCell>
+        <TableCell>{dateTime} </TableCell>
         <TableCell>{port} </TableCell>
         <TableCell>{dock} </TableCell>
         <TableCell>{event} </TableCell>

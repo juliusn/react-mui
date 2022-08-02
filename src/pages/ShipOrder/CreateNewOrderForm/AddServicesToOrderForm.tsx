@@ -6,7 +6,8 @@ import { OrderFormValues } from "./index";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { onPromise } from "../../../utils/utils";
 import { Service } from "../../../Types";
-import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 import AddIcon from "@mui/icons-material/Add";
 import * as yup from "yup";
 
@@ -22,10 +23,10 @@ const initialValues: Service = {
 };
 
 const schema = yup.object({
-  persons: yup.number().required(),
-  readiness: yup.number().required("readiness is required"),
-  place: yup.string().required("place is required"),
-  service: yup.string().required("service is required"),
+  persons: yup.number().typeError("Kentän on oltava numero").min(1, "Kentän on oltava positiivinen määrä").required("Kenttä on pakollinen"),
+  readiness: yup.number().typeError("Kentän on oltava numero").min(1, "Kentän on oltava positiivinen määrä").required("Kenttä on pakollinen"),
+  place: yup.string().required("Kenttä on pakollinen"),
+  service: yup.string().required("Kenttä on pakollinen"),
 });
 export default function AddServicesToOrderForm({ append }: AddServicesToOrderFormProps) {
   const { control, handleSubmit } = useForm<Service>({
@@ -39,36 +40,42 @@ export default function AddServicesToOrderForm({ append }: AddServicesToOrderFor
   };
   return(
     <>
-      <Grid item xs={3}>
-        <HookFormField<Service>
-          control={control}
-          name="service"
-        />
+      <Grid container columns={12} spacing={4}>
+        <Grid item xs={6}>
+          <HookFormField<Service>
+            control={control}
+            name="service"
+            label="Tehtävä"
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <HookFormField<Service>
+            control={control}
+            name="place"
+            label="Paikka"
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <HookFormField<Service>
+            control={control}
+            name="persons"
+            label="Työtekijät"
+            type="number"
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <HookFormField<Service>
+            control={control}
+            type="number"
+            label="Valmius"
+            name="readiness"
+          />
+        </Grid>
       </Grid>
-      <Grid item xs={3}>
-        <HookFormField<Service>
-          control={control}
-          name="place"
-        />
-      </Grid>
-      <Grid item xs={3}>
-        <HookFormField<Service>
-          control={control}
-          name="persons"
-          type="number"
-        />
-      </Grid>
-      <Grid item xs={3}>
-        <HookFormField<Service>
-          control={control}
-          type="number"
-          name="readiness"
-        />
-      </Grid>
-      <Grid item xs={1}>
-        <IconButton onClick={onPromise(handleSubmit(onSubmit))}>
-          <AddIcon />
-        </IconButton>
+      <Grid container columns={12} sx={{ marginTop: 2 }} direction="row" justifyContent={"end"} alignItems="center" >
+        <Button color="primary" onClick={onPromise(handleSubmit(onSubmit))} endIcon={<AddIcon />}>
+          <Typography>Lisää tehtävä</Typography>
+        </Button>
       </Grid>
     </>
   );
