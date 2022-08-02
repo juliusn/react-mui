@@ -14,12 +14,11 @@ function HookFormField<TFormValues>({ control, name, rules, ...props }: HookForm
   return(
     <TextField
       variant="standard"
-      sx={{ width: 220 }}
       { ...props }
       onChange={onChange}
       onBlur={onBlur}
       value={value}
-      label={fieldName}
+      label={props.label? props.label: fieldName}
       error={isError}
       helperText={isError && error.message}
     />
