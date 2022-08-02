@@ -9,8 +9,8 @@ type HookFormFieldProps<TFormValues> = TextFieldProps & {
 }
 function HookFormField<TFormValues>({ control, name, rules, ...props }: HookFormFieldProps<TFormValues> ) {
   const { field: { onChange, onBlur, name: fieldName, value },
-    fieldState: { error, isTouched } } = useController<TFormValues>({ control, name, rules });
-  const isError = !!(error && isTouched);
+    fieldState: { error } } = useController<TFormValues>({ control, name, rules });
+  const isError = !!(error);
   return(
     <TextField
       variant="standard"
