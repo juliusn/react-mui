@@ -29,7 +29,7 @@ const schema = yup.object({
   service: yup.string().required("Kenttä on pakollinen"),
 });
 export default function CreateNewServicesForm({ append }: AddServicesToOrderFormProps) {
-  const { control, handleSubmit } = useForm<Service>({
+  const { reset, control, handleSubmit } = useForm<Service>({
     defaultValues:  initialValues,
     resolver: yupResolver(schema),
     mode: "onSubmit",
@@ -37,6 +37,7 @@ export default function CreateNewServicesForm({ append }: AddServicesToOrderForm
 
   const onSubmit = (data: Service) => {
     append(data);
+    reset(initialValues);
   };
   return(
     <>

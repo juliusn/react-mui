@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import { startOfToday, getHours, getMinutes, setHours, setMinutes } from "date-fns";
@@ -15,7 +15,7 @@ import CreateNewServicesForm from "./CreateNewServicesForm";
 import { onPromise } from "../../../utils/utils";
 import OrderServicesTable from "./OrderServicesTable";
 import HookFormTimePicker from "../../../components/HookFormTimePicker";
-import { NewOrder, Page } from "./index";
+import useOrdersStore from "./useOrdersStore";
 
 export interface OrderFormValues  {
   date: Date,
@@ -47,15 +47,13 @@ const schema = yup.object({
   event: yup.string().required("event is required"),
 });
 
-interface ModifyNewOrder {
-  modifyOrder: React.Dispatch<React.SetStateAction<NewOrder[]>>,
-  setPage: React.Dispatch<React.SetStateAction<Page>>,
-  order: NewOrder;
-}
 
-const ModifyNewOrder = ({ setPage, modifyOrder, order }: ModifyNewOrder) => {
+const ModifyNewOrder = () => {
+  const updateOrder = useOrdersStore(state => state.updateOrder);
+  const order = useOrdersStore(state => state.modifiableOrder);
+  const setPage = useOrdersStore(state => state.setPage);
   const { setValue, watch, control, handleSubmit } = useForm<OrderFormValues>({
-    defaultValues:  initialValues,
+    defaultValues:   order ? order: initialValues,
     resolver: yupResolver(schema),
     mode: "onSubmit",
   });
@@ -63,21 +61,19 @@ const ModifyNewOrder = ({ setPage, modifyOrder, order }: ModifyNewOrder) => {
     control,
     name: "services",
   });
-  useEffect(() => {
-    setValue("services", order.services? order.services:[]);
+
+  useEffect( () => {
+    if(!order) throw new Error("object is null");
+    setValue("services", order.services? order.services : []);
     setValue("date", order.dateTime);
-    setValue("ship", order.ship);
+    setValue("time", order.dateTime);
     setValue("description", order.description);
     setValue("dock", order.dock);
-    setValue("time", order.dateTime);
-    setValue("event", order.event);
     setValue("port", order.port);
-  },[order, setValue]);
+    setValue("ship", order.ship);
+    setValue("event", order.event);
+  },[setValue, order]);
 
-  const timeWatch = watch("time");
-  useEffect(() => {
-    console.log(timeWatch);
-  },[timeWatch]);
   const services = watch("services");
 
   const onSubmit = ({ date, time, ...rest }: OrderFormValues) => {
@@ -86,8 +82,9 @@ const ModifyNewOrder = ({ setPage, modifyOrder, order }: ModifyNewOrder) => {
     const minutes = getMinutes(time);
     initialDateTime = setHours(initialDateTime, hours);
     initialDateTime = setMinutes(initialDateTime, minutes );
-    modifyOrder((a:NewOrder[]) => a.map( a => a.id === order.id ? { id:order.id, ...rest, dateTime:initialDateTime, from:"SPFS" } : a));
-    setPage({ page: "createNew" });
+    if(!order) throw new Error("id is null");
+    updateOrder({ id:order.id, ...rest, dateTime:initialDateTime, from:"SPFS" });
+    setPage("create");
   };
 
   return(
@@ -168,7 +165,7 @@ const ModifyNewOrder = ({ setPage, modifyOrder, order }: ModifyNewOrder) => {
         </Grid>
       </form>
       <Box sx={{ marginTop: 4, marginBottom: 4 }} display="flex" justifyContent= "space-between">
-        <Button variant="outlined" onClick={() => setPage({ page: "createNew" })}>Palaa muuttamatta</Button>
+        <Button variant="outlined" onClick={() => setPage("create")}>Palaa muuttamatta</Button>
         <Button variant="outlined" onClick={onPromise(handleSubmit(onSubmit))}>Tallenna muutokset</Button>
       </Box>
     </>

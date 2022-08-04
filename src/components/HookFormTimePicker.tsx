@@ -28,6 +28,7 @@ export default function HookFormTimePicker<TFormValues>({ control, name, rules, 
             {...params}
             {...props}
             variant={"standard"}
+            sx={{ width: 200 }}
             onBlur={onBlur}
             error={!!error}
             helperText={error && error.message}

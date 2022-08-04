@@ -17,8 +17,8 @@ import CreateNewServicesForm from "./CreateNewServicesForm";
 import { onPromise } from "../../../utils/utils";
 import OrderServicesTable from "./OrderServicesTable";
 import HookFormTimePicker from "../../../components/HookFormTimePicker";
-import { NewOrder } from "./index";
 import { v4 as uuidv4 } from "uuid";
+import useOrdersStore from "./useOrdersStore";
 
 
 export interface OrderFormValues  {
@@ -51,11 +51,8 @@ const schema = yup.object({
   event: yup.string().required("event is required"),
 });
 
-interface CreateNewOrderFormProps {
-  createNewOrder: React.Dispatch<React.SetStateAction<NewOrder[]>>,
-}
 
-const CreateNewOrderForm = ({ createNewOrder }: CreateNewOrderFormProps) => {
+const CreateNewOrderForm = () => {
   const { reset, setValue, watch, control, handleSubmit } = useForm<OrderFormValues>({
     defaultValues:  initialValues,
     resolver: yupResolver(schema),
@@ -66,13 +63,8 @@ const CreateNewOrderForm = ({ createNewOrder }: CreateNewOrderFormProps) => {
     name: "services",
   });
   const [ templates, setTemplates ] = useState<OrderTemplate[]>();
-
-  const timeWatch = watch("time");
-  useEffect(() => {
-    console.log(timeWatch);
-  },[timeWatch]);
+  const createOrder = useOrdersStore(state => state.setNewOrder);
   const services = watch("services");
-
   const onSubmit = ({ date, time, ...rest }: OrderFormValues) => {
     let initialDateTime = new Date(date);
     const hours = getHours(time);
@@ -80,7 +72,7 @@ const CreateNewOrderForm = ({ createNewOrder }: CreateNewOrderFormProps) => {
     initialDateTime = setHours(initialDateTime, hours);
     initialDateTime = setMinutes(initialDateTime, minutes );
     const id: string = uuidv4();
-    createNewOrder((a:NewOrder[]) => a.concat({ id, ...rest, dateTime:initialDateTime, from:"SPFS" }));
+    createOrder({ id, ...rest, dateTime:initialDateTime, from:"SPFS" });
     reset({ ...initialValues, date });
   };
 

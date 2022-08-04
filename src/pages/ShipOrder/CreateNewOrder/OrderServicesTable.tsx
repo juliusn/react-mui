@@ -3,6 +3,7 @@ import Table from "@mui/material/Table";
 import { Service } from "../../../Types";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
+import Paper from "@mui/material/Paper";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
@@ -17,7 +18,7 @@ interface ServiceListProps {
 export default function OrderServicesTable({ remove, services } :ServiceListProps ) {
 
   return (
-    <TableContainer>
+    <TableContainer component={Paper}>
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -29,12 +30,29 @@ export default function OrderServicesTable({ remove, services } :ServiceListProp
           </TableRow>
         </TableHead>
         <TableBody>
-          { services.map((row, index) => <Row key={`${row.place} ${row.service}`} {...row} remove={remove} index={index} />) }
+          { services.length !== 0
+            ? services.map((row, index) => <Row key={`${row.place} ${row.service}`} {...row} remove={remove} index={index} />)
+            : <PlaceHolderRow />  }
         </TableBody>
       </Table>
     </TableContainer>
   );
 }
+const PlaceHolderRow = () => {
+  return(
+    <>
+      <TableRow
+        sx={{ "& > *": { borderBottom: "unset" }, height: 50 }}
+      >
+        <TableCell>-</TableCell>
+        <TableCell>-</TableCell>
+        <TableCell>-</TableCell>
+        <TableCell>-</TableCell>
+        <TableCell></TableCell>
+      </TableRow>
+    </>
+  );
+};
 interface RowProps extends Service {
   remove: UseFieldArrayRemove
   index: number

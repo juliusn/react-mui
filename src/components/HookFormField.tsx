@@ -14,6 +14,7 @@ function HookFormField<TFormValues>({ control, name, rules, ...props }: HookForm
   return(
     <TextField
       variant="standard"
+      sx={{ maxWidth: 200 }}
       { ...props }
       onChange={onChange}
       onBlur={onBlur}

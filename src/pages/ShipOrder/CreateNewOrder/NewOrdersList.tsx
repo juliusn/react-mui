@@ -7,25 +7,25 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Divider from "@mui/material/Divider";
+import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { Order } from "../../../Types";
 import { format } from "date-fns";
-import { Page } from "./index";
+import useOrdersStore, { Page } from "./useOrdersStore";
 
 type NewOrder = Omit<Order, "dateOrdered"|"status">
 
-interface NewOrderListProps {
-  newOrders: NewOrder[]|undefined,
-  setPage: React.Dispatch<React.SetStateAction<Page>>,
-  selectedRow: string|null,
-}
 
-const NewOrdersList = ({ newOrders, setPage, selectedRow }: NewOrderListProps) => {
+const NewOrdersList = () => {
+  const getOrders = useOrdersStore(state => state.orders);
+  const setSelected = useOrdersStore(state => state.setModifiableOrder);
+  const setPage = useOrdersStore(state => state.setPage);
+  const selected = useOrdersStore(state => state.modifiableOrder);
   return(
     <Box>
       <Typography variant="h5" >Uudet tilaukset</Typography>
       <Divider sx={{ margin: 2 }} variant="middle" />
-      <TableContainer sx={{ marginTop: 1 }}>
+      <TableContainer sx={{ marginTop: 1 }} component={Paper}>
         <Table size="small">
           <TableHead>
             <TableRow>
@@ -37,7 +37,9 @@ const NewOrdersList = ({ newOrders, setPage, selectedRow }: NewOrderListProps) =
           </TableHead>
           <TableBody>
             {
-              newOrders?.map(a => <Row key={a.id} order={a} selected={a.id===selectedRow} setPage={setPage} />)
+              getOrders.length !== 0
+                ? getOrders?.map(a => <Row key={a.id} order={a} selected={a.id===selected?.id} setSelected={setSelected} setPage={setPage} />)
+                : <PlaceHolderRow />
             }
           </TableBody>
         </Table>
@@ -47,19 +49,23 @@ const NewOrdersList = ({ newOrders, setPage, selectedRow }: NewOrderListProps) =
 };
 interface RowProps {
   order: NewOrder,
-  setPage: React.Dispatch<React.SetStateAction<Page>>,
+  setPage: (page: Page) => void,
   selected: boolean,
+  setSelected: (newOrder: NewOrder) => void,
 }
-function Row({ selected, setPage, order }: RowProps) {
-  const { ship, event, description, port, dock, services, dateTime } = order;
+function Row({ selected, setPage, order, setSelected }: RowProps) {
+  const { ship, event, services, dateTime } = order;
   const serviceProviders = services ? services.map<number>(a => a.persons).reduce<number>((a,c) => c + a, 0 as number) : 0;
-
+  const handleClick = () => {
+    setSelected(order);
+    setPage("modify");
+  };
   return (
     <>
       <TableRow
         selected={selected}
         sx={{ "& > *": { borderBottom: "unset" } }}
-        onClick={() => setPage({ page: "modify", order })}
+        onClick={handleClick}
       >
         <TableCell>{ship} </TableCell>
         <TableCell>{format(dateTime, "dd/MM HH:mm")} </TableCell>
@@ -69,4 +75,18 @@ function Row({ selected, setPage, order }: RowProps) {
     </>
   );
 }
+const PlaceHolderRow = () => {
+  return(
+    <>
+      <TableRow
+        sx={{ "& > *": { borderBottom: "unset" }, height: 50 }}
+      >
+        <TableCell>-</TableCell>
+        <TableCell>-</TableCell>
+        <TableCell>-</TableCell>
+        <TableCell>-</TableCell>
+      </TableRow>
+    </>
+  );
+};
 export default NewOrdersList;

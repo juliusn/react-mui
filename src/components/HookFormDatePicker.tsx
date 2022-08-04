@@ -32,6 +32,7 @@ export default function HookFormDatePicker<TFormValues>({ control, name, rules, 
         renderInput={(params) => (
           <TextField {...params} {...props}
             variant="standard"
+            sx={{ maxWidth: 200 }}
             onBlur={onBlur}
             error={!!error}
             helperText={error && error.message}

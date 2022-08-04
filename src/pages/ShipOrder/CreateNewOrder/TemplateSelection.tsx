@@ -29,6 +29,8 @@ export default function TemplateSelection({ templates, setValue }:TemplateSelect
   return (
     <Autocomplete
       filterOptions={filterOptions}
+      sx={{ maxWidth: 200 }}
+
       options={templates}
       onChange={(e,value) => setTemplate(value)}
       groupBy={(option: OrderTemplate) => option.port}
