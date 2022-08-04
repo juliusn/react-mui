@@ -35,7 +35,7 @@ export default function HookFormDatePicker<TFormValues>({ control, name, rules, 
             onBlur={onBlur}
             error={!!error}
             helperText={error && error.message}
-            label={fieldName}
+            label={props.label ? props.label : fieldName}
           />
         )}
       />
