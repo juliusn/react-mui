@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
+import { parse } from "date-fns";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import { OrderTemplate } from "../../../Types";
 import { UseFormSetValue } from "react-hook-form";
-import { OrderFormValues } from "./index";
+import { OrderFormValues } from "./CreateNewOrderForm";
 
 interface TemplateSelectionProps{
   templates: OrderTemplate[]
@@ -18,7 +19,7 @@ export default function TemplateSelection({ templates, setValue }:TemplateSelect
 
   useEffect( () => {
     setValue("ship", template?.ship ? template.ship:"");
-    setValue("time", template?.time ? template?.time:"");
+    setValue("time", template?.time ? parse(template?.time, "HH:mm", new Date()):new Date());
     setValue("port", template?.port ? template.port:"");
     setValue("dock", template?.dock ? template.dock:"");
     setValue("event", template?.event ? template.event:"");

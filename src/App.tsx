@@ -12,11 +12,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 import theme from "./styles/Styles";
 import UserProfileContextProvider, { useUserProfileContext } from "./UserContextProvider";
 import ShipOrder from "./pages/ShipOrder";
-import NewShipOrderForm from "./pages/ShipOrder/CreateNewOrderForm";
+import NewShipOrderForm from "./pages/ShipOrder/CreateNewOrder";
 
 function App() {
   return (
-    <div className="App" style={{ minHeight: "100vh" }}>
+    <div className="App" style={{ minHeight: "100vh", display:"flex", flexDirection: "column" }}>
       <ThemeProvider theme={theme}>
         <UserProfileContextProvider>
           <Router>

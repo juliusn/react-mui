@@ -23,9 +23,9 @@ export interface LaituriTieto {
 }
 
 export interface Order {
-  id: number,
-  dateTime: string,
-  event: string,
+  id: string,
+  dateTime: Date,
+  event?: string,
   dateOrdered: string,
   description?: string,
   from: string,

@@ -2,7 +2,7 @@ import React from "react";
 import { UseFieldArrayAppend, useForm } from "react-hook-form";
 import HookFormField from "../../../components/HookFormField";
 import Grid from "@mui/material/Grid";
-import { OrderFormValues } from "./index";
+import { OrderFormValues } from "./CreateNewOrderForm";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { onPromise } from "../../../utils/utils";
 import { Service } from "../../../Types";
@@ -28,7 +28,7 @@ const schema = yup.object({
   place: yup.string().required("Kenttä on pakollinen"),
   service: yup.string().required("Kenttä on pakollinen"),
 });
-export default function AddServicesToOrderForm({ append }: AddServicesToOrderFormProps) {
+export default function CreateNewServicesForm({ append }: AddServicesToOrderFormProps) {
   const { control, handleSubmit } = useForm<Service>({
     defaultValues:  initialValues,
     resolver: yupResolver(schema),
@@ -41,6 +41,14 @@ export default function AddServicesToOrderForm({ append }: AddServicesToOrderFor
   return(
     <>
       <Grid container columns={12} spacing={4}>
+        <Grid item xs={6}>
+          <Typography variant="h5" sx={{ textAlign: "space-between" }} >Palvelut</Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <Button variant="outlined" onClick={onPromise(handleSubmit(onSubmit))} endIcon={<AddIcon />}>
+            <Typography>Lisää tehtävä</Typography>
+          </Button>
+        </Grid>
         <Grid item xs={6}>
           <HookFormField<Service>
             control={control}
@@ -71,11 +79,6 @@ export default function AddServicesToOrderForm({ append }: AddServicesToOrderFor
             name="readiness"
           />
         </Grid>
-      </Grid>
-      <Grid container columns={12} sx={{ marginTop: 2 }} direction="row" justifyContent={"end"} alignItems="center" >
-        <Button color="primary" onClick={onPromise(handleSubmit(onSubmit))} endIcon={<AddIcon />}>
-          <Typography>Lisää tehtävä</Typography>
-        </Button>
       </Grid>
     </>
   );

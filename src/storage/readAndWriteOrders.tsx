@@ -1,9 +1,9 @@
 import { Order, OrderTemplateValues } from "../Types";
+import { parse } from "date-fns";
+import { v4 as uuidv4 } from "uuid";
 
-let id = 0;
-function getId() {
-  id+=1;
-  return id;
+function getId(): string {
+  return uuidv4();
 }
 
 let orders: Order[] = [
@@ -11,7 +11,7 @@ let orders: Order[] = [
     id: getId(),
     event:"Kiinnitys",
     ship: "Mega Star",
-    dateTime: "16/6/2022 12:15",
+    dateTime: parse("16/6/2022 12:15", "d/MM/yyyy HH:mm", new Date()),
     dateOrdered: "10/6/2022 09:00",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quis neque et ex feugiat fermentum. Pellentesque porta purus sed purus porttitor, ac dictum quam rutrum. Etiam ipsum lacus, semper accumsan mollis vitae, dignissim molestie odio. Nullam sed felis libero. Phasellus sed mauris id nisl elementum auctor. Praesent nisl justo, feugiat vel leo imperdiet, posuere faucibus eros. Sed sodales laoreet congue. Maecenas congue odio in efficitur pellentesque.",
     status: false,
@@ -32,7 +32,7 @@ let orders: Order[] = [
     id: getId(),
     event: "Kiinnitys",
     ship: "Europa",
-    dateTime: "17/6/2022 16:00",
+    dateTime: parse("17/6/2022 16:00", "d/MM/yyyy HH:mm", new Date()),
     dateOrdered:"10/6/2022 09:01",
     status: true,
     from: "SFPS",
@@ -50,14 +50,12 @@ let orders: Order[] = [
         service: "Narut",
         persons: 1,
         readiness: 15
-
       },
       {
         place: "Silta",
         service: "Sillan ajo",
         persons: 1,
         readiness: 15
-
       },
     ]
   },
@@ -65,7 +63,7 @@ let orders: Order[] = [
     id: getId(),
     event: "Irrotus",
     ship: "Europa",
-    dateTime: "17/6/2022 18:30",
+    dateTime: parse("17/6/2022 18:30", "dd/MM/yyyy HH:mm", new Date()),
     dateOrdered:"10/6/2022 09:01",
     status: false,
     from: "SFPS",

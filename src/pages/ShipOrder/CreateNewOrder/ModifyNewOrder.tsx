@@ -1,39 +1,37 @@
-import React, { useState, useEffect } from "react";
-import Container from "@mui/material/Container";
-import Paper from "@mui/material/Paper";
-import Divider from "@mui/material/Divider";
+import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
-import { isFriday, isSaturday, isSunday, isWeekend, startOfToday } from "date-fns";
-import { Service, OrderTemplate } from "../../../Types";
-import { getOrderTemplates } from "../../../storage/readAndWriteOrders";
-import DividedCard from "../../../components/DividedCard";
+import Divider from "@mui/material/Divider";
+import { startOfToday, getHours, getMinutes, setHours, setMinutes } from "date-fns";
+import { Service } from "../../../Types";
 import { useForm, useFieldArray } from "react-hook-form";
 import HookFormField from "../../../components/HookFormField";
-import TemplateSelection from "./TemplateSelection";
 import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import HookFormDatePicker from "../../../components/HookFormDatePicker";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import AddServicesToOrdersForm from "./AddServicesToOrderForm";
+import CreateNewServicesForm from "./CreateNewServicesForm";
 import { onPromise } from "../../../utils/utils";
 import OrderServicesTable from "./OrderServicesTable";
+import HookFormTimePicker from "../../../components/HookFormTimePicker";
+import { NewOrder, Page } from "./index";
 
 export interface OrderFormValues  {
   date: Date,
   services: Service[],
   ship: string,
-  time: string,
+  time: Date,
   port: string,
   dock?: string,
   description?: string,
   event?: string,
 }
 const initialValues: OrderFormValues = {
-  date: new Date,
+  date: new Date(),
   ship: "",
   services:[],
-  time:"",
+  time: new Date(),
   port: "",
   dock: "",
   description: "",
@@ -43,12 +41,19 @@ const schema = yup.object({
   date: yup.date().min(startOfToday(), "Date must not be in past"),
   ship: yup.string().required("Ship is required"),
   port: yup.string().required("Port is required"),
-  time: yup.string().matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, { message: "HH:MM format" }),
+  time: yup.date().required().typeError("Kenttä on pakollinen"),
   dock: yup.string().required("Dock is required"),
   description: yup.string(),
   event: yup.string().required("event is required"),
 });
-const OrderForm = () => {
+
+interface ModifyNewOrder {
+  modifyOrder: React.Dispatch<React.SetStateAction<NewOrder[]>>,
+  setPage: React.Dispatch<React.SetStateAction<Page>>,
+  order: NewOrder;
+}
+
+const ModifyNewOrder = ({ setPage, modifyOrder, order }: ModifyNewOrder) => {
   const { setValue, watch, control, handleSubmit } = useForm<OrderFormValues>({
     defaultValues:  initialValues,
     resolver: yupResolver(schema),
@@ -58,34 +63,38 @@ const OrderForm = () => {
     control,
     name: "services",
   });
-  const [ templates, setTemplates ] = useState<OrderTemplate[]>();
+  useEffect(() => {
+    setValue("services", order.services? order.services:[]);
+    setValue("date", order.dateTime);
+    setValue("ship", order.ship);
+    setValue("description", order.description);
+    setValue("dock", order.dock);
+    setValue("time", order.dateTime);
+    setValue("event", order.event);
+    setValue("port", order.port);
+  },[order, setValue]);
 
+  const timeWatch = watch("time");
+  useEffect(() => {
+    console.log(timeWatch);
+  },[timeWatch]);
   const services = watch("services");
-  const onSubmit = (data: OrderFormValues) => {
-    console.log(data);
+
+  const onSubmit = ({ date, time, ...rest }: OrderFormValues) => {
+    let initialDateTime = new Date(date);
+    const hours = getHours(time);
+    const minutes = getMinutes(time);
+    initialDateTime = setHours(initialDateTime, hours);
+    initialDateTime = setMinutes(initialDateTime, minutes );
+    modifyOrder((a:NewOrder[]) => a.map( a => a.id === order.id ? { id:order.id, ...rest, dateTime:initialDateTime, from:"SPFS" } : a));
+    setPage({ page: "createNew" });
   };
 
-  const dateWatch = watch("date");
-  useEffect(() => {
-    if(isWeekend(dateWatch)){
-      if(isSaturday(dateWatch)){
-        setTemplates(getOrderTemplates().saturday);
-      }
-      if(isSunday(dateWatch)){
-        setTemplates(getOrderTemplates().sunday);
-      }
-    }
-    if(!isWeekend(dateWatch)){
-      if(isFriday(dateWatch)){
-        setTemplates(getOrderTemplates().friday);
-      }else{
-        setTemplates(getOrderTemplates().business_day);
-      }
-    }
-  }, [dateWatch]);
   return(
     <>
       <form>
+        <Typography variant="h5">Muokkaa tilausta</Typography>
+        <Divider sx={{ margin: 2 }} />
         <Grid columns={12} spacing={4} container>
           <Grid item xs={6}>
             <HookFormDatePicker<OrderFormValues>
@@ -95,12 +104,6 @@ const OrderForm = () => {
             />
           </Grid >
           <Grid item xs={6}>
-            <TemplateSelection
-              setValue={setValue}
-              templates= {templates? templates : []}
-            />
-          </Grid>
-          <Grid item xs={6}>
             <HookFormField<OrderFormValues>
               control={control}
               name="ship"
@@ -108,11 +111,12 @@ const OrderForm = () => {
             />
           </Grid>
           <Grid item xs={6}>
-            <HookFormField<OrderFormValues>
+            <HookFormTimePicker<OrderFormValues>
               control={control}
               name="time"
               required
             />
+
           </Grid>
           <Grid item xs={6}>
             <HookFormField<OrderFormValues>
@@ -149,17 +153,13 @@ const OrderForm = () => {
         </Grid>
       </form>
       <form>
-        <Grid columns={12} spacing={4} container>
+        <Grid sx={{ marginTop:1 }}columns={12} spacing={4} container>
           <Grid item xs={12}>
-            <Typography variant="h5" sx={{ textAlign: "center" }} >Palvelut</Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <AddServicesToOrdersForm
+            <CreateNewServicesForm
               append={append}
             />
           </Grid>
           <Grid item xs={12}>
-            <Grid item xs={6}>asd</Grid>
             <OrderServicesTable
               services={services}
               remove={remove}
@@ -167,31 +167,12 @@ const OrderForm = () => {
           </Grid>
         </Grid>
       </form>
-      <Button onClick={onPromise(handleSubmit(onSubmit))}>submit</Button>
+      <Box sx={{ marginTop: 4, marginBottom: 4 }} display="flex" justifyContent= "space-between">
+        <Button variant="outlined" onClick={() => setPage({ page: "createNew" })}>Palaa muuttamatta</Button>
+        <Button variant="outlined" onClick={onPromise(handleSubmit(onSubmit))}>Tallenna muutokset</Button>
+      </Box>
     </>
   );
 };
-const CreateNewOrderForm = () => {
 
-  return(
-    <Container component={Paper}>
-      <Grid container>
-        <Grid item xs={12}>
-          <Typography variant="h5" sx={{ textAlign: "center" }} >Alustapahtuma</Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <Divider />
-        </Grid>
-        <Grid item xs={12}>
-          <DividedCard
-            left={<Paper elevation={6} />}
-            right={ <OrderForm/> }
-            spacing={3}
-          />
-        </Grid>
-      </Grid>
-    </Container>
-  );
-};
-export default CreateNewOrderForm;
-
+export default ModifyNewOrder;

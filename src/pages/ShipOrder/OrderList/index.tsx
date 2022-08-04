@@ -7,7 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
-import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -21,6 +21,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import DividedCard from "../../../components/DividedCard";
 import { Order, Service } from "../../../Types";
+import { format } from "date-fns";
 
 interface RowMenuProps {
   anchorEl : null | HTMLElement
@@ -78,7 +79,7 @@ function Row({ ship, event, dateOrdered, description, from, status, port, dock, 
         <TableCell>{dateOrdered} </TableCell>
         <TableCell>{status? <Chip  color="success" label="Hyväksytty" />:<Chip color="warning" label="Odottaa"/>} </TableCell>
         <TableCell>{from} </TableCell>
-        <TableCell>{dateTime} </TableCell>
+        <TableCell>{format(dateTime, "dd/MM HH:mm")} </TableCell>
         <TableCell>{port} </TableCell>
         <TableCell>{dock} </TableCell>
         <TableCell>{event} </TableCell>
@@ -99,9 +100,9 @@ function Row({ ship, event, dateOrdered, description, from, status, port, dock, 
 const CollapsibleCell = ({ services, open, description } : { description?: string, open: boolean, services: Service[]|undefined }) => {
 
   return (
-    <TableCell padding="none" style={{  borderBottom: "unset", paddingBottom: 0, paddingTop: 0 }} colSpan={11}>
+    <TableCell padding="none" style={{  paddingBottom: 0, paddingTop: 0 }} colSpan={11}>
       <Collapse  in={open} timeout="auto" unmountOnExit>
-        <Paper sx={{ elevation: 5, margin: 2 }} >
+        <Box sx={{  margin: 2 }} >
           <DividedCard
             left={
               <Table size="small" aria-label="services">
@@ -136,7 +137,7 @@ const CollapsibleCell = ({ services, open, description } : { description?: strin
               />
             }
           />
-        </Paper>
+        </Box>
       </Collapse>
     </TableCell>
   );

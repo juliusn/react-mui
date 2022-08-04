@@ -8,11 +8,11 @@ interface DividedCardProps {
   size?: number
 }
 const calc = (n : number|undefined) => {
-  if(!n) return{ leftSize: 50, rightSize: 50 };
-  if( n <= 0 ) return{ leftSize: 1, rightSize: 99 };
-  if( n >= 1 ) return{ leftSize: 99, rightSize: 1 };
-  const x =  n * 100;
-  return{ leftSize: x, rightSize: 100-x };
+  if(!n) return{ leftSize: 49, rightSize: 49 };
+  if( n <= 0.02 ) return{ leftSize: 1, rightSize: 97 };
+  if( n >= 0.98 ) return{ leftSize: 97, rightSize: 1 };
+  const x =  n*100-1;
+  return{ leftSize: x, rightSize: 98-x };
 };
 /**
  *left = left side component of card
@@ -27,7 +27,7 @@ const DividedCard = ({ left, right, size }: DividedCardProps ) => {
         {left}
       </Box>
       <Box sx={{ flexGrow:2, margin: 5 }}>
-        <Divider orientation="vertical" />
+        <Divider  orientation="vertical" />
       </Box>
       <Box sx= {{ flexGrow: rightSize }}>
         {right}

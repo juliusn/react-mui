@@ -29,7 +29,7 @@ export default function OrderServicesTable({ remove, services } :ServiceListProp
           </TableRow>
         </TableHead>
         <TableBody>
-          { services.map((row, index) => <Row key={row.place} {...row} remove={remove} index={index} />) }
+          { services.map((row, index) => <Row key={`${row.place} ${row.service}`} {...row} remove={remove} index={index} />) }
         </TableBody>
       </Table>
     </TableContainer>
