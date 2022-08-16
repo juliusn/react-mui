@@ -69,6 +69,26 @@ let orders: Order[] = [
     from: "SFPS",
     port: "Länsisatama",
     dock: "Lj6",
+    services:[
+      {
+        place: "Keula",
+        service: "Narut",
+        persons: 2,
+        readiness: 15
+      },
+      {
+        place: "Perä",
+        service: "Narut",
+        persons: 1,
+        readiness: 15
+      },
+      {
+        place: "Silta",
+        service: "Sillan ajo",
+        persons: 1,
+        readiness: 15
+      },
+    ]
   }
 ];
 export const getOrders = () => orders;

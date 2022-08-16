@@ -52,7 +52,7 @@ const schema = yup.object({
 });
 
 
-const CreateNewOrderForm = () => {
+const CreateNewOrderForm = ({ setShowDialog }:{ setShowDialog: React.Dispatch<React.SetStateAction<boolean>> }) => {
   const { reset, setValue, watch, control, handleSubmit } = useForm<OrderFormValues>({
     defaultValues:  initialValues,
     resolver: yupResolver(schema),
@@ -74,6 +74,7 @@ const CreateNewOrderForm = () => {
     const id: string = uuidv4();
     createOrder({ id, ...rest, dateTime:initialDateTime, from:"SPFS" });
     reset({ ...initialValues, date });
+    setShowDialog(true);
   };
 
 

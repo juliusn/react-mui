@@ -33,7 +33,7 @@ export interface Order {
   ship: string,
   port: string,
   dock?: string,
-  services?: Service[],
+  services: Service[],
 }
 export interface OrderTemplateValues {
   business_day: OrderTemplate[],

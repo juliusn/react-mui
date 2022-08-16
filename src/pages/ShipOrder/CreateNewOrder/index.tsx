@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
@@ -13,19 +13,28 @@ import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import CreateNewOrderForm from "./CreateNewOrderForm";
 import ModifyNewOrder from "./ModifyNewOrder";
 import useOrdersStore from "./useOrdersStore";
+import { useCallbackPrompt } from "../../../hooks/useCallbackPrompt";
+import ConfirmationDialog from "../../../components/ConfirmationDialog";
 
 export type NewOrder = Omit<Order, "dateOrdered"|"status">
 
 const CreateNewOrder = () => {
   const page = useOrdersStore(state => state.page);
-
+  const [showDialog, setShowDialog] = useState<boolean>(false);
+  const { showPrompt, confirmNavigation, cancelNavigation } =
+    useCallbackPrompt(showDialog);
   const renderPage= () => {
-    if(page === "create") return(<CreateNewOrderForm />);
+    if(page === "create") return(<CreateNewOrderForm setShowDialog={setShowDialog} />);
     if(page === "modify") return(<ModifyNewOrder />);
   };
 
   return(
     <Container sx={{ marginTop:2, padding: 1 }} component={Paper}>
+      <ConfirmationDialog
+        show={showPrompt}
+        confirmNavigation={confirmNavigation}
+        cancelNavigation={cancelNavigation}
+      />
       <Grid container spacing={4}>
         <Grid item xs={6} >
           <Typography variant="h5" sx={{ textAlign: "start" }}>Luo uusia tilauksia</Typography>
