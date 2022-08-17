@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import { parse } from "date-fns";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
-import { OrderTemplate } from "../../../Types";
+import { OrderTemplate } from "Types";
 import { UseFormSetValue } from "react-hook-form";
 import { OrderFormValues } from "./CreateNewOrderForm";
 

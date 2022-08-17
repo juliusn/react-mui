@@ -4,8 +4,8 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
-import { Order } from "../../../Types";
-import DividedCard from "../../../components/DividedCard";
+import { Order } from "Types";
+import DividedCard from "components/DividedCard";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import NewOrdersList from "./NewOrdersList";
@@ -13,8 +13,8 @@ import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import CreateNewOrderForm from "./CreateNewOrderForm";
 import ModifyNewOrder from "./ModifyNewOrder";
 import useOrdersStore from "./useOrdersStore";
-import { useCallbackPrompt } from "../../../hooks/useCallbackPrompt";
-import ConfirmationDialog from "../../../components/ConfirmationDialog";
+import { useCallbackPrompt } from "hooks/useCallbackPrompt";
+import ConfirmationDialog from "components/ConfirmationDialog";
 
 export type NewOrder = Omit<Order, "dateOrdered"|"status">
 

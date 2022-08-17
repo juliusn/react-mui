@@ -1,4 +1,4 @@
-import { Order, OrderTemplateValues } from "../Types";
+import { Order, OrderTemplateValues } from "Types";
 import { parse } from "date-fns";
 import { v4 as uuidv4 } from "uuid";
 

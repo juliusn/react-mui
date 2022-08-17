@@ -1,6 +1,6 @@
 import "./App.css";
 import React from "react";
-import ResponsiveAppBar from "./AppBar";
+import ResponsiveAppBar from "AppBar";
 import Login from "./Login";
 import { BrowserRouter as Router, Navigate, useLocation, Route, Routes } from "react-router-dom";
 import Register from "./Register";
@@ -9,10 +9,10 @@ import Dashboard from "./Dashboard";
 import ThemeProvider from "@mui/system/ThemeProvider";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
-import theme from "./styles/Styles";
+import theme from "styles/Styles";
 import UserProfileContextProvider, { useUserProfileContext } from "./UserContextProvider";
-import ShipOrder from "./pages/ShipOrder";
-import NewShipOrderForm from "./pages/ShipOrder/CreateNewOrder";
+import ShipOrder from "pages/ShipOrder";
+import NewShipOrderForm from "pages/ShipOrder/CreateNewOrder";
 
 function App() {
   return (

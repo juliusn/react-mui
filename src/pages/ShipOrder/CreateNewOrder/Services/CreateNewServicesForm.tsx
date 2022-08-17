@@ -1,18 +1,18 @@
 import React from "react";
-import { UseFieldArrayAppend, useForm } from "react-hook-form";
-import HookFormField from "../../../components/HookFormField";
+import { useFieldArray, useForm, Control } from "react-hook-form";
+import HookFormField from "components/HookFormField";
 import Grid from "@mui/material/Grid";
-import { OrderFormValues } from "./CreateNewOrderForm";
+import { OrderFormValues } from "../CreateNewOrderForm";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { onPromise } from "../../../utils/utils";
-import { Service } from "../../../Types";
+import { onPromise } from "utils/utils";
+import { Service } from "Types";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import AddIcon from "@mui/icons-material/Add";
 import * as yup from "yup";
 
-interface CreateNewServicesFormProps {
-  append: UseFieldArrayAppend<OrderFormValues, "services">;
+interface AddServicesToOrderFormProps {
+  control: Control<OrderFormValues>
 }
 
 const initialValues: Service = {
@@ -28,21 +28,28 @@ const schema = yup.object({
   place: yup.string().required("Kenttä on pakollinen"),
   service: yup.string().required("Kenttä on pakollinen"),
 });
-export default function CreateNewServicesForm({ append }: CreateNewServicesFormProps) {
-  const { control, handleSubmit } = useForm<Service>({
+export default function CreateNewServicesForm({ control : serviceControl }: AddServicesToOrderFormProps) {
+  const { reset, control, handleSubmit } = useForm<Service>({
     defaultValues:  initialValues,
     resolver: yupResolver(schema),
     mode: "onSubmit",
   });
+  const { append } = useFieldArray({ control: serviceControl, name: "services" });
 
   const onSubmit = (data: Service) => {
     append(data);
+    reset(initialValues);
   };
   return(
     <>
       <Grid container columns={12} spacing={4}>
-        <Grid item xs={12}>
-          <Typography variant="h5" sx={{ textAlign: "center" }} >Palvelut</Typography>
+        <Grid item xs={6}>
+          <Typography variant="h5" sx={{ textAlign: "space-between" }} >Palvelut</Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <Button variant="outlined" onClick={onPromise(handleSubmit(onSubmit))} endIcon={<AddIcon />}>
+            <Typography>Lisää tehtävä</Typography>
+          </Button>
         </Grid>
         <Grid item xs={6}>
           <HookFormField<Service>
@@ -62,7 +69,7 @@ export default function CreateNewServicesForm({ append }: CreateNewServicesFormP
           <HookFormField<Service>
             control={control}
             name="persons"
-            label="Työtekijät"
+            label="Työntekijät"
             type="number"
           />
         </Grid>
@@ -74,11 +81,6 @@ export default function CreateNewServicesForm({ append }: CreateNewServicesFormP
             name="readiness"
           />
         </Grid>
-      </Grid>
-      <Grid container columns={12} sx={{ marginTop: 2 }} direction="row" justifyContent={"end"} alignItems="center" >
-        <Button color="primary" onClick={onPromise(handleSubmit(onSubmit))} endIcon={<AddIcon />}>
-          <Typography>Lisää tehtävä</Typography>
-        </Button>
       </Grid>
     </>
   );

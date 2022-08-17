@@ -1,6 +1,6 @@
 import React from "react";
 import Table from "@mui/material/Table";
-import { Service } from "../../../Types";
+import { Service } from "Types";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import Paper from "@mui/material/Paper";
@@ -9,13 +9,15 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { UseFieldArrayRemove } from "react-hook-form";
+import { Control, useFieldArray, useWatch, UseFieldArrayRemove } from "react-hook-form";
+import { OrderFormValues } from "../CreateNewOrderForm";
 
-interface ServiceListProps {
-  remove: UseFieldArrayRemove,
-  services: Service[],
+interface ServiceTableProps {
+  control: Control<OrderFormValues>,
 }
-export default function OrderServicesTable({ remove, services } :ServiceListProps ) {
+export default function ServicesTable({ control } :ServiceTableProps ) {
+  const services = useWatch({ control,  name: "services" });
+  const { remove } = useFieldArray({ control, name: "services" });
 
   return (
     <TableContainer component={Paper}>
@@ -23,7 +25,7 @@ export default function OrderServicesTable({ remove, services } :ServiceListProp
         <TableHead>
           <TableRow>
             <TableCell>Persons</TableCell>
-            <TableCell>Event</TableCell>
+            <TableCell>Place</TableCell>
             <TableCell>Readiness</TableCell>
             <TableCell>Service</TableCell>
             <TableCell></TableCell>

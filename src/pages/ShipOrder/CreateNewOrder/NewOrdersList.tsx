@@ -9,7 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import { Order } from "../../../Types";
+import { Order } from "Types";
 import { format } from "date-fns";
 import useOrdersStore, { Page } from "./useOrdersStore";
 

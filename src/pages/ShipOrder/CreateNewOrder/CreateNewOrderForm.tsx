@@ -3,20 +3,19 @@ import Divider from "@mui/material/Divider";
 import { getHours, getMinutes, setHours, setMinutes, isFriday, isSaturday, isSunday, isWeekend, startOfToday } from "date-fns";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { Service, OrderTemplate } from "../../../Types";
-import { getOrderTemplates } from "../../../storage/readAndWriteOrders";
-import { useForm, useFieldArray } from "react-hook-form";
-import HookFormField from "../../../components/HookFormField";
+import { Service, OrderTemplate } from "Types";
+import { getOrderTemplates } from "storage/readAndWriteOrders";
+import { useForm } from "react-hook-form";
+import HookFormField from "components/HookFormField";
 import TemplateSelection from "./TemplateSelection";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
-import HookFormDatePicker from "../../../components/HookFormDatePicker";
+import HookFormDatePicker from "components/HookFormDatePicker";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import CreateNewServicesForm from "./CreateNewServicesForm";
-import { onPromise } from "../../../utils/utils";
-import OrderServicesTable from "./OrderServicesTable";
-import HookFormTimePicker from "../../../components/HookFormTimePicker";
+import { onPromise } from "utils/utils";
+import Services from "./Services";
+import HookFormTimePicker from "components/HookFormTimePicker";
 import { v4 as uuidv4 } from "uuid";
 import useOrdersStore from "./useOrdersStore";
 
@@ -41,7 +40,7 @@ const initialValues: OrderFormValues = {
   description: "",
   event: "",
 };
-const schema = yup.object({
+export const schema = yup.object({
   date: yup.date().min(startOfToday(), "Date must not be in past"),
   ship: yup.string().required("Ship is required"),
   port: yup.string().required("Port is required"),
@@ -58,13 +57,8 @@ const CreateNewOrderForm = ({ setShowDialog }:{ setShowDialog: React.Dispatch<Re
     resolver: yupResolver(schema),
     mode: "onSubmit",
   });
-  const { append, remove } = useFieldArray({
-    control,
-    name: "services",
-  });
   const [ templates, setTemplates ] = useState<OrderTemplate[]>();
   const createOrder = useOrdersStore(state => state.setNewOrder);
-  const services = watch("services");
   const onSubmit = ({ date, time, ...rest }: OrderFormValues) => {
     let initialDateTime = new Date(date);
     const hours = getHours(time);
@@ -165,19 +159,7 @@ const CreateNewOrderForm = ({ setShowDialog }:{ setShowDialog: React.Dispatch<Re
         </Grid>
       </form>
       <form>
-        <Grid sx={{ marginTop:1 }}columns={12} spacing={4} container>
-          <Grid item xs={12}>
-            <CreateNewServicesForm
-              append={append}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <OrderServicesTable
-              services={services}
-              remove={remove}
-            />
-          </Grid>
-        </Grid>
+        <Services control={control}/>
       </form>
       <Box sx={{ marginTop: 4, marginBottom: 4 }}>
         <Button variant="outlined" onClick={onPromise(handleSubmit(onSubmit))}>Lisää tilaus</Button>

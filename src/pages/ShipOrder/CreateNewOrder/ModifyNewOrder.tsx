@@ -1,32 +1,20 @@
 import React, { useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import { startOfToday, getHours, getMinutes, setHours, setMinutes } from "date-fns";
-import { Service } from "../../../Types";
-import { useForm, useFieldArray } from "react-hook-form";
-import HookFormField from "../../../components/HookFormField";
+import { getHours, getMinutes, setHours, setMinutes } from "date-fns";
+import { useForm } from "react-hook-form";
+import HookFormField from "components/HookFormField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import HookFormDatePicker from "../../../components/HookFormDatePicker";
+import HookFormDatePicker from "components/HookFormDatePicker";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import CreateNewServicesForm from "./CreateNewServicesForm";
-import { onPromise } from "../../../utils/utils";
-import OrderServicesTable from "./OrderServicesTable";
-import HookFormTimePicker from "../../../components/HookFormTimePicker";
+import Services from "./Services";
+import { onPromise } from "utils/utils";
+import HookFormTimePicker from "components/HookFormTimePicker";
 import useOrdersStore from "./useOrdersStore";
+import { OrderFormValues, schema } from "./CreateNewOrderForm";
 
-export interface OrderFormValues  {
-  date: Date,
-  services: Service[],
-  ship: string,
-  time: Date,
-  port: string,
-  dock?: string,
-  description?: string,
-  event?: string,
-}
 const initialValues: OrderFormValues = {
   date: new Date(),
   ship: "",
@@ -37,29 +25,15 @@ const initialValues: OrderFormValues = {
   description: "",
   event: "",
 };
-const schema = yup.object({
-  date: yup.date().min(startOfToday(), "Date must not be in past"),
-  ship: yup.string().required("Ship is required"),
-  port: yup.string().required("Port is required"),
-  time: yup.date().required().typeError("Kenttä on pakollinen"),
-  dock: yup.string().required("Dock is required"),
-  description: yup.string(),
-  event: yup.string().required("event is required"),
-});
-
 
 const ModifyNewOrder = () => {
   const updateOrder = useOrdersStore(state => state.updateOrder);
   const order = useOrdersStore(state => state.modifiableOrder);
   const setPage = useOrdersStore(state => state.setPage);
-  const { setValue, watch, control, handleSubmit } = useForm<OrderFormValues>({
+  const { setValue, control, handleSubmit } = useForm<OrderFormValues>({
     defaultValues:   order ? order: initialValues,
     resolver: yupResolver(schema),
     mode: "onSubmit",
-  });
-  const { append, remove } = useFieldArray({
-    control,
-    name: "services",
   });
 
   useEffect( () => {
@@ -73,8 +47,6 @@ const ModifyNewOrder = () => {
     setValue("ship", order.ship);
     setValue("event", order.event);
   },[setValue, order]);
-
-  const services = watch("services");
 
   const onSubmit = ({ date, time, ...rest }: OrderFormValues) => {
     let initialDateTime = new Date(date);
@@ -150,19 +122,7 @@ const ModifyNewOrder = () => {
         </Grid>
       </form>
       <form>
-        <Grid sx={{ marginTop:1 }}columns={12} spacing={4} container>
-          <Grid item xs={12}>
-            <CreateNewServicesForm
-              append={append}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <OrderServicesTable
-              services={services}
-              remove={remove}
-            />
-          </Grid>
-        </Grid>
+        <Services control={control} />
       </form>
       <Box sx={{ marginTop: 4, marginBottom: 4 }} display="flex" justifyContent= "space-between">
         <Button variant="outlined" onClick={() => setPage("create")}>Palaa muuttamatta</Button>
