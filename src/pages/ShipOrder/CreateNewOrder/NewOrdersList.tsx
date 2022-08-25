@@ -11,16 +11,15 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { Order } from "Types";
 import { format } from "date-fns";
-import useOrdersStore, { Page } from "./useOrdersStore";
+import { useNavigate, useParams } from "react-router-dom";
+import useOrdersStore from "./useOrdersStore";
 
 type NewOrder = Omit<Order, "dateOrdered"|"status">
 
 
 const NewOrdersList = () => {
+  const { orderId } = useParams();
   const getOrders = useOrdersStore(state => state.orders);
-  const setSelected = useOrdersStore(state => state.setModifiableOrder);
-  const setPage = useOrdersStore(state => state.setPage);
-  const selected = useOrdersStore(state => state.modifiableOrder);
   return(
     <Box>
       <Typography variant="h5" >Uudet tilaukset</Typography>
@@ -38,7 +37,7 @@ const NewOrdersList = () => {
           <TableBody>
             {
               getOrders.length !== 0
-                ? getOrders?.map(a => <Row key={a.id} order={a} selected={a.id===selected?.id} setSelected={setSelected} setPage={setPage} />)
+                ? getOrders?.map(a => <Row key={a.id} order={a} selected={a.id === orderId} />)
                 : <PlaceHolderRow />
             }
           </TableBody>
@@ -49,16 +48,14 @@ const NewOrdersList = () => {
 };
 interface RowProps {
   order: NewOrder,
-  setPage: (page: Page) => void,
   selected: boolean,
-  setSelected: (newOrder: NewOrder) => void,
 }
-function Row({ selected, setPage, order, setSelected }: RowProps) {
+function Row({ selected, order }: RowProps) {
   const { ship, event, services, dateTime } = order;
   const serviceProviders = services ? services.map<number>(a => a.persons).reduce<number>((a,c) => c + a, 0 as number) : 0;
+  const navigate = useNavigate();
   const handleClick = () => {
-    setSelected(order);
-    setPage("modify");
+    navigate(`modify/${order.id}`);
   };
   return (
     <>

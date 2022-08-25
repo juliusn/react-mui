@@ -10,31 +10,26 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import NewOrdersList from "./NewOrdersList";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
-import CreateNewOrderForm from "./CreateNewOrderForm";
-import ModifyNewOrder from "./ModifyNewOrder";
-import useOrdersStore from "./useOrdersStore";
 import { useCallbackPrompt } from "hooks/useCallbackPrompt";
 import ConfirmationDialog from "components/ConfirmationDialog";
+import { useParams, Outlet, useOutletContext } from "react-router-dom";
 
 export type NewOrder = Omit<Order, "dateOrdered"|"status">
-
+type ContextType = { setShowDialog: React.Dispatch<React.SetStateAction<boolean>> | null };
 const CreateNewOrder = () => {
-  const page = useOrdersStore(state => state.page);
-  const [showDialog, setShowDialog] = useState<boolean>(false);
-  const { showPrompt, confirmNavigation, cancelNavigation } =
-    useCallbackPrompt(showDialog);
-  const renderPage= () => {
-    if(page === "create") return(<CreateNewOrderForm setShowDialog={setShowDialog} />);
-    if(page === "modify") return(<ModifyNewOrder />);
-  };
+  const [ showDialog, setShowDialog ] = useState<boolean>(false);
+  const { showPrompt, confirmNavigation, cancelNavigation } = useCallbackPrompt(showDialog);
+  const { orderId } = useParams();
 
   return(
     <Container sx={{ marginTop:2, padding: 1 }} component={Paper}>
+      {/*
       <ConfirmationDialog
         show={showPrompt}
         confirmNavigation={confirmNavigation}
         cancelNavigation={cancelNavigation}
       />
+  */}
       <Grid container spacing={4}>
         <Grid item xs={6} >
           <Typography variant="h5" sx={{ textAlign: "start" }}>Luo uusia tilauksia</Typography>
@@ -55,7 +50,7 @@ const CreateNewOrder = () => {
         <Grid item xs={12}>
           <DividedCard
             left={<NewOrdersList />}
-            right={renderPage()}
+            right={<Outlet context={setShowDialog}/>}
             size={0.4}
           />
         </Grid>
@@ -63,5 +58,8 @@ const CreateNewOrder = () => {
     </Container>
   );
 };
+export function useDialog() {
+  return useOutletContext<ContextType>();
+}
 export default CreateNewOrder;
 

@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Divider from "@mui/material/Divider";
-import { getHours, getMinutes, setHours, setMinutes, isFriday, isSaturday, isSunday, isWeekend, startOfToday } from "date-fns";
+import { getHours, getMinutes, setHours, setMinutes, startOfToday } from "date-fns";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Service, OrderTemplate } from "Types";
-import { getOrderTemplates } from "storage/readAndWriteOrders";
 import { useForm } from "react-hook-form";
 import HookFormField from "components/HookFormField";
-import TemplateSelection from "./TemplateSelection";
+import TemplateSelection from "./TemplateSelect";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import HookFormDatePicker from "components/HookFormDatePicker";
@@ -18,7 +17,7 @@ import Services from "./Services";
 import HookFormTimePicker from "components/HookFormTimePicker";
 import { v4 as uuidv4 } from "uuid";
 import useOrdersStore from "./useOrdersStore";
-
+import { useDialog } from "./";
 
 export interface OrderFormValues  {
   date: Date,
@@ -51,13 +50,13 @@ export const schema = yup.object({
 });
 
 
-const CreateNewOrderForm = ({ setShowDialog }:{ setShowDialog: React.Dispatch<React.SetStateAction<boolean>> }) => {
-  const { reset, setValue, watch, control, handleSubmit } = useForm<OrderFormValues>({
+const CreateNewOrderForm = () => {
+  const { setShowDialog } = useDialog();
+  const { reset, setValue, control, handleSubmit } = useForm<OrderFormValues>({
     defaultValues:  initialValues,
     resolver: yupResolver(schema),
     mode: "onSubmit",
   });
-  const [ templates, setTemplates ] = useState<OrderTemplate[]>();
   const createOrder = useOrdersStore(state => state.setNewOrder);
   const onSubmit = ({ date, time, ...rest }: OrderFormValues) => {
     let initialDateTime = new Date(date);
@@ -68,28 +67,9 @@ const CreateNewOrderForm = ({ setShowDialog }:{ setShowDialog: React.Dispatch<Re
     const id: string = uuidv4();
     createOrder({ id, ...rest, dateTime:initialDateTime, from:"SPFS" });
     reset({ ...initialValues, date });
-    setShowDialog(true);
+    if(setShowDialog) setShowDialog(true);
   };
 
-
-  const dateWatch = watch("date");
-  useEffect(() => {
-    if(isWeekend(dateWatch)){
-      if(isSaturday(dateWatch)){
-        setTemplates(getOrderTemplates().saturday);
-      }
-      if(isSunday(dateWatch)){
-        setTemplates(getOrderTemplates().sunday);
-      }
-    }
-    if(!isWeekend(dateWatch)){
-      if(isFriday(dateWatch)){
-        setTemplates(getOrderTemplates().friday);
-      }else{
-        setTemplates(getOrderTemplates().business_day);
-      }
-    }
-  }, [dateWatch]);
   return(
     <>
       <Typography variant="h5">Luo uusi tilaus</Typography>
@@ -106,7 +86,7 @@ const CreateNewOrderForm = ({ setShowDialog }:{ setShowDialog: React.Dispatch<Re
           <Grid item xs={6}>
             <TemplateSelection
               setValue={setValue}
-              templates= {templates? templates : []}
+              control={control}
             />
           </Grid>
           <Grid item xs={6}>

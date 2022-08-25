@@ -3,16 +3,37 @@ import TextField from "@mui/material/TextField";
 import { parse } from "date-fns";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import { OrderTemplate } from "Types";
-import { UseFormSetValue } from "react-hook-form";
+import { UseFormSetValue, Control, useWatch } from "react-hook-form";
 import { OrderFormValues } from "./CreateNewOrderForm";
-
+import { getOrderTemplates } from "storage/readAndWriteOrders";
+import { isFriday, isSaturday, isSunday, isWeekend } from "date-fns";
 interface TemplateSelectionProps{
-  templates: OrderTemplate[]
+  control: Control<OrderFormValues>;
   setValue: UseFormSetValue<OrderFormValues>;
 }
 
-export default function TemplateSelection({ templates, setValue }:TemplateSelectionProps) {
+export default function TemplateSelection({ control, setValue }:TemplateSelectionProps) {
   const [ template, setTemplate ] = useState<OrderTemplate|null>();
+  const [ templates, setTemplates ] = useState<OrderTemplate[]>([]);
+  const date = useWatch({ control, name: "date" });
+
+  useEffect(() => {
+    if(isWeekend(date)){
+      if(isSaturday(date)){
+        setTemplates(getOrderTemplates().saturday);
+      }
+      if(isSunday(date)){
+        setTemplates(getOrderTemplates().sunday);
+      }
+    }
+    if(!isWeekend(date)){
+      if(isFriday(date)){
+        setTemplates(getOrderTemplates().friday);
+      }else{
+        setTemplates(getOrderTemplates().business_day);
+      }
+    }
+  }, [date]);
   const filterOptions = createFilterOptions({
     stringify: (option: OrderTemplate) => `${option.ship} ${option.time} ${option.port}`,
   });

@@ -13,6 +13,7 @@ const ShipOrder = () => {
   const [ orders, setOrders ] = useState<Order[]>([]);
   const navigate = useNavigate();
   useEffect(() => {
+    //muokkaa hakemaan serveriltä data
     setOrders(getOrders());
   }, []);
 
@@ -22,7 +23,7 @@ const ShipOrder = () => {
         <Button
           startIcon={<AddIcon />}
           variant="outlined"
-          onClick={() => navigate("/create")}
+          onClick={() => navigate("/create/new")}
         >
           Lisää uusi tilaus
         </Button>

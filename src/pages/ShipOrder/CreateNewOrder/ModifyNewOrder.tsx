@@ -14,6 +14,7 @@ import { onPromise } from "utils/utils";
 import HookFormTimePicker from "components/HookFormTimePicker";
 import useOrdersStore from "./useOrdersStore";
 import { OrderFormValues, schema } from "./CreateNewOrderForm";
+import { useNavigate, useParams } from "react-router-dom";
 
 const initialValues: OrderFormValues = {
   date: new Date(),
@@ -27,9 +28,13 @@ const initialValues: OrderFormValues = {
 };
 
 const ModifyNewOrder = () => {
+  const { orderId } = useParams();
+  const navigate = useNavigate();
+  if(!orderId) {
+    throw new Error("order by id was not found");
+  }
   const updateOrder = useOrdersStore(state => state.updateOrder);
-  const order = useOrdersStore(state => state.modifiableOrder);
-  const setPage = useOrdersStore(state => state.setPage);
+  const order = useOrdersStore(state => state.getOrderById(orderId));
   const { setValue, control, handleSubmit } = useForm<OrderFormValues>({
     defaultValues:   order ? order: initialValues,
     resolver: yupResolver(schema),
@@ -37,15 +42,18 @@ const ModifyNewOrder = () => {
   });
 
   useEffect( () => {
-    if(!order) throw new Error("object is null");
-    setValue("services", order.services? order.services : []);
-    setValue("date", order.dateTime);
-    setValue("time", order.dateTime);
-    setValue("description", order.description);
-    setValue("dock", order.dock);
-    setValue("port", order.port);
-    setValue("ship", order.ship);
-    setValue("event", order.event);
+    if(!order){
+      navigate("/create/new");
+    } else{
+      setValue("services", order.services? order.services : []);
+      setValue("date", order.dateTime);
+      setValue("time", order.dateTime);
+      setValue("description", order.description);
+      setValue("dock", order.dock);
+      setValue("port", order.port);
+      setValue("ship", order.ship);
+      setValue("event", order.event);
+    }
   },[setValue, order]);
 
   const onSubmit = ({ date, time, ...rest }: OrderFormValues) => {
@@ -56,9 +64,11 @@ const ModifyNewOrder = () => {
     initialDateTime = setMinutes(initialDateTime, minutes );
     if(!order) throw new Error("id is null");
     updateOrder({ id:order.id, ...rest, dateTime:initialDateTime, from:"SPFS" });
-    setPage("create");
+    goBack();
   };
-
+  const goBack = () => {
+    navigate("/create/new");
+  };
   return(
     <>
       <form>
@@ -125,7 +135,7 @@ const ModifyNewOrder = () => {
         <Services control={control} />
       </form>
       <Box sx={{ marginTop: 4, marginBottom: 4 }} display="flex" justifyContent= "space-between">
-        <Button variant="outlined" onClick={() => setPage("create")}>Palaa muuttamatta</Button>
+        <Button variant="outlined" onClick={() => goBack()}>Palaa muuttamatta</Button>
         <Button variant="outlined" onClick={onPromise(handleSubmit(onSubmit))}>Tallenna muutokset</Button>
       </Box>
     </>

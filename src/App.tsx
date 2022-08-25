@@ -13,6 +13,9 @@ import theme from "styles/Styles";
 import UserProfileContextProvider, { useUserProfileContext } from "./UserContextProvider";
 import ShipOrder from "pages/ShipOrder";
 import NewShipOrderForm from "pages/ShipOrder/CreateNewOrder";
+import ModifyNewOrder from "pages/ShipOrder/CreateNewOrder/ModifyNewOrder";
+import CreateNewOrderForm  from "pages/ShipOrder/CreateNewOrder/CreateNewOrderForm";
+
 
 function App() {
   return (
@@ -78,7 +81,24 @@ function App() {
                       <NewShipOrderForm />
                     </RequireAuth>
                   }
-                />
+                >
+                  <Route
+                    path="new"
+                    element={
+                      <RequireAuth>
+                        <CreateNewOrderForm/>
+                      </RequireAuth>
+                    }
+                  />
+                  <Route
+                    path="modify/:orderId"
+                    element={
+                      <RequireAuth>
+                        <ModifyNewOrder />
+                      </RequireAuth>
+                    }
+                  />
+                </Route>
               </Route>
               <Route
                 path="*"
