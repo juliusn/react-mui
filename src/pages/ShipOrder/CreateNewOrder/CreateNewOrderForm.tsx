@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef } from "react";
 import Divider from "@mui/material/Divider";
 import { getHours, getMinutes, setHours, setMinutes, startOfToday } from "date-fns";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { Service, OrderTemplate } from "Types";
+import { Service } from "Types";
 import { useForm } from "react-hook-form";
 import HookFormField from "components/HookFormField";
-import TemplateSelection from "./TemplateSelect";
+import TemplateSelect from "./TemplateSelect";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import HookFormDatePicker from "components/HookFormDatePicker";
@@ -52,6 +52,7 @@ export const schema = yup.object({
 
 const CreateNewOrderForm = () => {
   const { setShowDialog } = useDialog();
+  const ref = useRef<HTMLInputElement|null>(null);
   const { reset, setValue, control, handleSubmit } = useForm<OrderFormValues>({
     defaultValues:  initialValues,
     resolver: yupResolver(schema),
@@ -67,6 +68,10 @@ const CreateNewOrderForm = () => {
     const id: string = uuidv4();
     createOrder({ id, ...rest, dateTime:initialDateTime, from:"SPFS" });
     reset({ ...initialValues, date });
+    if(ref.current){
+      ref.current.focus();
+      ref.current.select();
+    }
     if(setShowDialog) setShowDialog(true);
   };
 
@@ -84,9 +89,10 @@ const CreateNewOrderForm = () => {
             />
           </Grid >
           <Grid item xs={6}>
-            <TemplateSelection
+            <TemplateSelect
               setValue={setValue}
               control={control}
+              ref={ref}
             />
           </Grid>
           <Grid item xs={6}>

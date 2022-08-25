@@ -7,12 +7,14 @@ import { UseFormSetValue, Control, useWatch } from "react-hook-form";
 import { OrderFormValues } from "./CreateNewOrderForm";
 import { getOrderTemplates } from "storage/readAndWriteOrders";
 import { isFriday, isSaturday, isSunday, isWeekend } from "date-fns";
-interface TemplateSelectionProps{
+
+interface TemplateSelectProps{
   control: Control<OrderFormValues>;
   setValue: UseFormSetValue<OrderFormValues>;
+  ref: React.Ref<HTMLInputElement | null>;
 }
 
-export default function TemplateSelection({ control, setValue }:TemplateSelectionProps) {
+const TemplateSelect = React.forwardRef(({ control, setValue }:TemplateSelectProps, ref) => {
   const [ template, setTemplate ] = useState<OrderTemplate|null>();
   const [ templates, setTemplates ] = useState<OrderTemplate[]>([]);
   const date = useWatch({ control, name: "date" });
@@ -51,12 +53,14 @@ export default function TemplateSelection({ control, setValue }:TemplateSelectio
     <Autocomplete
       filterOptions={filterOptions}
       sx={{ maxWidth: 200 }}
-
       options={templates}
+      selectOnFocus
       onChange={(e,value) => setTemplate(value)}
       groupBy={(option: OrderTemplate) => option.port}
       getOptionLabel={(option: OrderTemplate) => `${option.ship} ${option.time}`}
-      renderInput={(params) => <TextField variant="standard" {...params} label="Templates" />}
+      renderInput={(params) => <TextField variant="standard" {...params} inputRef={ref} label="Templates" />}
     />
   );
-}
+});
+TemplateSelect.displayName = "TemplateSelect";
+export default TemplateSelect;

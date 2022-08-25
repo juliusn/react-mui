@@ -11,7 +11,7 @@ import Button from "@mui/material/Button";
 import NewOrdersList from "./NewOrdersList";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import { useCallbackPrompt } from "hooks/useCallbackPrompt";
-import ConfirmationDialog from "components/ConfirmationDialog";
+import ConfirmationDialog from "components/Prompt";
 import { useParams, Outlet, useOutletContext } from "react-router-dom";
 
 export type NewOrder = Omit<Order, "dateOrdered"|"status">
