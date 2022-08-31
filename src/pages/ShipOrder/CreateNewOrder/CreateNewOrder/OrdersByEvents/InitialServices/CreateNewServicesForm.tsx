@@ -2,7 +2,7 @@ import React from "react";
 import { useFieldArray, useForm, Control } from "react-hook-form";
 import HookFormField from "components/HookFormField";
 import Grid from "@mui/material/Grid";
-import { OrderFormValues } from "../CreateNewOrderForm";
+import { OrderFormValues } from "..";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { onPromise } from "utils/utils";
 import { Service } from "Types";
@@ -43,29 +43,29 @@ export default function CreateNewServicesForm({ control : serviceControl }: AddS
   return(
     <>
       <Grid container columns={12} spacing={4}>
-        <Grid item xs={6}>
-          <Typography variant="h5" sx={{ textAlign: "space-between" }} >Palvelut</Typography>
+        <Grid item xs={6} sx={{ justifyContent: "flex-end", display: "flex" }}>
+          <Typography variant="h5" sx={{ textAlign: "ceneter" }} >Palvelut</Typography>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={6} sx={{ justifyContent: "flex-end", display: "flex" }}>
           <Button variant="outlined" onClick={onPromise(handleSubmit(onSubmit))} endIcon={<AddIcon />}>
-            <Typography>Lisää tehtävä</Typography>
+            Lisää tehtävä
           </Button>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={6} md={3}>
           <HookFormField<Service>
             control={control}
             name="service"
             label="Tehtävä"
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={6} md={3}>
           <HookFormField<Service>
             control={control}
             name="place"
             label="Paikka"
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={6} md={3}>
           <HookFormField<Service>
             control={control}
             name="persons"
@@ -73,7 +73,7 @@ export default function CreateNewServicesForm({ control : serviceControl }: AddS
             type="number"
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={6} md={3}>
           <HookFormField<Service>
             control={control}
             type="number"

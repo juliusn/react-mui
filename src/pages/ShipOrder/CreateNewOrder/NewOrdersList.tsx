@@ -9,13 +9,10 @@ import TableRow from "@mui/material/TableRow";
 import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import { Order } from "Types";
+import { OrderByEvent, NewOrder } from "Types";
 import { format } from "date-fns";
 import { useNavigate, useParams } from "react-router-dom";
 import useOrdersStore from "./useOrdersStore";
-
-type NewOrder = Omit<Order, "dateOrdered"|"status">
-
 
 const NewOrdersList = () => {
   const { orderId } = useParams();
@@ -51,8 +48,9 @@ interface RowProps {
   selected: boolean,
 }
 function Row({ selected, order }: RowProps) {
-  const { ship, event, services, dateTime } = order;
-  const serviceProviders = services ? services.map<number>(a => a.persons).reduce<number>((a,c) => c + a, 0 as number) : 0;
+  const { dateTime, type } = order;
+  // eslint-disable-next-line
+  const serviceProviders = type === "event" ? order.services.map<number>(a => a.persons).reduce<number>((a,c) => c + a, 0 as number) : order.persons;
   const navigate = useNavigate();
   const handleClick = () => {
     navigate(`modify/${order.id}`);
@@ -64,9 +62,9 @@ function Row({ selected, order }: RowProps) {
         sx={{ "& > *": { borderBottom: "unset" } }}
         onClick={handleClick}
       >
-        <TableCell>{ship} </TableCell>
+        <TableCell>{order.type === "event" ? order.ship : ""} </TableCell>
         <TableCell>{format(dateTime, "dd/MM HH:mm")} </TableCell>
-        <TableCell>{event} </TableCell>
+        <TableCell>{order.type === "event" ? order.event : "tuntityö"} </TableCell>
         <TableCell>{serviceProviders} </TableCell>
       </TableRow>
     </>

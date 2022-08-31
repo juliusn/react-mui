@@ -4,7 +4,7 @@ import { parse } from "date-fns";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import { OrderTemplate } from "Types";
 import { UseFormSetValue, Control, useWatch } from "react-hook-form";
-import { OrderFormValues } from "./CreateNewOrderForm";
+import { OrderFormValues } from ".";
 import { getOrderTemplates } from "storage/readAndWriteOrders";
 import { isFriday, isSaturday, isSunday, isWeekend } from "date-fns";
 

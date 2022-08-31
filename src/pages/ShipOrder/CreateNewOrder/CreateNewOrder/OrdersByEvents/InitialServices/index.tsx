@@ -1,14 +1,14 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 import CreateNewServicesForm from "./CreateNewServicesForm";
-import OrderServicesTable from "./OrderServicesTable";
+import OrderServicesTable from "./InitialServicesTable";
 import { Control } from "react-hook-form";
-import { OrderFormValues } from "../CreateNewOrderForm";
+import { OrderFormValues } from "..";
 
 interface ServicesProps {
   control: Control<OrderFormValues>;
 }
-function Services({ control } : ServicesProps) {
+function InitialServices({ control } : ServicesProps) {
   return(
     <Grid sx={{ marginTop:1 }}columns={12} spacing={4} container>
       <Grid item xs={12}>
@@ -26,4 +26,4 @@ function Services({ control } : ServicesProps) {
   );
 }
 
-export default Services;
+export default InitialServices;

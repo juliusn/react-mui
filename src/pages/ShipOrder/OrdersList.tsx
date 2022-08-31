@@ -20,15 +20,18 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import DividedCard from "components/DividedCard";
-import { Order, Service } from "Types";
+import { OrderByEvent, Order, OrderByHourlyWork, Service } from "Types";
 import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 interface RowMenuProps {
   anchorEl : null | HTMLElement
   onClose: () => void
+  id: string
 }
-const RowMenu = ({ anchorEl, onClose }: RowMenuProps ) => {
+const RowMenu = ({ id, anchorEl, onClose }: RowMenuProps ) => {
   const menuOpen = Boolean(anchorEl);
+  const navigate = useNavigate();
 
   return(
     <Menu
@@ -40,7 +43,7 @@ const RowMenu = ({ anchorEl, onClose }: RowMenuProps ) => {
         <ListItemIcon>
           <EditIcon />
         </ListItemIcon>
-        <ListItemText>Muokkaa tilausta</ListItemText>
+        <ListItemText onClick={() => navigate(`/modify/${id}`)}>Muokkaa tilausta</ListItemText>
       </MenuItem>
       <MenuItem>
         <ListItemIcon>
@@ -51,7 +54,44 @@ const RowMenu = ({ anchorEl, onClose }: RowMenuProps ) => {
     </Menu>
   );
 };
-function Row({ ship, event, dateOrdered, description, from, status, port, dock, services, dateTime }: Order) {
+// put Collabsiblerow component to render description
+function RowByHourlyWork({ id, persons, duration , dateOrdered, from, status, port, dateTime }: OrderByHourlyWork) {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  return(
+    <>
+      <TableRow
+        sx={{ "& > *": { borderBottom: "unset" } }}
+      >
+        <TableCell></TableCell>
+        <TableCell></TableCell>
+        <TableCell>{format(dateOrdered, "dd/MM HH:mm")}</TableCell>
+        <TableCell>{status? <Chip  color="success" label="Hyväksytty" />:<Chip color="warning" label="Odottaa"/>} </TableCell>
+        <TableCell>{from} </TableCell>
+        <TableCell>{format(dateTime, "dd/MM HH:mm")} </TableCell>
+        <TableCell>{port} </TableCell>
+        <TableCell></TableCell>
+        <TableCell>Tuntityö {duration} h</TableCell>
+        <TableCell>{persons}</TableCell>
+        <TableCell>
+          <IconButton onClick={handleClick}><MoreVertIcon /></IconButton>
+          <RowMenu
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            id={id}
+          />
+        </TableCell>
+      </TableRow>
+    </>
+  );
+
+}
+function RowByEvent({ id, ship, event, dateOrdered, description, from, status, port, dock, services, dateTime }: OrderByEvent) {
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   //eslint-disable-next-line
@@ -76,7 +116,7 @@ function Row({ ship, event, dateOrdered, description, from, status, port, dock, 
           </IconButton>
         </TableCell>
         <TableCell>{ship} </TableCell>
-        <TableCell>{dateOrdered} </TableCell>
+        <TableCell>{format(dateOrdered, "dd/MM HH:mm")}</TableCell>
         <TableCell>{status? <Chip  color="success" label="Hyväksytty" />:<Chip color="warning" label="Odottaa"/>} </TableCell>
         <TableCell>{from} </TableCell>
         <TableCell>{format(dateTime, "dd/MM HH:mm")} </TableCell>
@@ -86,8 +126,11 @@ function Row({ ship, event, dateOrdered, description, from, status, port, dock, 
         <TableCell>{serviceProviders} </TableCell>
         <TableCell>
           <IconButton onClick={handleClick}><MoreVertIcon /></IconButton>
-          <RowMenu anchorEl={anchorEl}
-            onClose={handleClose} />
+          <RowMenu
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            id={id}
+          />
         </TableCell>
       </TableRow>
       <TableRow>
@@ -143,7 +186,7 @@ const CollapsibleCell = ({ services, open, description } : { description?: strin
   );
 };
 
-export default function CollapsibleTable({ orders } :{ orders : Order[] }) {
+export default function OrdersList({ orders } :{ orders : Order[] }) {
 
   return (
     <TableContainer>
@@ -159,14 +202,15 @@ export default function CollapsibleTable({ orders } :{ orders : Order[] }) {
             <TableCell>Satama</TableCell>
             <TableCell>Laituri</TableCell>
             <TableCell>Tapahtuma</TableCell>
-            <TableCell>Aluspalvelut</TableCell>
+            <TableCell>Henkilöt</TableCell>
             <TableCell></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          { orders.map((row) => (
-            <Row key={row.id} {...row} />
-          ))}
+          { orders.map((row) => {
+            if("services" in row) return <RowByEvent key={row.id} {...row} />;
+            return <RowByHourlyWork key={row.id} {...row} />;
+          })}
         </TableBody>
       </Table>
     </TableContainer>

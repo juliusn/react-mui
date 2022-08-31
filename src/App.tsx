@@ -8,13 +8,15 @@ import Reset from "./Reset";
 import Dashboard from "./Dashboard";
 import ThemeProvider from "@mui/system/ThemeProvider";
 import Backdrop from "@mui/material/Backdrop";
+import Container from "@mui/material/Container";
 import CircularProgress from "@mui/material/CircularProgress";
 import theme from "styles/Styles";
 import UserProfileContextProvider, { useUserProfileContext } from "./UserContextProvider";
 import ShipOrder from "pages/ShipOrder";
 import NewShipOrderForm from "pages/ShipOrder/CreateNewOrder";
 import ModifyNewOrder from "pages/ShipOrder/CreateNewOrder/ModifyNewOrder";
-import CreateNewOrderForm  from "pages/ShipOrder/CreateNewOrder/CreateNewOrderForm";
+import CreateOrder from "pages/ShipOrder/CreateNewOrder/CreateNewOrder";
+import ModifyOrder from "pages/ModifyOrder";
 
 
 function App() {
@@ -24,87 +26,97 @@ function App() {
         <UserProfileContextProvider>
           <Router>
             <ResponsiveAppBar />
-            <Routes>
-              <Route
-                path="/login"
-                element={
-                  <AlreadyAuth>
-                    <Login />
-                  </AlreadyAuth>
-                }
-              />
-              <Route
-                path="/register"
-                element={
-                  <AlreadyAuth>
-                    <Register />
-                  </AlreadyAuth>
-                }
-              />
-              <Route
-                path="/reset"
-                element={
-                  <AlreadyAuth>
-                    <Reset />
-                  </AlreadyAuth>
-                }
-              />
-              <Route
-                path="/dashboard"
-                element={
-                  <RequireAuth>
-                    <Dashboard />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="/port-events"
-                element={
-                  <RequireAuth>
-                    <Dashboard />
-                  </RequireAuth>
-                }
-              />
-              <Route>
+            <Container>
+              <Routes>
                 <Route
-                  path="/ship-order"
+                  path="/login"
+                  element={
+                    <AlreadyAuth>
+                      <Login />
+                    </AlreadyAuth>
+                  }
+                />
+                <Route
+                  path="/register"
+                  element={
+                    <AlreadyAuth>
+                      <Register />
+                    </AlreadyAuth>
+                  }
+                />
+                <Route
+                  path="/reset"
+                  element={
+                    <AlreadyAuth>
+                      <Reset />
+                    </AlreadyAuth>
+                  }
+                />
+                <Route
+                  path="/dashboard"
                   element={
                     <RequireAuth>
-                      <ShipOrder />
+                      <Dashboard />
                     </RequireAuth>
                   }
                 />
                 <Route
-                  path="/create"
+                  path="/port-events"
                   element={
                     <RequireAuth>
-                      <NewShipOrderForm />
+                      <Dashboard />
                     </RequireAuth>
                   }
-                >
+                />
+                <Route>
                   <Route
-                    path="new"
+                    path="/ship-order"
                     element={
                       <RequireAuth>
-                        <CreateNewOrderForm/>
+                        <ShipOrder />
                       </RequireAuth>
                     }
                   />
                   <Route
-                    path="modify/:orderId"
+                    path="/create"
                     element={
                       <RequireAuth>
-                        <ModifyNewOrder />
+                        <NewShipOrderForm />
                       </RequireAuth>
                     }
-                  />
+                  >
+                    <Route
+                      path="new"
+                      element={
+                        <RequireAuth>
+                          <CreateOrder/>
+                        </RequireAuth>
+                      }
+                    />
+                    <Route
+                      path="modify/:orderId"
+                      element={
+                        <RequireAuth>
+                          <ModifyNewOrder />
+                        </RequireAuth>
+                      }
+                    />
+                  </Route>
                 </Route>
-              </Route>
-              <Route
-                path="*"
-                element={<Navigate to="/dashboard" replace />}
-              />
-            </Routes>
+                <Route
+                  path="modify/:orderId"
+                  element={
+                    <RequireAuth>
+                      <ModifyOrder />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="*"
+                  element={<Navigate to="/dashboard" replace />}
+                />
+              </Routes>
+            </Container>
           </Router>
         </UserProfileContextProvider>
       </ThemeProvider>

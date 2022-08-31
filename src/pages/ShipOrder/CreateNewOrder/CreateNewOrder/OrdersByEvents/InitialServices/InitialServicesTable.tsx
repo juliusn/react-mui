@@ -10,7 +10,7 @@ import TableRow from "@mui/material/TableRow";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Control, useFieldArray, useWatch, UseFieldArrayRemove } from "react-hook-form";
-import { OrderFormValues } from "../CreateNewOrderForm";
+import { OrderFormValues } from "..";
 
 interface ServiceTableProps {
   control: Control<OrderFormValues>,

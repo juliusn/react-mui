@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import { Order } from "Types";
-import CollapsibleTable from "./OrderList";
+import OrdersList from "./OrdersList";
 import { getOrders } from "storage/readAndWriteOrders";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate, Outlet } from "react-router-dom";
@@ -28,7 +28,7 @@ const ShipOrder = () => {
           Lisää uusi tilaus
         </Button>
       </Box>
-      <CollapsibleTable orders={orders} />
+      <OrdersList orders={orders} />
       <Outlet />
     </Container>
   );

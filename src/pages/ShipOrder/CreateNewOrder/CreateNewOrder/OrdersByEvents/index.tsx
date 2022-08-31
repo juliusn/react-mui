@@ -1,21 +1,36 @@
-import React, { useEffect } from "react";
-import Typography from "@mui/material/Typography";
+import React, { useRef } from "react";
 import Divider from "@mui/material/Divider";
-import { getHours, getMinutes, setHours, setMinutes } from "date-fns";
+import { getHours, getMinutes, setHours, setMinutes, startOfToday } from "date-fns";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import { Service } from "Types";
 import { useForm } from "react-hook-form";
 import HookFormField from "components/HookFormField";
+import TemplateSelect from "./TemplateSelect";
 import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import HookFormDatePicker from "components/HookFormDatePicker";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Services from "./Services";
+import * as yup from "yup";
 import { onPromise } from "utils/utils";
+import Services from "./InitialServices";
 import HookFormTimePicker from "components/HookFormTimePicker";
-import useOrdersStore from "./useOrdersStore";
-import { OrderFormValues, schema } from "./CreateNewOrderForm";
-import { useNavigate, useParams } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+import useOrdersStore from "../../useOrdersStore";
+import { useDialog } from "../..";
+import EditIcon from "@mui/icons-material/Edit";
 
+
+export interface OrderFormValues  {
+  date: Date,
+  services: Service[],
+  ship: string,
+  time: Date,
+  port: string,
+  dock?: string,
+  description?: string,
+  event?: string,
+}
 const initialValues: OrderFormValues = {
   date: new Date(),
   ship: "",
@@ -26,54 +41,47 @@ const initialValues: OrderFormValues = {
   description: "",
   event: "",
 };
+export const schema = yup.object({
+  date: yup.date().min(startOfToday(), "Date must not be in past"),
+  ship: yup.string().required("Ship is required"),
+  port: yup.string().required("Port is required"),
+  time: yup.date().required().typeError("Kenttä on pakollinen"),
+  dock: yup.string().required("Dock is required"),
+  description: yup.string(),
+  event: yup.string().required("event is required"),
+});
 
-const ModifyNewOrder = () => {
-  const { orderId } = useParams();
-  const navigate = useNavigate();
-  if(!orderId) {
-    throw new Error("order by id was not found");
-  }
-  const updateOrder = useOrdersStore(state => state.updateOrder);
-  const order = useOrdersStore(state => state.getOrderById(orderId));
-  const { setValue, control, handleSubmit } = useForm<OrderFormValues>({
-    defaultValues:   order ? order: initialValues,
+
+const CreateNewOrderForm = () => {
+  const { setShowDialog } = useDialog();
+  const ref = useRef<HTMLInputElement|null>(null);
+  const { reset, setValue, control, handleSubmit } = useForm<OrderFormValues>({
+    defaultValues:  initialValues,
     resolver: yupResolver(schema),
     mode: "onSubmit",
   });
-
-  useEffect( () => {
-    if(!order){
-      navigate("/create/new");
-    } else{
-      setValue("services", order.services? order.services : []);
-      setValue("date", order.dateTime);
-      setValue("time", order.dateTime);
-      setValue("description", order.description);
-      setValue("dock", order.dock);
-      setValue("port", order.port);
-      setValue("ship", order.ship);
-      setValue("event", order.event);
-    }
-  },[setValue, order]);
-
+  const createOrder = useOrdersStore(state => state.setNewOrder);
   const onSubmit = ({ date, time, ...rest }: OrderFormValues) => {
     let initialDateTime = new Date(date);
     const hours = getHours(time);
     const minutes = getMinutes(time);
     initialDateTime = setHours(initialDateTime, hours);
     initialDateTime = setMinutes(initialDateTime, minutes );
-    if(!order) throw new Error("id is null");
-    updateOrder({ id:order.id, ...rest, dateTime:initialDateTime, from:"SPFS" });
-    goBack();
+    const id: string = uuidv4();
+    createOrder({ id, ...rest, dateTime:initialDateTime, from:"SPFS", type: "event" });
+    reset({ ...initialValues, date });
+    if(ref.current){
+      ref.current.focus();
+      ref.current.select();
+    }
+    if(setShowDialog) setShowDialog(true);
   };
-  const goBack = () => {
-    navigate("/create/new");
-  };
+
   return(
     <>
+      <Typography sx={{ textAlign: "center" }} variant="h5">Luo uusi tilaus</Typography>
+      <Divider sx={{ margin: 2 }} />
       <form>
-        <Typography variant="h5">Muokkaa tilausta</Typography>
-        <Divider sx={{ margin: 2 }} />
         <Grid columns={12} spacing={4} container>
           <Grid item xs={6}>
             <HookFormDatePicker<OrderFormValues>
@@ -82,6 +90,13 @@ const ModifyNewOrder = () => {
               required
             />
           </Grid >
+          <Grid item xs={6}>
+            <TemplateSelect
+              setValue={setValue}
+              control={control}
+              ref={ref}
+            />
+          </Grid>
           <Grid item xs={6}>
             <HookFormField<OrderFormValues>
               control={control}
@@ -132,14 +147,13 @@ const ModifyNewOrder = () => {
         </Grid>
       </form>
       <form>
-        <Services control={control} />
+        <Services control={control}/>
       </form>
-      <Box sx={{ marginTop: 4, marginBottom: 4 }} display="flex" justifyContent= "space-between">
-        <Button variant="outlined" onClick={() => goBack()}>Palaa muuttamatta</Button>
-        <Button variant="outlined" onClick={onPromise(handleSubmit(onSubmit))}>Tallenna muutokset</Button>
+      <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: 4, marginBottom: 4 }}>
+        <Button endIcon={<EditIcon />} variant="outlined" onClick={onPromise(handleSubmit(onSubmit))}>Lisää tilaus</Button>
       </Box>
     </>
   );
 };
 
-export default ModifyNewOrder;
+export default CreateNewOrderForm;

@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DesktopTimePicker } from "@mui/x-date-pickers/DesktopTimePicker";
-import { useController, Path, Control, PathValue, RegisterOptions } from "react-hook-form";
+import { useController, Path, Control, RegisterOptions } from "react-hook-form";
 import { parse } from "date-fns";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 
@@ -37,10 +37,10 @@ export default function HookFormTimePicker<TFormValues>({ control, name, rules, 
         }}
         renderInput={(params) => (
           <TextField
+            sx={{ maxWidth: 200 }}
             {...params}
             {...props}
             variant={"standard"}
-            sx={{ width: 200 }}
             helperText={error && error.message}
             error={!!(error)}
             label={props.label ? props.label : fieldName}

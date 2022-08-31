@@ -8,11 +8,12 @@ function getId(): string {
 
 let orders: Order[] = [
   {
+    type: "event",
     id: getId(),
     event:"Kiinnitys",
     ship: "Mega Star",
     dateTime: parse("16/6/2022 12:15", "d/MM/yyyy HH:mm", new Date()),
-    dateOrdered: "10/6/2022 09:00",
+    dateOrdered: parse("10/6/2022 09:00", "d/MM/yyyy HH:mm", new Date()),
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quis neque et ex feugiat fermentum. Pellentesque porta purus sed purus porttitor, ac dictum quam rutrum. Etiam ipsum lacus, semper accumsan mollis vitae, dignissim molestie odio. Nullam sed felis libero. Phasellus sed mauris id nisl elementum auctor. Praesent nisl justo, feugiat vel leo imperdiet, posuere faucibus eros. Sed sodales laoreet congue. Maecenas congue odio in efficitur pellentesque.",
     status: false,
     from: "SFPS",
@@ -29,11 +30,12 @@ let orders: Order[] = [
     ]
   },
   {
+    type: "event",
     id: getId(),
     event: "Kiinnitys",
     ship: "Europa",
     dateTime: parse("17/6/2022 16:00", "d/MM/yyyy HH:mm", new Date()),
-    dateOrdered:"10/6/2022 09:01",
+    dateOrdered:parse("10/6/2022 09:01" ,"d/MM/yyyy HH:mm", new Date()),
     status: true,
     from: "SFPS",
     port: "Länsisatama",
@@ -60,11 +62,12 @@ let orders: Order[] = [
     ]
   },
   {
+    type: "event",
     id: getId(),
     event: "Irrotus",
     ship: "Europa",
     dateTime: parse("17/6/2022 18:30", "dd/MM/yyyy HH:mm", new Date()),
-    dateOrdered:"10/6/2022 09:01",
+    dateOrdered:parse( "10/6/2022 09:01","d/MM/yyyy HH:mm", new Date()),
     status: false,
     from: "SFPS",
     port: "Länsisatama",
@@ -92,8 +95,10 @@ let orders: Order[] = [
   }
 ];
 export const getOrders = () => orders;
-
-export const postOrder = ({ order } : {order: Order}) => orders = orders.concat(order);
+export const getOrderById = (id: string) => orders.find(i => i.id === id);
+export const deleteOrderById = (id: string) => orders= orders.filter(i => i.id !== id);
+export const updateOrder= (order: Order) => orders = orders.map(o => o.id === order.id ? { ...order, status: false, dateOrdered: new Date() } : o);
+export const postOrder = ({ order } : {order: Order | Order[]}) => orders = orders.concat(order);
 export const getOrderTemplates = () => orderTemplates;
 
 const orderTemplates: OrderTemplateValues = {

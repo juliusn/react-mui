@@ -1,35 +1,22 @@
-export interface ServiceProvider {
-  nimi: string
-}
-export interface Keikka {
-  keikkaId: string
-  toteuttaja: ServiceProvider
-  keikalleLahdetty: boolean
-  suoritteet: suorite[]
-}
-export interface suorite {
-  aika: string
-  paikka: string
-  laituriTieto: LaituriTieto
-  tehtava: string
-  laiva: Laiva
-}
-export interface Laiva {
-  nimi: string
-}
-export interface LaituriTieto {
-  satama: string
-  laituri?: string
-}
-
-export interface Order {
+export interface orderBase {
   id: string,
   dateTime: Date,
-  event?: string,
-  dateOrdered: string,
-  description?: string,
+  dateOrdered: Date,
   from: string,
   status: boolean,
+  type:"hourwork"|"event",
+}
+export interface OrderByHourlyWork extends orderBase{
+  type:"hourwork",
+  description?: string,
+  port: string,
+  duration: number,
+  persons: number,
+}
+export interface OrderByEvent extends orderBase{
+  type: "event",
+  event?: string,
+  description?: string,
   ship: string,
   port: string,
   dock?: string,
@@ -55,3 +42,7 @@ export interface Service {
   service: string,
   readiness: number,
 }
+export type Order = OrderByEvent | OrderByHourlyWork;
+export type NewOrder = NewOrderByEvent | NewOrderByHourlyWork;
+export type NewOrderByEvent = Omit<OrderByEvent, "dateOrdered"|"status">;
+export type NewOrderByHourlyWork = Omit<OrderByHourlyWork, "dateOrdered"|"status">;
