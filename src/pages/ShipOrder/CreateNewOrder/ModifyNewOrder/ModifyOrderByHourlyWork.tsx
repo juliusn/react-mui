@@ -77,18 +77,21 @@ const ModifyHourlyWorkOrder = ({ order, goBack, update, deleteOrder }: ModifyNew
   };
   return(
     <>
-      <Typography sx={{ textAlign: "center" }} variant="h5">Muokkaa tuntityötilausta</Typography>
+      <Box display="flex" justifyContent= "space-between">
+        <Typography sx={{ textAlign: "center" }} variant="h5">Muokkaa tuntityötilausta</Typography>
+        <Button variant="outlined" startIcon={<DeleteIcon />} onClick={handleDelete}>Poista</Button>
+      </Box>
       <Divider sx={{ margin: 2 }} />
       <form>
         <Grid columns={12} spacing={4} container>
-          <Grid item xs={6}>
+          <Grid item md={6} lg={4}>
             <HookFormDatePicker<OrderFormValues>
               control={control}
               name="date"
               required
             />
           </Grid >
-          <Grid item xs={6}>
+          <Grid item md={6} lg={4}>
             <HookFormTimePicker<OrderFormValues>
               control={control}
               name="time"
@@ -96,7 +99,7 @@ const ModifyHourlyWorkOrder = ({ order, goBack, update, deleteOrder }: ModifyNew
             />
 
           </Grid>
-          <Grid item xs={6}>
+          <Grid item md={6} lg={4}>
             <HookFormField<OrderFormValues>
               control={control}
               name="duration"
@@ -104,7 +107,7 @@ const ModifyHourlyWorkOrder = ({ order, goBack, update, deleteOrder }: ModifyNew
               type="number"
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item md={6} lg={4}>
             <HookFormField<OrderFormValues>
               control={control}
               name="persons"
@@ -112,14 +115,14 @@ const ModifyHourlyWorkOrder = ({ order, goBack, update, deleteOrder }: ModifyNew
               required
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item md={6} lg={4}>
             <HookFormField<OrderFormValues>
               control={control}
               name="port"
               required
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item md={6} lg={4}>
             <HookFormField<OrderFormValues>
               control={control}
               name="description"
@@ -133,9 +136,8 @@ const ModifyHourlyWorkOrder = ({ order, goBack, update, deleteOrder }: ModifyNew
         </Grid>
       </form>
       <Box sx={{ display: "flex", justifyContent:"space-between", marginTop: 4, marginBottom: 4 }}>
-        <Button variant="outlined" startIcon={<CloseIcon />} onClick={() => goBack()}>Palaa muuttamatta</Button>
-        <Button variant="outlined" startIcon={<DeleteIcon />} onClick={handleDelete}>Poista tilaus</Button>
-        <Button variant="outlined" startIcon={<EditIcon />} onClick={onPromise(handleSubmit(onSubmit))}>Tallenna muutokset</Button>
+        <Button variant="outlined" startIcon={<CloseIcon />} onClick={() => goBack()}>Palaa</Button>
+        <Button variant="outlined" startIcon={<EditIcon />} onClick={onPromise(handleSubmit(onSubmit))}>Tallenna</Button>
       </Box>
     </>
   );

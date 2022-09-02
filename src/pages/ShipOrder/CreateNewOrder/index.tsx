@@ -4,20 +4,16 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
-import { OrderByEvent } from "Types";
 import DividedCard from "components/DividedCard";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import NewOrdersList from "./NewOrdersList";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import { useCallbackPrompt } from "hooks/useCallbackPrompt";
-import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ConfirmationDialog from "components/Prompt";
-import { useNavigate, Outlet, useOutletContext, Navigate } from "react-router-dom";
-import { getOrderTemplates, postOrder } from "storage/readAndWriteOrders";
+import { useNavigate, Outlet, useOutletContext } from "react-router-dom";
+import { postOrder } from "storage/readAndWriteOrders";
 import useOrdersStore from "./useOrdersStore";
-import ButtonGroup from "@mui/material/ButtonGroup";
 import { Order } from "Types";
 
 
@@ -79,7 +75,7 @@ const CreateNewOrder = () => {
           <DividedCard
             left={<NewOrdersList />}
             right={<Outlet context={setShowDialog}/>}
-            size={0.4}
+            size={5}
           />
         </Grid>
       </Grid>
