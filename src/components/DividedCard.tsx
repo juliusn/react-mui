@@ -1,5 +1,5 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
 
 interface DividedCardProps {
@@ -8,31 +8,30 @@ interface DividedCardProps {
   size?: number
 }
 const calc = (n : number|undefined) => {
-  if(!n) return{ leftSize: 49, rightSize: 49 };
-  if( n <= 0.02 ) return{ leftSize: 1, rightSize: 97 };
-  if( n >= 0.98 ) return{ leftSize: 97, rightSize: 1 };
-  const x =  n*100-1;
-  return{ leftSize: x, rightSize: 98-x };
+  if(!n) return{ leftSize: 5, rightSize: 5, middle: 2 };
+  if( n <= 1 ) return{ leftSize: 1, rightSize: 10, middle: 1 };
+  if( n >= 9 ) return{ leftSize: 10, rightSize: 1, middle: 1 };
+  return{ leftSize: n, rightSize: 11-n, middle: 1 };
 };
 /**
  *left = left side component of card
  *right = Right side component of card
- *size = value = 0.01 - 0.99. Value means left side component precentage of card size. 0.5 = 50%
+ *size = value = 1-9. Value means left side component precentage of card size. 5 = 5/11, undefined is 50%
  * */
 const DividedCard = ({ left, right, size }: DividedCardProps ) => {
-  const{ leftSize, rightSize } = calc(size);
+  const { leftSize, rightSize, middle } = calc(size);
   return(
-    <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
-      <Box sx={{ flexGrow: leftSize }}>
+    <Grid container spacing={5}>
+      <Grid item xs={leftSize}>
         {left}
-      </Box>
-      <Box sx={{ flexGrow:2, margin: 5 }}>
-        <Divider  orientation="vertical" />
-      </Box>
-      <Box sx= {{ flexGrow: rightSize }}>
+      </Grid>
+      <Grid item sx={{ backgroundColro: "blue" }} xs={middle}>
+        <Divider sx={{ width: "50%" }} orientation="vertical" />
+      </Grid>
+      <Grid item xs={rightSize}>
         {right}
-      </Box>
-    </Box>
+      </Grid>
+    </Grid>
   );
 };
 
