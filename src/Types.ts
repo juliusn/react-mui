@@ -1,19 +1,21 @@
-export interface orderBase {
+export type OrderTypes = "hourwork" | "event";
+export type Client = "SFPS"
+export interface OrderBase {
   id: string,
   dateTime: Date,
   dateOrdered: Date,
-  from: string,
+  client: Client,
   status: boolean,
-  type:"hourwork"|"event",
+  type: OrderTypes,
 }
-export interface OrderByHourlyWork extends orderBase{
+export interface OrderByHourlyWork extends OrderBase{
   type:"hourwork",
   description?: string,
   port: string,
   duration: number,
   persons: number,
 }
-export interface OrderByEvent extends orderBase{
+export interface OrderByEvent extends OrderBase{
   type: "event",
   event?: string,
   description?: string,

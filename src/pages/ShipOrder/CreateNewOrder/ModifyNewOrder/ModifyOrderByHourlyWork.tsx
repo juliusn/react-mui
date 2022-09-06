@@ -68,7 +68,7 @@ const ModifyHourlyWorkOrder = ({ order, goBack, update, deleteOrder }: ModifyNew
     const minutes = getMinutes(time);
     initialDateTime = setHours(initialDateTime, hours);
     initialDateTime = setMinutes(initialDateTime, minutes );
-    update({ id:order.id, ...rest, dateTime:initialDateTime, from:"SPFS", type:"hourwork" });
+    update({ id:order.id, ...rest, dateTime:initialDateTime, client:"SFPS", type:"hourwork" });
     goBack();
   };
   const handleDelete = () => {

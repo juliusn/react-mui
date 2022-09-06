@@ -51,7 +51,7 @@ const ModifyNewOrder = ({ update, deleteOrder, order, goBack }:ModifyNewOrderI) 
     initialDateTime = setHours(initialDateTime, hours);
     initialDateTime = setMinutes(initialDateTime, minutes );
     if(!order) throw new Error("id is null");
-    update({ id:order.id, ...rest, dateTime:initialDateTime, from:"SPFS", type: "event" });
+    update({ id:order.id, ...rest, dateTime:initialDateTime, client:"SFPS", type: "event" });
     goBack();
   };
   const handleDelete= () => {

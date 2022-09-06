@@ -16,7 +16,7 @@ let orders: Order[] = [
     dateOrdered: parse("10/6/2022 09:00", "d/MM/yyyy HH:mm", new Date()),
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quis neque et ex feugiat fermentum. Pellentesque porta purus sed purus porttitor, ac dictum quam rutrum. Etiam ipsum lacus, semper accumsan mollis vitae, dignissim molestie odio. Nullam sed felis libero. Phasellus sed mauris id nisl elementum auctor. Praesent nisl justo, feugiat vel leo imperdiet, posuere faucibus eros. Sed sodales laoreet congue. Maecenas congue odio in efficitur pellentesque.",
     status: false,
-    from: "SFPS",
+    client: "SFPS",
     port: "Länsisatama",
     dock: "LJ6",
     services:[
@@ -37,7 +37,7 @@ let orders: Order[] = [
     dateTime: parse("17/6/2022 16:00", "d/MM/yyyy HH:mm", new Date()),
     dateOrdered:parse("10/6/2022 09:01" ,"d/MM/yyyy HH:mm", new Date()),
     status: true,
-    from: "SFPS",
+    client: "SFPS",
     port: "Länsisatama",
     dock: "Lj6",
     services:[
@@ -69,7 +69,7 @@ let orders: Order[] = [
     dateTime: parse("17/6/2022 18:30", "dd/MM/yyyy HH:mm", new Date()),
     dateOrdered:parse( "10/6/2022 09:01","d/MM/yyyy HH:mm", new Date()),
     status: false,
-    from: "SFPS",
+    client: "SFPS",
     port: "Länsisatama",
     dock: "Lj6",
     services:[

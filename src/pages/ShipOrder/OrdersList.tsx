@@ -20,7 +20,7 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import DividedCard from "components/DividedCard";
-import { OrderByEvent, Order, OrderByHourlyWork, Service } from "Types";
+import { OrderByEvent, Order, OrderByHourlyWork } from "Types";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 
@@ -32,7 +32,6 @@ interface RowMenuProps {
 const RowMenu = ({ id, anchorEl, onClose }: RowMenuProps ) => {
   const menuOpen = Boolean(anchorEl);
   const navigate = useNavigate();
-
   return(
     <Menu
       anchorEl={anchorEl}
@@ -54,57 +53,48 @@ const RowMenu = ({ id, anchorEl, onClose }: RowMenuProps ) => {
     </Menu>
   );
 };
-// put Collabsiblerow component to render description
-function RowByHourlyWork({ id, persons, duration , dateOrdered, from, status, port, dateTime }: OrderByHourlyWork) {
+function Row(props: { order : Order }) {
+  const { order } = props;
+  const { type, status, dateOrdered, dateTime, id, client, port } = order;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [open, setOpen] = useState(false);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+  function selectCellByType(cellNum: number ){
+    if(order.type==="event"){
+      switch(cellNum){
+      case 1:
+        return order.ship;
+      case 7:
+        return order.dock;
+      case 8:
+        return order.event;
+      case 9:
+        return order.services.map<number>(a => a.persons).reduce<number>((a,c) => c + a, 0 as number);
+      default:
+        return null;
+      }
+    }
+    if(type==="hourwork"){
+      switch(cellNum){
+      case 8:
+        return `${order.duration}h tuntityö`;
+      case 9:
+        return order.persons;
+      default:
+        return null;
+      }
+    }
+
+    return null;
+
+  }
   return(
     <>
-      <TableRow
-        sx={{ "& > *": { borderBottom: "unset" } }}
-      >
-        <TableCell></TableCell>
-        <TableCell></TableCell>
-        <TableCell>{format(dateOrdered, "dd/MM HH:mm")}</TableCell>
-        <TableCell>{status? <Chip  color="success" label="Hyväksytty" />:<Chip color="warning" label="Odottaa"/>} </TableCell>
-        <TableCell>{from} </TableCell>
-        <TableCell>{format(dateTime, "dd/MM HH:mm")} </TableCell>
-        <TableCell>{port} </TableCell>
-        <TableCell></TableCell>
-        <TableCell>Tuntityö {duration} h</TableCell>
-        <TableCell>{persons}</TableCell>
-        <TableCell>
-          <IconButton onClick={handleClick}><MoreVertIcon /></IconButton>
-          <RowMenu
-            anchorEl={anchorEl}
-            onClose={handleClose}
-            id={id}
-          />
-        </TableCell>
-      </TableRow>
-    </>
-  );
-
-}
-function RowByEvent({ id, ship, event, dateOrdered, description, from, status, port, dock, services, dateTime }: OrderByEvent) {
-  const [open, setOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  //eslint-disable-next-line
-  const serviceProviders = services ? services.map<number>(a => a.persons).reduce<number>((a,c) => c + a, 0 as number) : 0;
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  return (
-    <React.Fragment>
       <TableRow
         sx={{ "& > *": { borderBottom: "unset" } }}
       >
@@ -115,15 +105,15 @@ function RowByEvent({ id, ship, event, dateOrdered, description, from, status, p
             {open ? <ExpandLessIcon /> : <ExpandMoreIcon /> }
           </IconButton>
         </TableCell>
-        <TableCell>{ship} </TableCell>
+        <TableCell>{selectCellByType(1)}</TableCell>
         <TableCell>{format(dateOrdered, "dd/MM HH:mm")}</TableCell>
         <TableCell>{status? <Chip  color="success" label="Hyväksytty" />:<Chip color="warning" label="Odottaa"/>} </TableCell>
-        <TableCell>{from} </TableCell>
+        <TableCell>{client} </TableCell>
         <TableCell>{format(dateTime, "dd/MM HH:mm")} </TableCell>
         <TableCell>{port} </TableCell>
-        <TableCell>{dock} </TableCell>
-        <TableCell>{event} </TableCell>
-        <TableCell>{serviceProviders} </TableCell>
+        <TableCell>{selectCellByType(7)}</TableCell>
+        <TableCell>{selectCellByType(8)}</TableCell>
+        <TableCell>{selectCellByType(9)}</TableCell>
         <TableCell>
           <IconButton onClick={handleClick}><MoreVertIcon /></IconButton>
           <RowMenu
@@ -134,55 +124,78 @@ function RowByEvent({ id, ship, event, dateOrdered, description, from, status, p
         </TableCell>
       </TableRow>
       <TableRow>
-        <CollapsibleCell description={description} services={services} open={open}/>
+        <CollapsibleCell open={open}>
+          { order.type === "event" ? <Event order={order} /> : <Hourly order={order}/>}
+        </CollapsibleCell>
       </TableRow>
-    </React.Fragment>
+    </>
   );
 }
-
-const CollapsibleCell = ({ services, open, description } : { description?: string, open: boolean, services: Service[]|undefined }) => {
-
-  return (
+const CollapsibleCell = ({  open, children } : { open: boolean, children: React.ReactNode }) => {
+  return(
     <TableCell padding="none" style={{  paddingBottom: 0, paddingTop: 0 }} colSpan={11}>
       <Collapse  in={open} timeout="auto" unmountOnExit>
-        <Box sx={{  margin: 2 }} >
-          <DividedCard
-            left={
-              <Table size="small" aria-label="services">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Palvelu</TableCell>
-                    <TableCell>Paikka</TableCell>
-                    <TableCell>Tilattu</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  { services && services.map(row => (
-                    <TableRow key={row.place}>
-                      <TableCell>{row.service}</TableCell>
-                      <TableCell>{row.place}</TableCell>
-                      <TableCell>{row.persons}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            }
-            right={
-              <TextField
-                id="standard-textarea"
-                label="Huomioitavaa"
-                multiline
-                rows={ description ? 6: 0}
-                fullWidth={ description ? true: false}
-                variant="standard"
-                value={description}
-                disabled
-              />
-            }
-          />
-        </Box>
+        {children}
       </Collapse>
     </TableCell>
+  );
+};
+const Event = ( props: { order: OrderByEvent }) => {
+  const { services, description }  = props.order;
+  return (
+    <Box sx={{  margin: 2 }} >
+      <DividedCard
+        left={
+          <Table size="small" aria-label="services">
+            <TableHead>
+              <TableRow>
+                <TableCell>Palvelu</TableCell>
+                <TableCell>Paikka</TableCell>
+                <TableCell>Tilattu</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              { services && services.map(row => (
+                <TableRow key={row.place}>
+                  <TableCell>{row.service}</TableCell>
+                  <TableCell>{row.place}</TableCell>
+                  <TableCell>{row.persons}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        }
+        right={
+          <TextField
+            id="standard-textarea"
+            label="Huomioitavaa"
+            multiline
+            rows={ description ? 6: 0}
+            fullWidth={ description ? true: false}
+            variant="standard"
+            value={description}
+            disabled
+          />
+        }
+      />
+    </Box>
+  );
+};
+const Hourly = (props :{ order: OrderByHourlyWork }) => {
+  const { description } = props.order;
+  return (
+    <Box sx={{  margin: 2 }} >
+      <TextField
+        id="standard-textarea"
+        label="Huomioitavaa"
+        multiline
+        rows={ description ? 6: 0}
+        fullWidth={ description ? true: false}
+        variant="standard"
+        value={description}
+        disabled
+      />
+    </Box>
   );
 };
 
@@ -207,10 +220,7 @@ export default function OrdersList({ orders } :{ orders : Order[] }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          { orders.map((row) => {
-            if("services" in row) return <RowByEvent key={row.id} {...row} />;
-            return <RowByHourlyWork key={row.id} {...row} />;
-          })}
+          { orders.map((row) => <Row key={row.id} order={row}/>)}
         </TableBody>
       </Table>
     </TableContainer>
