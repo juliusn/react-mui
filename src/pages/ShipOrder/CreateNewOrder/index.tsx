@@ -14,7 +14,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate, Outlet, useOutletContext } from "react-router-dom";
 import { postOrder } from "storage/readAndWriteOrders";
 import useOrdersStore from "./useOrdersStore";
-import { Order } from "Types";
+import { PostOrder } from "Types";
 
 
 type ContextType = { setShowDialog: React.Dispatch<React.SetStateAction<boolean>> | null };
@@ -27,7 +27,7 @@ const CreateNewOrder = () => {
 
   const onSubmit = () => {
     // tömö
-    const order: Order[] = orders.map(o => ({ ...o, dateOrdered: new Date(), status: false }));
+    const order: PostOrder[] = orders.map(o => ({ ...o, status: "pending" }));
     postOrder({ order });
     // tarksita että onko samat talletettu jo listalle
     clearOrders();

@@ -35,8 +35,8 @@ const ModifyNewOrder = ({ update, deleteOrder, order, goBack }:ModifyNewOrderI) 
   useEffect( () => {
     //setup inputs
     setValue("services", order.services? order.services : []);
-    setValue("date", order.dateTime);
-    setValue("time", order.dateTime);
+    setValue("date", order.dateBegin);
+    setValue("time", order.dateBegin);
     setValue("description", order.description);
     setValue("dock", order.dock);
     setValue("port", order.port);
@@ -51,7 +51,7 @@ const ModifyNewOrder = ({ update, deleteOrder, order, goBack }:ModifyNewOrderI) 
     initialDateTime = setHours(initialDateTime, hours);
     initialDateTime = setMinutes(initialDateTime, minutes );
     if(!order) throw new Error("id is null");
-    update({ id:order.id, ...rest, dateTime:initialDateTime, client:"SFPS", type: "event" });
+    update({ id:order.id, ...rest, dateBegin:initialDateTime, client:"SFPS", type: "event" });
     goBack();
   };
   const handleDelete= () => {

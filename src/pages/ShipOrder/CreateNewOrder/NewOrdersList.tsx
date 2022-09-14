@@ -9,7 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import { OrderByEvent, NewOrder } from "Types";
+import { NewOrder } from "Types";
 import { format } from "date-fns";
 import { useNavigate, useParams } from "react-router-dom";
 import useOrdersStore from "./useOrdersStore";
@@ -48,7 +48,7 @@ interface RowProps {
   selected: boolean,
 }
 function Row({ selected, order }: RowProps) {
-  const { dateTime, type } = order;
+  const { dateBegin, type } = order;
   // eslint-disable-next-line
   const serviceProviders = type === "event" ? order.services.map<number>(a => a.persons).reduce<number>((a,c) => c + a, 0 as number) : order.persons;
   const navigate = useNavigate();
@@ -63,7 +63,7 @@ function Row({ selected, order }: RowProps) {
         onClick={handleClick}
       >
         <TableCell>{order.type === "event" ? order.ship : ""} </TableCell>
-        <TableCell>{format(dateTime, "dd/MM HH:mm")} </TableCell>
+        <TableCell>{format(dateBegin, "dd/MM HH:mm")} </TableCell>
         <TableCell>{order.type === "event" ? order.event : "tuntityö"} </TableCell>
         <TableCell>{serviceProviders} </TableCell>
       </TableRow>

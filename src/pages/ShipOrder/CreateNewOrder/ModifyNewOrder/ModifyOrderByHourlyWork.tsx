@@ -56,11 +56,12 @@ const ModifyHourlyWorkOrder = ({ order, goBack, update, deleteOrder }: ModifyNew
     mode: "onSubmit",
   });
   useEffect( () => {
-    setValue("date", order.dateTime);
-    setValue("time", order.dateTime);
+    setValue("date", order.dateBegin);
+    setValue("time", order.dateBegin);
     setValue("duration", order.duration);
     setValue("persons", order.persons);
     setValue("port", order.port);
+    setValue("description", order.description);
   }, [order, setValue]);
   const onSubmit = ({ date, time, ...rest }: OrderFormValues) => {
     let initialDateTime = new Date(date);
@@ -68,7 +69,7 @@ const ModifyHourlyWorkOrder = ({ order, goBack, update, deleteOrder }: ModifyNew
     const minutes = getMinutes(time);
     initialDateTime = setHours(initialDateTime, hours);
     initialDateTime = setMinutes(initialDateTime, minutes );
-    update({ id:order.id, ...rest, dateTime:initialDateTime, client:"SFPS", type:"hourwork" });
+    update({ id:order.id, ...rest, dateBegin:initialDateTime, client:"SFPS", type:"hourwork" });
     goBack();
   };
   const handleDelete = () => {

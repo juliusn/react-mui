@@ -56,7 +56,7 @@ const CreateNewOrderForm = () => {
     initialDateTime = setHours(initialDateTime, hours);
     initialDateTime = setMinutes(initialDateTime, minutes );
     const id: string = uuidv4();
-    createOrder({ id, ...rest, dateTime:initialDateTime, client:"SFPS", type:"hourwork" });
+    createOrder({ id, ...rest, dateBegin:initialDateTime, client:"SFPS", type:"hourwork" });
     reset({ ...initialValues, date });
   };
 

@@ -68,7 +68,7 @@ const CreateNewOrderForm = () => {
     initialDateTime = setHours(initialDateTime, hours);
     initialDateTime = setMinutes(initialDateTime, minutes );
     const id: string = uuidv4();
-    createOrder({ id, ...rest, dateTime:initialDateTime, client:"SFPS", type: "event" });
+    createOrder({ id, ...rest, dateBegin:initialDateTime, client:"SFPS", type: "event" });
     reset({ ...initialValues, date });
     if(ref.current){
       ref.current.focus();
