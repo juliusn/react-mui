@@ -1,29 +1,20 @@
-export type OrderTypes = "hourwork" | "event";
-export type Client = "SFPS"
-export interface OrderBase {
-  id: string,
-  dateTime: Date,
-  dateOrdered: Date,
-  client: Client,
-  status: boolean,
-  type: OrderTypes,
-}
-export interface OrderByHourlyWork extends OrderBase{
-  type:"hourwork",
-  description?: string,
-  port: string,
-  duration: number,
-  persons: number,
-}
-export interface OrderByEvent extends OrderBase{
-  type: "event",
-  event?: string,
-  description?: string,
-  ship: string,
-  port: string,
-  dock?: string,
-  services: Service[],
-}
+import { z } from "zod";
+import {
+  Service as zService,
+  Services as zServices,
+  OrderUnion,
+  OrderBase as zOrderBase,
+  OrderByHourlyWork as zOrderByHourlyWork,
+  OrderByEvent as zOrderByEvent,
+  NewOrderByEvent as zNewOrderByEvent,
+  NewOrderByHourlyWork as zNewOrderByHourlyWork,
+  NewOrder as zNewOrder,
+  Status as zStatus,
+  OrderTypes as zOrderTypes,
+  ClientType as zClientType,
+  PostOrder as zPostOrder,
+} from "utils/ZodSchemas";
+
 export interface OrderTemplateValues {
   business_day: OrderTemplate[],
   friday: OrderTemplate[],
@@ -36,15 +27,20 @@ export interface OrderTemplate {
   port: string,
   dock?: string,
   event: string,
-  services: Service[],
+  services: Services,
 }
-export interface Service {
-  persons: number,
-  place: string,
-  service: string,
-  readiness: number,
-}
-export type Order = OrderByEvent | OrderByHourlyWork;
-export type NewOrder = NewOrderByEvent | NewOrderByHourlyWork;
-export type NewOrderByEvent = Omit<OrderByEvent, "dateOrdered"|"status">;
-export type NewOrderByHourlyWork = Omit<OrderByHourlyWork, "dateOrdered"|"status">;
+
+export type OrderTypes = z.infer<typeof zOrderTypes>;
+export type Client = z.infer<typeof zClientType>;
+export type Status = z.infer<typeof zStatus>
+
+export type Service = zService;
+export type Services = z.infer<typeof zServices>;
+export type OrderBase = z.infer<typeof zOrderBase>;
+export type OrderByHourlyWork = z.infer<typeof zOrderByHourlyWork>;
+export type OrderByEvent = z.infer<typeof zOrderByEvent>;
+export type Order = z.infer<typeof OrderUnion>;
+export type NewOrderByEvent = z.infer<typeof zNewOrderByEvent>;
+export type NewOrderByHourlyWork = z.infer<typeof zNewOrderByHourlyWork>;
+export type NewOrder = z.infer<typeof zNewOrder>;
+export type PostOrder = z.infer<typeof zPostOrder>;

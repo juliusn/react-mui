@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getOrders } from "storage/readAndWriteOrders";
 import Collapse from "@mui/material/Collapse";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -20,9 +21,13 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import DividedCard from "components/DividedCard";
-import { OrderByEvent, Order, OrderByHourlyWork } from "Types";
+import { OrderByEvent, Status, Order, OrderByHourlyWork } from "Types";
+import { FirebaseOrders, OrderUnion, Status as zStatus } from "utils/ZodSchemas";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
+import { getDocs, DocumentData, Query, onSnapshot, query, collection, where } from "firebase/firestore";
+import { db } from "../../firebase";
+
 
 interface RowMenuProps {
   anchorEl : null | HTMLElement
@@ -53,9 +58,14 @@ const RowMenu = ({ id, anchorEl, onClose }: RowMenuProps ) => {
     </Menu>
   );
 };
+function RenderStatus (status: Status) {
+  if(status === "pending") return <Chip color="warning" label="Pending"/>;
+  return <Chip  color="success" label="Accepted" />;
+}
+
 function Row(props: { order : Order }) {
   const { order } = props;
-  const { type, status, dateOrdered, dateTime, id, client, port } = order;
+  const { type, status, dateOrdered, dateBegin, id, client, port } = order;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [open, setOpen] = useState(false);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -89,9 +99,7 @@ function Row(props: { order : Order }) {
         return null;
       }
     }
-
     return null;
-
   }
   return(
     <>
@@ -107,9 +115,9 @@ function Row(props: { order : Order }) {
         </TableCell>
         <TableCell>{selectCellByType(1)}</TableCell>
         <TableCell>{format(dateOrdered, "dd/MM HH:mm")}</TableCell>
-        <TableCell>{status? <Chip  color="success" label="Hyväksytty" />:<Chip color="warning" label="Odottaa"/>} </TableCell>
+        <TableCell>{RenderStatus(status)}</TableCell>
         <TableCell>{client} </TableCell>
-        <TableCell>{format(dateTime, "dd/MM HH:mm")} </TableCell>
+        <TableCell>{format(dateBegin, "dd/MM HH:mm")} </TableCell>
         <TableCell>{port} </TableCell>
         <TableCell>{selectCellByType(7)}</TableCell>
         <TableCell>{selectCellByType(8)}</TableCell>
@@ -199,8 +207,29 @@ const Hourly = (props :{ order: OrderByHourlyWork }) => {
   );
 };
 
-export default function OrdersList({ orders } :{ orders : Order[] }) {
+export default function OrdersList() {
 
+  const [ orders, setOrders ] = useState<Order[]>([]);
+
+  useEffect(() => {
+    setOrders(getOrders());
+    const q = query(collection(db, "orders"));
+    const unsub = onSnapshot(q, (querySnapshot) => {
+      const data : Order[] = [];
+      querySnapshot.forEach(a => {
+        try{
+          const c = FirebaseOrders.parse(a.data());
+          const d = { id: a.id, ...c, status: zStatus.parse(c.status),  dateBegin: new Date(c.dateBegin.seconds*1000), dateOrdered: new Date(c.dateOrdered.seconds*1000) };
+          data.push(OrderUnion.parse(d));
+        }catch(e){
+          console.log("Data corrupted", e);
+        }
+      });
+      setOrders(data);
+    });
+
+    return () => unsub();
+  }, []);
   return (
     <TableContainer>
       <Table aria-label="collapsible table">

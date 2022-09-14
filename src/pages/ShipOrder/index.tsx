@@ -3,19 +3,12 @@ import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
-import { Order } from "Types";
 import OrdersList from "./OrdersList";
-import { getOrders } from "storage/readAndWriteOrders";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate, Outlet } from "react-router-dom";
 
 const ShipOrder = () => {
-  const [ orders, setOrders ] = useState<Order[]>([]);
   const navigate = useNavigate();
-  useEffect(() => {
-    //muokkaa hakemaan serveriltä data
-    setOrders(getOrders());
-  }, []);
 
   return(
     <Container component={Paper} sx={{ padding: 2 }}>
@@ -28,7 +21,7 @@ const ShipOrder = () => {
           Lisää uusi tilaus
         </Button>
       </Box>
-      <OrdersList orders={orders} />
+      <OrdersList />
       <Outlet />
     </Container>
   );
