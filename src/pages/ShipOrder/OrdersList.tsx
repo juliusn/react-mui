@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { getOrders } from "storage/readAndWriteOrders";
+import React, { useState } from "react";
 import Collapse from "@mui/material/Collapse";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -22,11 +21,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import DividedCard from "components/DividedCard";
 import { OrderByEvent, Status, Order, OrderByHourlyWork } from "Types";
-import { FirebaseOrders, OrderUnion, Status as zStatus } from "utils/ZodSchemas";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
-import { getDocs, DocumentData, Query, onSnapshot, query, collection, where } from "firebase/firestore";
-import { db } from "../../firebase";
+import { useSubscribeOrders } from "hooks/useStorage";
 
 
 interface RowMenuProps {
@@ -209,27 +206,8 @@ const Hourly = (props :{ order: OrderByHourlyWork }) => {
 
 export default function OrdersList() {
 
-  const [ orders, setOrders ] = useState<Order[]>([]);
+  const { orders } = useSubscribeOrders();
 
-  useEffect(() => {
-    setOrders(getOrders());
-    const q = query(collection(db, "orders"));
-    const unsub = onSnapshot(q, (querySnapshot) => {
-      const data : Order[] = [];
-      querySnapshot.forEach(a => {
-        try{
-          const c = FirebaseOrders.parse(a.data());
-          const d = { id: a.id, ...c, status: zStatus.parse(c.status),  dateBegin: new Date(c.dateBegin.seconds*1000), dateOrdered: new Date(c.dateOrdered.seconds*1000) };
-          data.push(OrderUnion.parse(d));
-        }catch(e){
-          console.log("Data corrupted", e);
-        }
-      });
-      setOrders(data);
-    });
-
-    return () => unsub();
-  }, []);
   return (
     <TableContainer>
       <Table aria-label="collapsible table">

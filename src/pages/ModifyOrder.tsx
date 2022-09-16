@@ -1,9 +1,9 @@
-import React, { useLayoutEffect, useState } from "react";
+import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ModifyOrderByHourlyWork from "./ShipOrder/CreateNewOrder/ModifyNewOrder/ModifyOrderByHourlyWork";
 import ModifyOrderByEvent from "./ShipOrder/CreateNewOrder/ModifyNewOrder/ModifyOrderByEvent";
-import { Order, OrderByEvent, OrderByHourlyWork } from "Types";
-import { getOrderById, updateOrder, deleteOrderById } from "storage/readAndWriteOrders";
+import { OrderByEvent, OrderByHourlyWork } from "Types";
+import { updateOrder } from "storage/readAndWriteOrders";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
@@ -11,22 +11,23 @@ import Grid from "@mui/material/Grid";
 import DividedCard from "components/DividedCard";
 import Paper from "@mui/material/Paper";
 import { format } from "date-fns";
+import { useModifyStorage, useSubscribeOrderById } from "hooks/useStorage";
 
 const ModifyOrder = () => {
-  const { orderId } = useParams();
   const navigate = useNavigate();
-  const [ order, setOrder ] = useState<Order>();
+  const { orderId } = useParams();
+  if(!orderId) return null;
+  return( <Render id={orderId} navigate={navigate} />);
+};
+interface RenderProps {
+  id: string,
+  navigate: (url: string) => void,
+}
+const Render = ({ id, navigate }: RenderProps ) => {
+  const { order } = useSubscribeOrderById(id);
   const goBack= () => navigate("/ship-order");
+  const { deleteOrderById } = useModifyStorage();
 
-  useLayoutEffect( () => {
-    if(!orderId) throw new Error();
-    const initialOrder = getOrderById(orderId);
-    if(!initialOrder){
-      navigate("/ship-order");
-      return;
-    }
-    setOrder(initialOrder);
-  }, [orderId, navigate]);
 
   if(!order) return <></>;
   if("services" in order){

@@ -10,25 +10,33 @@ import Button from "@mui/material/Button";
 import NewOrdersList from "./NewOrdersList";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import { useCallbackPrompt } from "hooks/useCallbackPrompt";
+import { v4 as uuid } from "uuid";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate, Outlet, useOutletContext } from "react-router-dom";
-import { postOrder } from "storage/readAndWriteOrders";
 import useOrdersStore from "./useOrdersStore";
 import { PostOrder } from "Types";
 
+
+import { db } from "../../../firebase";
+import { writeBatch, serverTimestamp, doc } from "firebase/firestore";
 
 type ContextType = { setShowDialog: React.Dispatch<React.SetStateAction<boolean>> | null };
 const CreateNewOrder = () => {
   const navigate = useNavigate();
   const [ showDialog, setShowDialog ] = useState<boolean>(false);
-  const { showPrompt, confirmNavigation, cancelNavigation } = useCallbackPrompt(showDialog);
+  //const { showPrompt, confirmNavigation, cancelNavigation } = useCallbackPrompt(showDialog);
   const orders = useOrdersStore(state => state.orders);
   const clearOrders = useOrdersStore(state => state.removeAllOrders);
 
   const onSubmit = () => {
-    // tömö
+    const batch = writeBatch(db);
     const order: PostOrder[] = orders.map(o => ({ ...o, status: "pending" }));
-    postOrder({ order });
+    order.forEach((o : PostOrder) => {
+      const id = uuid();
+      const orderRef = doc(db, "orders", id);
+      batch.set(orderRef, { ...o, dateOrdered: serverTimestamp() });
+    });
+    batch.commit().catch(e => console.log(e));
     // tarksita että onko samat talletettu jo listalle
     clearOrders();
     navigate("/ship-order");
@@ -86,4 +94,3 @@ export function useDialog() {
   return useOutletContext<ContextType>();
 }
 export default CreateNewOrder;
-

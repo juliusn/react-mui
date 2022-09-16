@@ -18,6 +18,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
+
 interface ModifyNewOrderI {
   order: NewOrderByEvent,
   goBack: () => void,
@@ -54,7 +55,7 @@ const ModifyNewOrder = ({ update, deleteOrder, order, goBack }:ModifyNewOrderI) 
     update({ id:order.id, ...rest, dateBegin:initialDateTime, client:"SFPS", type: "event" });
     goBack();
   };
-  const handleDelete= () => {
+  const handleDelete = () => {
     deleteOrder(order.id);
     goBack();
   };

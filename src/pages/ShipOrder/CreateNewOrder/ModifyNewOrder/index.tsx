@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useStorage from "../useOrdersStore";
 import ModifyOrderByHourlyWork from "./ModifyOrderByHourlyWork";
@@ -14,7 +14,7 @@ const ModifyNewOrder = () => {
   const deleteOrder= useStorage(state => state.deleteOrderById);
   const updateOrder = useStorage(state => state.updateOrder);
   const goBack = () => navigate("/create/new");
-  useLayoutEffect( () => {
+  useEffect( () => {
     if(!orderId) throw new Error();
     const initialOrder = fetchOrder(orderId);
     if(!initialOrder){
