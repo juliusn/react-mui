@@ -23,7 +23,7 @@ import DividedCard from "components/DividedCard";
 import { OrderByEvent, Status, Order, OrderByHourlyWork } from "Types";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
-import { useSubscribeOrders } from "hooks/useStorage";
+import { useModifyStorage, useSubscribeOrders } from "hooks/useStorage";
 
 
 interface RowMenuProps {
@@ -34,6 +34,7 @@ interface RowMenuProps {
 const RowMenu = ({ id, anchorEl, onClose }: RowMenuProps ) => {
   const menuOpen = Boolean(anchorEl);
   const navigate = useNavigate();
+  const { deleteOrderById } = useModifyStorage();
   return(
     <Menu
       anchorEl={anchorEl}
@@ -50,7 +51,7 @@ const RowMenu = ({ id, anchorEl, onClose }: RowMenuProps ) => {
         <ListItemIcon>
           <DeleteIcon />
         </ListItemIcon>
-        <ListItemText>Poista tilaus</ListItemText>
+        <ListItemText onClick={() => deleteOrderById(id)}>Poista tilaus</ListItemText>
       </MenuItem>
     </Menu>
   );

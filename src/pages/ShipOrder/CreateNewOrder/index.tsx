@@ -80,6 +80,7 @@ const CreateNewOrder = () => {
           <Divider />
         </Grid>
         <Grid item xs={12}>
+          {/* outlet renders CreateNewOrder/index or ModifyNewOrder/index */ }
           <DividedCard
             left={<NewOrdersList />}
             right={<Outlet context={setShowDialog}/>}

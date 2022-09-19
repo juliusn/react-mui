@@ -13,7 +13,7 @@ import * as yup from "yup";
 import { onPromise } from "utils/utils";
 import HookFormTimePicker from "components/HookFormTimePicker";
 import { v4 as uuidv4 } from "uuid";
-import useOrdersStore from "../../useOrdersStore";
+import useOrdersStore from "../useOrdersStore";
 import EditIcon from "@mui/icons-material/Edit";
 
 
