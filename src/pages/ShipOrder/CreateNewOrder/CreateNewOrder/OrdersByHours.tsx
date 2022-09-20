@@ -71,6 +71,7 @@ const CreateNewOrderForm = () => {
               control={control}
               name="date"
               required
+              label="Päivämäärä"
             />
           </Grid >
           <Grid item xs={6}>
@@ -78,6 +79,7 @@ const CreateNewOrderForm = () => {
               control={control}
               name="time"
               required
+              label="Aika"
             />
 
           </Grid>
@@ -87,6 +89,7 @@ const CreateNewOrderForm = () => {
               name="duration"
               required
               type="number"
+              label="Kesto"
             />
           </Grid>
           <Grid item xs={6}>
@@ -95,6 +98,7 @@ const CreateNewOrderForm = () => {
               name="persons"
               type="number"
               required
+              label="Henkilömäärä"
             />
           </Grid>
           <Grid item xs={6}>
@@ -102,6 +106,7 @@ const CreateNewOrderForm = () => {
               control={control}
               name="port"
               required
+              label="Satama"
             />
           </Grid>
           <Grid item xs={6}>
@@ -110,6 +115,7 @@ const CreateNewOrderForm = () => {
               name="description"
               multiline
               maxRows={9}
+              label="Lisätietoja"
             />
           </Grid>
           <Grid item xs={12}>

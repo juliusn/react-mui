@@ -89,6 +89,7 @@ const ModifyHourlyWorkOrder = ({ order, goBack, update, deleteOrder }: ModifyNew
             <HookFormDatePicker<OrderFormValues>
               control={control}
               name="date"
+              label="Päivämäärä"
               required
             />
           </Grid >
@@ -97,6 +98,7 @@ const ModifyHourlyWorkOrder = ({ order, goBack, update, deleteOrder }: ModifyNew
               control={control}
               name="time"
               required
+              label="Aika"
             />
 
           </Grid>
@@ -104,6 +106,7 @@ const ModifyHourlyWorkOrder = ({ order, goBack, update, deleteOrder }: ModifyNew
             <HookFormField<OrderFormValues>
               control={control}
               name="duration"
+              label="Kesto"
               required
               type="number"
             />
@@ -112,6 +115,7 @@ const ModifyHourlyWorkOrder = ({ order, goBack, update, deleteOrder }: ModifyNew
             <HookFormField<OrderFormValues>
               control={control}
               name="persons"
+              label="Henkilömäärä"
               type="number"
               required
             />
@@ -120,6 +124,7 @@ const ModifyHourlyWorkOrder = ({ order, goBack, update, deleteOrder }: ModifyNew
             <HookFormField<OrderFormValues>
               control={control}
               name="port"
+              label="Satama"
               required
             />
           </Grid>
@@ -127,6 +132,7 @@ const ModifyHourlyWorkOrder = ({ order, goBack, update, deleteOrder }: ModifyNew
             <HookFormField<OrderFormValues>
               control={control}
               name="description"
+              label="Lisätietoja"
               multiline
               maxRows={9}
             />

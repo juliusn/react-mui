@@ -11,9 +11,10 @@ interface TemplateSelectProps{
   control: Control<OrderFormValues>;
   setValue: UseFormSetValue<OrderFormValues>;
   ref: React.Ref<HTMLInputElement | null>;
+  label?: string;
 }
 
-const TemplateSelect = forwardRef(({ control, setValue }:TemplateSelectProps, ref) => {
+const TemplateSelect = forwardRef(({ control, setValue, label }:TemplateSelectProps, ref) => {
   const [ template, setTemplate ] = useState<OrderTemplate|null>();
   const [ templates, setTemplates ] = useState<OrderTemplate[]>([]);
   const date = useWatch({ control, name: "date" });
@@ -57,7 +58,7 @@ const TemplateSelect = forwardRef(({ control, setValue }:TemplateSelectProps, re
       onChange={(e,value) => setTemplate(value)}
       groupBy={(option: OrderTemplate) => option.port}
       getOptionLabel={(option: OrderTemplate) => `${option.ship} ${option.time}`}
-      renderInput={(params) => <TextField variant="standard" {...params} inputRef={ref} label="Templates" />}
+      renderInput={(params) => <TextField label={label? label: "Templates"} variant="standard" {...params} inputRef={ref} />}
     />
   );
 });

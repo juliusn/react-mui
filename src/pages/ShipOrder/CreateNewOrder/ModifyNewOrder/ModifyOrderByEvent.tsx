@@ -72,6 +72,7 @@ const ModifyNewOrder = ({ update, deleteOrder, order, goBack }:ModifyNewOrderI) 
             <HookFormDatePicker<OrderFormValues>
               control={control}
               name="date"
+              label="Päivämäärä"
               required
             />
           </Grid >
@@ -79,6 +80,7 @@ const ModifyNewOrder = ({ update, deleteOrder, order, goBack }:ModifyNewOrderI) 
             <HookFormField<OrderFormValues>
               control={control}
               name="ship"
+              label="Laiva"
               required
             />
           </Grid>
@@ -86,6 +88,7 @@ const ModifyNewOrder = ({ update, deleteOrder, order, goBack }:ModifyNewOrderI) 
             <HookFormTimePicker<OrderFormValues>
               control={control}
               name="time"
+              label="Aika"
               required
             />
 
@@ -94,6 +97,7 @@ const ModifyNewOrder = ({ update, deleteOrder, order, goBack }:ModifyNewOrderI) 
             <HookFormField<OrderFormValues>
               control={control}
               name="port"
+              label="Satama"
               required
             />
           </Grid>
@@ -101,6 +105,7 @@ const ModifyNewOrder = ({ update, deleteOrder, order, goBack }:ModifyNewOrderI) 
             <HookFormField<OrderFormValues>
               control={control}
               name="dock"
+              label="Laituri"
               required
             />
           </Grid>
@@ -108,6 +113,7 @@ const ModifyNewOrder = ({ update, deleteOrder, order, goBack }:ModifyNewOrderI) 
             <HookFormField<OrderFormValues>
               control={control}
               required
+              label="Tapahtuma"
               name="event"
             />
           </Grid>
@@ -116,6 +122,7 @@ const ModifyNewOrder = ({ update, deleteOrder, order, goBack }:ModifyNewOrderI) 
               control={control}
               name="description"
               multiline
+              label="Lisätietoja"
               maxRows={9}
             />
           </Grid>

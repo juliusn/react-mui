@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
@@ -9,10 +9,9 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import NewOrdersList from "./NewOrdersList";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
-import { useCallbackPrompt } from "hooks/useCallbackPrompt";
 import { v4 as uuid } from "uuid";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useNavigate, Outlet, useOutletContext } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
 import useOrdersStore from "./useOrdersStore";
 import { PostOrder } from "Types";
 
@@ -20,11 +19,8 @@ import { PostOrder } from "Types";
 import { db } from "../../../firebase";
 import { writeBatch, serverTimestamp, doc } from "firebase/firestore";
 
-type ContextType = { setShowDialog: React.Dispatch<React.SetStateAction<boolean>> | null };
 const CreateNewOrder = () => {
   const navigate = useNavigate();
-  const [ showDialog, setShowDialog ] = useState<boolean>(false);
-  //const { showPrompt, confirmNavigation, cancelNavigation } = useCallbackPrompt(showDialog);
   const orders = useOrdersStore(state => state.orders);
   const clearOrders = useOrdersStore(state => state.removeAllOrders);
 
@@ -44,13 +40,6 @@ const CreateNewOrder = () => {
 
   return(
     <Container sx={{ marginTop:2, padding: 1 }} component={Paper}>
-      {/*
-      <ConfirmationDialog
-        show={showPrompt}
-        confirmNavigation={confirmNavigation}
-        cancelNavigation={cancelNavigation}
-      />
-  */}
       <Grid container spacing={4}>
         <Grid item xs={3} >
           <Button
@@ -70,9 +59,7 @@ const CreateNewOrder = () => {
               endIcon={<SendRoundedIcon />}
               onClick={onSubmit}
             >
-              { ////////////////////////////////////////////////////////////////////
-              }
-              Lähetä kaikki tilaukset (muista asettaa tarkistus)
+              Lähetä tilaukset (muista asettaa tarkistus)
             </Button>
           </Box>
         </Grid>
@@ -83,7 +70,7 @@ const CreateNewOrder = () => {
           {/* outlet renders CreateNewOrder/index or ModifyNewOrder/index */ }
           <DividedCard
             left={<NewOrdersList />}
-            right={<Outlet context={setShowDialog}/>}
+            right={<Outlet/>}
             size={5}
           />
         </Grid>
@@ -91,7 +78,4 @@ const CreateNewOrder = () => {
     </Container>
   );
 };
-export function useDialog() {
-  return useOutletContext<ContextType>();
-}
 export default CreateNewOrder;

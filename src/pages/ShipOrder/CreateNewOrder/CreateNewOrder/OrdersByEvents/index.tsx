@@ -17,7 +17,6 @@ import Services from "./InitialServices";
 import HookFormTimePicker from "components/HookFormTimePicker";
 import { v4 as uuidv4 } from "uuid";
 import useOrdersStore from "../../useOrdersStore";
-import { useDialog } from "../..";
 import EditIcon from "@mui/icons-material/Edit";
 
 
@@ -53,7 +52,6 @@ export const schema = yup.object({
 
 
 const CreateNewOrderForm = () => {
-  const { setShowDialog } = useDialog();
   const ref = useRef<HTMLInputElement|null>(null);
   const { reset, setValue, control, handleSubmit } = useForm<OrderFormValues>({
     defaultValues:  initialValues,
@@ -74,7 +72,6 @@ const CreateNewOrderForm = () => {
       ref.current.focus();
       ref.current.select();
     }
-    if(setShowDialog) setShowDialog(true);
   };
 
   return(
@@ -87,6 +84,7 @@ const CreateNewOrderForm = () => {
             <HookFormDatePicker<OrderFormValues>
               control={control}
               name="date"
+              label="Päivämäärä"
               required
             />
           </Grid >
@@ -95,6 +93,7 @@ const CreateNewOrderForm = () => {
               setValue={setValue}
               control={control}
               ref={ref}
+              label="Valmis tilaus"
             />
           </Grid>
           <Grid item xs={6}>
@@ -102,6 +101,7 @@ const CreateNewOrderForm = () => {
               control={control}
               name="ship"
               required
+              label="Laiva"
             />
           </Grid>
           <Grid item xs={6}>
@@ -109,6 +109,7 @@ const CreateNewOrderForm = () => {
               control={control}
               name="time"
               required
+              label="Aika"
             />
 
           </Grid>
@@ -117,6 +118,7 @@ const CreateNewOrderForm = () => {
               control={control}
               name="port"
               required
+              label="Satama"
             />
           </Grid>
           <Grid item xs={6}>
@@ -124,6 +126,7 @@ const CreateNewOrderForm = () => {
               control={control}
               name="dock"
               required
+              label="Laituri"
             />
           </Grid>
           <Grid item xs={6}>
@@ -131,12 +134,14 @@ const CreateNewOrderForm = () => {
               control={control}
               required
               name="event"
+              label="Tapahtuma"
             />
           </Grid>
           <Grid item xs={6}>
             <HookFormField<OrderFormValues>
               control={control}
               name="description"
+              label="Lisätietoja"
               multiline
               maxRows={9}
             />
