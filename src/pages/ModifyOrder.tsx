@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import ModifyOrderByHourlyWork from "./ShipOrder/CreateNewOrder/ModifyNewOrder/ModifyOrderByHourlyWork";
 import ModifyOrderByEvent from "./ShipOrder/CreateNewOrder/ModifyNewOrder/ModifyOrderByEvent";
 import { OrderByEvent, OrderByHourlyWork } from "Types";
-import { updateOrder } from "storage/readAndWriteOrders";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
@@ -26,7 +25,7 @@ interface RenderProps {
 const Render = ({ id, navigate }: RenderProps ) => {
   const { order } = useSubscribeOrderById(id);
   const goBack= () => navigate("/ship-order");
-  const { deleteOrderById } = useModifyStorage();
+  const { deleteOrderById, updateOrderByid } = useModifyStorage();
 
 
   if(!order) return <></>;
@@ -40,7 +39,7 @@ const Render = ({ id, navigate }: RenderProps ) => {
               deleteOrder={deleteOrderById}
               order={order}
               goBack={goBack}
-              update={updateOrder}
+              update={updateOrderByid}
             />
           }
           left={<BasicInfoAboutOrder order={order} />}
@@ -57,7 +56,7 @@ const Render = ({ id, navigate }: RenderProps ) => {
               deleteOrder={deleteOrderById}
               order={order}
               goBack={goBack}
-              update={updateOrder}
+              update={updateOrderByid}
             />
           }
           left={<BasicInfoAboutOrder order={order} />}
@@ -66,7 +65,6 @@ const Render = ({ id, navigate }: RenderProps ) => {
     );
   }
 };
-export default ModifyOrder;
 const BasicInfoAboutOrder = ({ order }:{ order: OrderByHourlyWork|OrderByEvent }) => {
   return(
     <Grid container sx={{ padding: 5 }} spacing={4} >
@@ -88,3 +86,4 @@ const BasicInfoAboutOrder = ({ order }:{ order: OrderByHourlyWork|OrderByEvent }
     </Grid>
   );
 };
+export default ModifyOrder;

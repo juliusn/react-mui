@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getDoc, doc, deleteDoc, onSnapshot, query, collection } from "firebase/firestore";
+import { updateDoc, doc, deleteDoc, onSnapshot, query, collection, serverTimestamp } from "firebase/firestore";
 import { Order } from "Types";
 import { FirebaseOrders, OrderUnion, Status as zStatus } from "utils/ZodSchemas";
 import { db } from "../firebase";
@@ -47,12 +47,21 @@ export const useSubscribeOrderById = (id : string) => {
 
 export const useModifyStorage = () => {
 
+  const orderRef = (id: string) => doc(db, "orders", id);
   const deleteOrderById = (id : string) => {
     void (async () => {
 
-      await deleteDoc(doc(db, "orders", id));
+      await deleteDoc(orderRef(id));
+    })();
+  };
+  const updateOrderByid = ( updatedOrder: Order) => {
+    void (async () => {
+      await updateDoc(orderRef(updatedOrder.id), {
+        ...updatedOrder,
+        dateOrdered: serverTimestamp()
+      });
     })();
   };
 
-  return { deleteOrderById };
+  return { deleteOrderById, updateOrderByid };
 };
