@@ -147,7 +147,7 @@ const CollapsibleCell = ({  open, children } : { open: boolean, children: React.
   );
 };
 const Event = ( props: { order: OrderByEvent }) => {
-  const { services, description }  = props.order;
+  const { services, description, id }  = props.order;
   return (
     <Box sx={{  margin: 2 }} >
       <DividedCard
@@ -162,7 +162,7 @@ const Event = ( props: { order: OrderByEvent }) => {
             </TableHead>
             <TableBody>
               { services && services.map(row => (
-                <TableRow key={row.place}>
+                <TableRow key={`${row.place}-${id}`}>
                   <TableCell>{row.service}</TableCell>
                   <TableCell>{row.place}</TableCell>
                   <TableCell>{row.persons}</TableCell>
