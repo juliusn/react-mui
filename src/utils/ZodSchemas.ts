@@ -29,11 +29,10 @@ export type Service = z.infer<typeof Service>;
 export const OrderBase = z.object({
   id: z.string(),
   dateBegin: z.date(),
-  dateOrdered: z.date(),
+  dateOrdered: z.date().nullable(),
   client: ClientType,
   description: z.string().optional(),
   status: Status,
-  type: OrderTypes,
   port: z.string(),
 });
 export const OrderByHourlyWork = OrderBase.extend({
@@ -50,12 +49,11 @@ export const OrderByEvent = OrderBase.extend({
 });
 const FirebaseOrdersBase = z.object({
   dateBegin: firebaseTimestamp,
-  dateOrdered: firebaseTimestamp,
+  dateOrdered: firebaseTimestamp.nullable(),
   client: ClientType,
   description: z.string().optional(),
   status: z.string(),
   port: z.string(),
-  type: OrderTypes,
 });
 const FirebaseOrderEvent = FirebaseOrdersBase.extend({
   type: eventType,
@@ -75,3 +73,4 @@ export const PostOrder = z.union([ OrderByEvent.omit({ dateOrdered: true }), Ord
 export const NewOrderByEvent = OrderByEvent.omit({ dateOrdered: true, status: true });
 export const NewOrderByHourlyWork = OrderByHourlyWork.omit({ dateOrdered: true, status: true });
 export const NewOrder = z.union([ NewOrderByEvent , NewOrderByHourlyWork ]);
+export const OrderFormReturn = z.union([ NewOrder, OrderUnion ]);

@@ -1,7 +1,7 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 import HookFormField from "components/HookFormField";
-import { OrderFormValues } from "./index";
+import { OrderFormValues } from "./OrderByEventForm";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { onPromise } from "utils/utils";
 import { Service } from "Types";

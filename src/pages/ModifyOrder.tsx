@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ModifyOrderByHourlyWork from "./ShipOrder/CreateNewOrder/ModifyNewOrder/ModifyOrderByHourlyWork";
-import ModifyOrderByEvent from "./ShipOrder/CreateNewOrder/ModifyNewOrder/ModifyOrderByEvent";
+import { ModifyOrderByEvent } from "./ShipOrder/CreateNewOrder/ModifyNewOrder/ModifyOrderByEvent";
 import { OrderByEvent, OrderByHourlyWork } from "Types";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
@@ -11,6 +11,7 @@ import DividedCard from "components/DividedCard";
 import Paper from "@mui/material/Paper";
 import { format } from "date-fns";
 import { useModifyStorage, useSubscribeOrderById } from "hooks/useStorage";
+
 
 const ModifyOrder = () => {
   const navigate = useNavigate();
@@ -40,6 +41,7 @@ const Render = ({ id, navigate }: RenderProps ) => {
               order={order}
               goBack={goBack}
               update={updateOrderByid}
+              buttonTitle="Tallenna muutokset"
             />
           }
           left={<BasicInfoAboutOrder order={order} />}
@@ -70,7 +72,7 @@ const BasicInfoAboutOrder = ({ order }:{ order: OrderByHourlyWork|OrderByEvent }
     <Grid container sx={{ padding: 5 }} spacing={4} >
       <Grid item xs={12}>
         <Typography variant="h5">Ordered</Typography>
-        <Typography variant="caption">{format(order.dateOrdered, "dd/MM/yyyy HH:mm")}</Typography>
+        <Typography variant="caption">{order.dateOrdered ? format(order.dateOrdered, "dd/MM/yyyy HH:mm"): ""}</Typography>
         <Divider />
       </Grid>
       <Grid item xs={12}>

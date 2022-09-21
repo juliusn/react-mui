@@ -1,18 +1,19 @@
 import { z } from "zod";
 import {
   Service as zService,
-  Services as zServices,
+  Services,
   OrderUnion,
-  OrderBase as zOrderBase,
-  OrderByHourlyWork as zOrderByHourlyWork,
-  OrderByEvent as zOrderByEvent,
-  NewOrderByEvent as zNewOrderByEvent,
-  NewOrderByHourlyWork as zNewOrderByHourlyWork,
-  NewOrder as zNewOrder,
-  Status as zStatus,
-  OrderTypes as zOrderTypes,
-  ClientType as zClientType,
-  PostOrder as zPostOrder,
+  OrderBase,
+  OrderByHourlyWork,
+  OrderByEvent,
+  NewOrderByEvent,
+  NewOrderByHourlyWork,
+  NewOrder,
+  Status,
+  OrderTypes,
+  ClientType,
+  PostOrder,
+  OrderFormReturn,
 } from "utils/ZodSchemas";
 
 export interface OrderTemplateValues {
@@ -30,17 +31,18 @@ export interface OrderTemplate {
   services: Services,
 }
 
-export type OrderTypes = z.infer<typeof zOrderTypes>;
-export type Client = z.infer<typeof zClientType>;
-export type Status = z.infer<typeof zStatus>
+export type OrderTypes = z.infer<typeof OrderTypes>;
+export type Client = z.infer<typeof ClientType>;
+export type Status = z.infer<typeof Status>
 
 export type Service = zService;
-export type Services = z.infer<typeof zServices>;
-export type OrderBase = z.infer<typeof zOrderBase>;
-export type OrderByHourlyWork = z.infer<typeof zOrderByHourlyWork>;
-export type OrderByEvent = z.infer<typeof zOrderByEvent>;
+export type Services = z.infer<typeof Services>;
+export type OrderBase = z.infer<typeof OrderBase>;
+export type OrderByHourlyWork = z.infer<typeof OrderByHourlyWork>;
+export type OrderByEvent = z.infer<typeof OrderByEvent>;
 export type Order = z.infer<typeof OrderUnion>;
-export type NewOrderByEvent = z.infer<typeof zNewOrderByEvent>;
-export type NewOrderByHourlyWork = z.infer<typeof zNewOrderByHourlyWork>;
-export type NewOrder = z.infer<typeof zNewOrder>;
-export type PostOrder = z.infer<typeof zPostOrder>;
+export type NewOrderByEvent = z.infer<typeof NewOrderByEvent>;
+export type NewOrderByHourlyWork = z.infer<typeof NewOrderByHourlyWork>;
+export type NewOrder = z.infer<typeof NewOrder>;
+export type PostOrder = z.infer<typeof PostOrder>;
+export type OrderFormReturn = z.infer<typeof OrderFormReturn>

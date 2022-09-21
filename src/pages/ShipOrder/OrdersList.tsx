@@ -112,7 +112,7 @@ function Row(props: { order : Order }) {
           </IconButton>
         </TableCell>
         <TableCell>{selectCellByType(1)}</TableCell>
-        <TableCell>{format(dateOrdered, "dd/MM HH:mm")}</TableCell>
+        <TableCell>{dateOrdered ? format(dateOrdered, "dd/MM HH:mm") : ""}</TableCell>
         <TableCell>{RenderStatus(status)}</TableCell>
         <TableCell>{client} </TableCell>
         <TableCell>{format(dateBegin, "dd/MM HH:mm")} </TableCell>
