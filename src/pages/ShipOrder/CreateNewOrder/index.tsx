@@ -13,7 +13,7 @@ import { v4 as uuid } from "uuid";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate, Outlet } from "react-router-dom";
 import useOrdersStore from "./useOrdersStore";
-import { PostOrder } from "Types";
+import { PostOrderI } from "Types";
 
 
 import { db } from "../../../firebase";
@@ -26,8 +26,8 @@ const CreateNewOrder = () => {
 
   const onSubmit = () => {
     const batch = writeBatch(db);
-    const order: PostOrder[] = orders.map(o => ({ ...o, status: "pending" }));
-    order.forEach((o : PostOrder) => {
+    const order: PostOrderI[] = orders.map(o => ({ ...o, status: "pending" }));
+    order.forEach((o : PostOrderI) => {
       const id = uuid();
       const orderRef = doc(db, "orders", id);
       batch.set(orderRef, { ...o, dateOrdered: serverTimestamp() });

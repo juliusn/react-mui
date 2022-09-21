@@ -3,7 +3,7 @@ import Divider from "@mui/material/Divider";
 import { getHours, getMinutes, setHours, setMinutes, startOfToday } from "date-fns";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { OrderByEvent, NewOrderByEvent, Service, OrderFormEvent } from "Types";
+import { OrderByEventI, NewOrderByEventI, ServiceI, OrderFormEventI } from "Types";
 import { useForm, Control } from "react-hook-form";
 import HookFormField from "components/HookFormField";
 import TemplateSelect from "./TemplateSelect";
@@ -21,7 +21,7 @@ import EditIcon from "@mui/icons-material/Edit";
 
 export interface OrderFormValues  {
   date: Date,
-  services: Service[],
+  services: ServiceI[],
   ship: string,
   time: Date,
   port: string,
@@ -54,11 +54,11 @@ interface OrderFormByEventI {
   titleComponent?: React.ReactNode,
   actionComponent?: React.ReactNode,
   template?: boolean,
-  submit: (order: OrderFormEvent) => void,
-  order?: OrderByEvent | NewOrderByEvent,
+  submit: (order: OrderFormEventI) => void,
+  order?: OrderByEventI | NewOrderByEventI,
   buttonTitle: string,
 }
-function parseToInitialValues(order: OrderByEvent|NewOrderByEvent):OrderFormValues {
+function parseToInitialValues(order: OrderByEventI|NewOrderByEventI):OrderFormValues {
   return { ...order, date: new Date(order.dateBegin), time: new Date(order.dateBegin) };
 }
 const OrderFormByEvent = ({ buttonTitle, actionComponent, titleComponent, title, template, submit, order }: OrderFormByEventI) => {
@@ -126,7 +126,7 @@ const OrderFormByEvent = ({ buttonTitle, actionComponent, titleComponent, title,
 interface OrderByEventFormI {
   control: Control<OrderFormValues>,
 }
-export const OrderByEventForm = ({ control } : OrderByEventFormI ) => {
+const OrderByEventForm = ({ control } : OrderByEventFormI ) => {
   return(
     <>
       <form>

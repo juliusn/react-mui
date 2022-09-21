@@ -20,7 +20,7 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import DividedCard from "components/DividedCard";
-import { OrderByEvent, Status, Order, OrderByHourlyWork } from "Types";
+import { OrderByEventI, StatusI, OrderI, OrderByHourlyWorkI } from "Types";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { useModifyStorage, useSubscribeOrders } from "hooks/useStorage";
@@ -56,12 +56,12 @@ const RowMenu = ({ id, anchorEl, onClose }: RowMenuProps ) => {
     </Menu>
   );
 };
-function RenderStatus (status: Status) {
+function RenderStatus (status: StatusI) {
   if(status === "pending") return <Chip color="warning" label="Pending"/>;
   return <Chip  color="success" label="Accepted" />;
 }
 
-function Row(props: { order : Order }) {
+function Row(props: { order : OrderI }) {
   const { order } = props;
   const { type, status, dateOrdered, dateBegin, id, client, port } = order;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -146,7 +146,7 @@ const CollapsibleCell = ({  open, children } : { open: boolean, children: React.
     </TableCell>
   );
 };
-const Event = ( props: { order: OrderByEvent }) => {
+const Event = ( props: { order: OrderByEventI }) => {
   const { services, description, id }  = props.order;
   return (
     <Box sx={{  margin: 2 }} >
@@ -187,7 +187,7 @@ const Event = ( props: { order: OrderByEvent }) => {
     </Box>
   );
 };
-const Hourly = (props :{ order: OrderByHourlyWork }) => {
+const Hourly = (props :{ order: OrderByHourlyWorkI }) => {
   const { description } = props.order;
   return (
     <Box sx={{  margin: 2 }} >

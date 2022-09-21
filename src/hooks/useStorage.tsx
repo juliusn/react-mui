@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { updateDoc, doc, deleteDoc, onSnapshot, query, collection, serverTimestamp } from "firebase/firestore";
-import { Order } from "Types";
+import { OrderI } from "Types";
 import { FirebaseOrders, OrderUnion, Status as zStatus } from "utils/ZodSchemas";
 import { db } from "../firebase";
 
 export const useSubscribeOrders = () => {
-  const [ orders, setOrders ] = useState<Order[]>([]);
+  const [ orders, setOrders ] = useState<OrderI[]>([]);
   useEffect(() => {
     const q = query(collection(db, "orders"));
     const unsub = onSnapshot(q, (querySnapshot) => {
-      const data : Order[] = [];
+      const data : OrderI[] = [];
       querySnapshot.forEach(a => {
         try{
           const parsedOrder = FirebaseOrders.parse(a.data());
@@ -28,7 +28,7 @@ export const useSubscribeOrders = () => {
   return { orders };
 };
 export const useSubscribeOrderById = (id : string) => {
-  const [ order, setOrder ] = useState<Order>();
+  const [ order, setOrder ] = useState<OrderI>();
   useEffect(() => {
     const unsub = onSnapshot(doc(db, "orders", id), (doc) => {
       try{
@@ -54,7 +54,7 @@ export const useModifyStorage = () => {
       await deleteDoc(orderRef(id));
     })();
   };
-  const updateOrderByid = ( updatedOrder: Order) => {
+  const updateOrderByid = ( updatedOrder: OrderI) => {
     void (async () => {
       await updateDoc(orderRef(updatedOrder.id), {
         ...updatedOrder,

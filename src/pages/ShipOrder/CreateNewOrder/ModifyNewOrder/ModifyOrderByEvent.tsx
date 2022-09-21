@@ -3,15 +3,15 @@ import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 import Box from "@mui/material/Box";
-import { NewOrderByEvent, Order, NewOrder, OrderFormEvent } from "Types";
+import { NewOrderByEventI, OrderI, NewOrderI, OrderFormEventI } from "Types";
 import { OrderUnion } from "utils/ZodSchemas";
 import OrderFormByEvent from "pages/ShipOrder/CreateNewOrder/CreateNewOrder/OrdersByEvents/OrderByEventForm";
 
 
 interface ModifyNewOrderI {
-  order: NewOrderByEvent,
+  order: NewOrderByEventI,
   goBack: () => void,
-  update: (order: NewOrder|Order) => void,
+  update: (order: NewOrderI|OrderI) => void,
   deleteOrder: (id: string) => void,
 }
 
@@ -37,7 +37,7 @@ interface ModifyOrder extends ModifyNewOrderI {
 }
 export const ModifyOrderByEvent  = ({ buttonTitle, goBack, actionComponent, update, deleteOrder, order }:ModifyOrder) => {
 
-  const submit = (order: OrderFormEvent) => {
+  const submit = (order: OrderFormEventI) => {
     update(OrderUnion.parse(order));
     goBack();
   };

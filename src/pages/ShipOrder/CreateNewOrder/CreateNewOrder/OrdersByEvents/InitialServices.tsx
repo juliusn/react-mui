@@ -4,7 +4,7 @@ import HookFormField from "components/HookFormField";
 import { OrderFormValues } from "./OrderByEventForm";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { onPromise } from "utils/utils";
-import { Service } from "Types";
+import { ServiceI } from "Types";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import AddIcon from "@mui/icons-material/Add";
@@ -45,7 +45,7 @@ interface AddServicesToOrderFormProps {
   control: Control<OrderFormValues>
 }
 
-const initialValues: Service = {
+const initialValues: ServiceI = {
   place: "",
   service: "",
   persons: 1,
@@ -60,14 +60,14 @@ const schema = yup.object({
 });
 
 function CreateNewServicesForm({ control : serviceControl }: AddServicesToOrderFormProps) {
-  const { reset, control, handleSubmit } = useForm<Service>({
+  const { reset, control, handleSubmit } = useForm<ServiceI>({
     defaultValues:  initialValues,
     resolver: yupResolver(schema),
     mode: "onSubmit",
   });
   const { append } = useFieldArray({ control: serviceControl, name: "services" });
 
-  const onSubmit = (data: Service) => {
+  const onSubmit = (data: ServiceI) => {
     append(data);
     reset(initialValues);
   };
@@ -83,21 +83,21 @@ function CreateNewServicesForm({ control : serviceControl }: AddServicesToOrderF
           </Button>
         </Grid>
         <Grid item xs={6} md={3}>
-          <HookFormField<Service>
+          <HookFormField<ServiceI>
             control={control}
             name="service"
             label="Tehtävä"
           />
         </Grid>
         <Grid item xs={6} md={3}>
-          <HookFormField<Service>
+          <HookFormField<ServiceI>
             control={control}
             name="place"
             label="Paikka"
           />
         </Grid>
         <Grid item xs={6} md={3}>
-          <HookFormField<Service>
+          <HookFormField<ServiceI>
             control={control}
             name="persons"
             label="Työntekijät"
@@ -105,7 +105,7 @@ function CreateNewServicesForm({ control : serviceControl }: AddServicesToOrderF
           />
         </Grid>
         <Grid item xs={6} md={3}>
-          <HookFormField<Service>
+          <HookFormField<ServiceI>
             control={control}
             type="number"
             label="Valmius"
@@ -159,7 +159,7 @@ const PlaceHolderRow = () => {
     </>
   );
 };
-interface RowProps extends Service {
+interface RowProps extends ServiceI {
   remove: UseFieldArrayRemove
   index: number
 }

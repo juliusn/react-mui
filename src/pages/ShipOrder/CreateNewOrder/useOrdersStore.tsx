@@ -1,12 +1,12 @@
 import create from "zustand";
-import { NewOrder } from "Types";
+import { NewOrderI } from "Types";
 
 export interface OrdersStoreValues {
-  orders: NewOrder[],
-  setNewOrder: (newOrder:NewOrder) => void,
+  orders: NewOrderI[],
+  setNewOrder: (newOrder:NewOrderI) => void,
   removeAllOrders: () => void,
-  getOrderById: (id: string) => NewOrder|undefined,
-  updateOrder: (updatedOrder: NewOrder) => void,
+  getOrderById: (id: string) => NewOrderI|undefined,
+  updateOrder: (updatedOrder: NewOrderI) => void,
   deleteOrderById: (id: string) => void,
 }
 

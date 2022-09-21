@@ -1,4 +1,4 @@
-import { PostOrder, Order, OrderTemplateValues } from "Types";
+import { PostOrderI, OrderI, OrderTemplateValues } from "Types";
 import { parse } from "date-fns";
 import { v4 as uuidv4 } from "uuid";
 
@@ -6,7 +6,7 @@ function getId(): string {
   return uuidv4();
 }
 
-let orders: Order[] = [
+let orders: OrderI[] = [
   {
     type: "event",
     id: getId(),
@@ -97,8 +97,8 @@ let orders: Order[] = [
 export const getOrders = () => orders;
 export const getOrderById = (id: string) => orders.find(i => i.id === id);
 export const deleteOrderById = (id: string) => orders= orders.filter(i => i.id !== id);
-export const updateOrder= (order: Order) => orders = orders.map(o => o.id === order.id ? { ...order, status: "pending", dateOrdered: new Date() } : o);
-export const postOrder = ({ order } : {order: PostOrder | PostOrder[]}) => {
+export const updateOrder= (order: OrderI) => orders = orders.map(o => o.id === order.id ? { ...order, status: "pending", dateOrdered: new Date() } : o);
+export const postOrder = ({ order } : {order: PostOrderI | PostOrderI[]}) => {
   if( "map" in order){
     const initialOrders = order.map(o => ({ ...o, dateOrdered: new Date() }));
     orders = orders.concat(initialOrders);

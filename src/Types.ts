@@ -32,19 +32,19 @@ export interface OrderTemplate {
   services: Services,
 }
 
-export type OrderTypes = z.infer<typeof OrderTypes>;
-export type Client = z.infer<typeof ClientType>;
-export type Status = z.infer<typeof Status>
+export type OrderTypesI = z.infer<typeof OrderTypes>;
+export type ClientI = z.infer<typeof ClientType>;
+export type StatusI = z.infer<typeof Status>
 
-export type Service = zService;
+export type ServiceI = zService;
 export type Services = z.infer<typeof Services>;
-export type OrderBase = z.infer<typeof OrderBase>;
-export type OrderByHourlyWork = z.infer<typeof OrderByHourlyWork>;
-export type OrderByEvent = z.infer<typeof OrderByEvent>;
-export type Order = z.infer<typeof OrderUnion>;
-export type NewOrderByEvent = z.infer<typeof NewOrderByEvent>;
-export type NewOrderByHourlyWork = z.infer<typeof NewOrderByHourlyWork>;
-export type NewOrder = z.infer<typeof NewOrder>;
-export type PostOrder = z.infer<typeof PostOrder>;
-export type OrderFormEvent = z.infer<typeof OrderFormEvent>
-export type OrderFormHourly = z.infer<typeof OrderFormHourly>
+export type OrderBaseI = z.infer<typeof OrderBase>;
+export type OrderByHourlyWorkI = z.infer<typeof OrderByHourlyWork>;
+export type OrderByEventI = z.infer<typeof OrderByEvent>;
+export type OrderI = z.infer<typeof OrderUnion>;
+export type NewOrderByEventI = z.infer<typeof NewOrderByEvent>;
+export type NewOrderByHourlyWorkI = z.infer<typeof NewOrderByHourlyWork>;
+export type NewOrderI = z.infer<typeof NewOrder>;
+export type PostOrderI = z.infer<typeof PostOrder>;
+export type OrderFormEventI = z.infer<typeof OrderFormEvent>
+export type OrderFormHourlyI = z.infer<typeof OrderFormHourly>

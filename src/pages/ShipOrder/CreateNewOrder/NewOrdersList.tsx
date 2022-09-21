@@ -9,7 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import { NewOrder } from "Types";
+import { NewOrderI } from "Types";
 import { format } from "date-fns";
 import { useNavigate, useParams } from "react-router-dom";
 import useOrdersStore from "./useOrdersStore";
@@ -44,7 +44,7 @@ const NewOrdersList = () => {
   );
 };
 interface RowProps {
-  order: NewOrder,
+  order: NewOrderI,
   selected: boolean,
 }
 function Row({ selected, order }: RowProps) {

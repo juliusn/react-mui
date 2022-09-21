@@ -3,13 +3,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import useStorage from "../useOrdersStore";
 import ModifyOrderByHourlyWork from "./ModifyOrderByHourlyWork";
 import ModifyOrderByEvent from "./ModifyOrderByEvent";
-import { NewOrder } from "Types";
+import { NewOrderI } from "Types";
 
 
 const ModifyNewOrder = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
-  const [ order, setOrder ] = useState<NewOrder>();
+  const [ order, setOrder ] = useState<NewOrderI>();
   const fetchOrder= useStorage(state => state.getOrderById);
   const deleteOrder= useStorage(state => state.deleteOrderById);
   const updateOrder = useStorage(state => state.updateOrder);

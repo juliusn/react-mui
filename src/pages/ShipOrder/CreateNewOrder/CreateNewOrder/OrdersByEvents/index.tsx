@@ -1,13 +1,13 @@
 import React from "react";
-import { OrderFormEvent } from "Types";
-import { NewOrder } from "utils/ZodSchemas";
+import { OrderFormEventI } from "Types";
+import { NewOrderByEvent } from "utils/ZodSchemas";
 import useOrdersStore from "../../useOrdersStore";
 import OrderFormByEvent from "./OrderByEventForm";
 
 const CreateNewOrderForm = () => {
   const createOrder = useOrdersStore(state => state.setNewOrder);
-  const submit = (order: OrderFormEvent ) => {
-    createOrder(NewOrder.parse(order));
+  const submit = (order: OrderFormEventI ) => {
+    createOrder(NewOrderByEvent.parse(order));
   };
   return(
     <OrderFormByEvent
