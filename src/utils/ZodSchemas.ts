@@ -73,4 +73,5 @@ export const PostOrder = z.union([ OrderByEvent.omit({ dateOrdered: true }), Ord
 export const NewOrderByEvent = OrderByEvent.omit({ dateOrdered: true, status: true });
 export const NewOrderByHourlyWork = OrderByHourlyWork.omit({ dateOrdered: true, status: true });
 export const NewOrder = z.union([ NewOrderByEvent , NewOrderByHourlyWork ]);
-export const OrderFormReturn = z.union([ NewOrder, OrderUnion ]);
+export const OrderFormHourly = z.union([ NewOrderByHourlyWork, OrderByHourlyWork ]);
+export const OrderFormEvent = z.union([ NewOrderByEvent, OrderByEvent ]);

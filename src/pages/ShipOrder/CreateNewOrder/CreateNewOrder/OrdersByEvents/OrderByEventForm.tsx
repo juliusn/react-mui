@@ -3,7 +3,7 @@ import Divider from "@mui/material/Divider";
 import { getHours, getMinutes, setHours, setMinutes, startOfToday } from "date-fns";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { OrderByEvent, NewOrderByEvent, Service, OrderFormReturn } from "Types";
+import { OrderByEvent, NewOrderByEvent, Service, OrderFormEvent } from "Types";
 import { useForm, Control } from "react-hook-form";
 import HookFormField from "components/HookFormField";
 import TemplateSelect from "./TemplateSelect";
@@ -54,7 +54,7 @@ interface OrderFormByEventI {
   titleComponent?: React.ReactNode,
   actionComponent?: React.ReactNode,
   template?: boolean,
-  submit: (order: OrderFormReturn) => void,
+  submit: (order: OrderFormEvent) => void,
   order?: OrderByEvent | NewOrderByEvent,
   buttonTitle: string,
 }

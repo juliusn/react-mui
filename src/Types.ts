@@ -13,7 +13,8 @@ import {
   OrderTypes,
   ClientType,
   PostOrder,
-  OrderFormReturn,
+  OrderFormHourly,
+  OrderFormEvent,
 } from "utils/ZodSchemas";
 
 export interface OrderTemplateValues {
@@ -45,4 +46,5 @@ export type NewOrderByEvent = z.infer<typeof NewOrderByEvent>;
 export type NewOrderByHourlyWork = z.infer<typeof NewOrderByHourlyWork>;
 export type NewOrder = z.infer<typeof NewOrder>;
 export type PostOrder = z.infer<typeof PostOrder>;
-export type OrderFormReturn = z.infer<typeof OrderFormReturn>
+export type OrderFormEvent = z.infer<typeof OrderFormEvent>
+export type OrderFormHourly = z.infer<typeof OrderFormHourly>
