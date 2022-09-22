@@ -11,19 +11,20 @@ import DividedCard from "components/DividedCard";
 import Paper from "@mui/material/Paper";
 import { format } from "date-fns";
 import { useModifyStorage, useSubscribeOrderById } from "hooks/useStorage";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Button from "@mui/material/Button";
 
 
 const ModifyOrder = () => {
-  const navigate = useNavigate();
   const { orderId } = useParams();
   if(!orderId) return null;
-  return( <Render id={orderId} navigate={navigate} />);
+  return( <Render id={orderId} />);
 };
 interface RenderProps {
   id: string,
-  navigate: (url: string) => void,
 }
-const Render = ({ id, navigate }: RenderProps ) => {
+const Render = ({ id }: RenderProps ) => {
+  const navigate = useNavigate();
   const { order } = useSubscribeOrderById(id);
   const goBack= () => navigate("/ship-order");
   const { deleteOrderById, updateOrderByid } = useModifyStorage();
@@ -45,7 +46,7 @@ const Render = ({ id, navigate }: RenderProps ) => {
               buttonTitle={buttonTitle}
             />
           }
-          left={<BasicInfoAboutOrder order={order} />}
+          left={<BasicInfoAboutOrder order={order} goBack={goBack}/>}
         />
       </Container>
     );
@@ -63,15 +64,22 @@ const Render = ({ id, navigate }: RenderProps ) => {
               buttonTitle={buttonTitle}
             />
           }
-          left={<BasicInfoAboutOrder order={order} />}
+          left={<BasicInfoAboutOrder order={order} goBack={goBack}/>}
         />
       </Container>
     );
   }
 };
-const BasicInfoAboutOrder = ({ order }:{ order: OrderByHourlyWorkI|OrderByEventI }) => {
+interface BasicInfoAboutOrderI {
+  order: OrderByHourlyWorkI|OrderByEventI,
+  goBack: () => void,
+}
+const BasicInfoAboutOrder = ({ goBack, order }:BasicInfoAboutOrderI) => {
   return(
-    <Grid container sx={{ padding: 5 }} spacing={4} >
+    <Grid container spacing={4} >
+      <Grid item xs={12}>
+        <Button variant="outlined" startIcon={<ArrowBackIcon />} onClick={() => goBack()}>Takaisin</Button>
+      </Grid>
       <Grid item xs={12}>
         <Typography variant="h5">Ordered</Typography>
         <Typography variant="caption">{order.dateOrdered ? format(order.dateOrdered, "dd/MM/yyyy HH:mm"): ""}</Typography>
