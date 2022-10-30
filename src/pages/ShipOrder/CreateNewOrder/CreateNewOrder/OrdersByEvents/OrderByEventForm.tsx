@@ -1,10 +1,12 @@
 import React, { useRef } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import Divider from "@mui/material/Divider";
 import { getHours, getMinutes, setHours, setMinutes, startOfToday } from "date-fns";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { OrderByEventI, NewOrderByEventI, ServiceI, OrderFormEventI } from "Types";
-import { useForm, Control } from "react-hook-form";
+import { useFieldArray, useForm, Control } from "react-hook-form";
 import HookFormField from "components/HookFormField";
 import TemplateSelect from "./TemplateSelect";
 import Grid from "@mui/material/Grid";
@@ -13,7 +15,6 @@ import HookFormDatePicker from "components/HookFormDatePicker";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { onPromise } from "utils/utils";
-import Services from "./InitialServices";
 import HookFormTimePicker from "components/HookFormTimePicker";
 import { v4 as uuidv4 } from "uuid";
 import EditIcon from "@mui/icons-material/Edit";
@@ -32,7 +33,7 @@ export interface OrderFormValues  {
 const initialValues: OrderFormValues = {
   date: new Date(),
   ship: "",
-  services:[],
+  services:[{ persons: 1, readiness: 15, service: "", place: "" }],
   time: new Date(),
   port: "",
   dock: "",
@@ -68,7 +69,6 @@ const OrderFormByEvent = ({ buttonTitle, actionComponent, titleComponent, title,
     resolver: yupResolver(schema),
     mode: "onSubmit",
   });
-
   const onSubmit = ({ date, time, ...rest }: OrderFormValues) => {
     let initialDateTime = new Date(date);
     const hours = getHours(time);
@@ -127,6 +127,12 @@ interface OrderByEventFormI {
   control: Control<OrderFormValues>,
 }
 const OrderByEventForm = ({ control } : OrderByEventFormI ) => {
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "services",
+  });
+
   return(
     <>
       <form>
@@ -192,10 +198,58 @@ const OrderByEventForm = ({ control } : OrderByEventFormI ) => {
           <Grid item xs={12}>
             <Divider />
           </Grid>
+          <Grid item xs={6}>
+            <Typography variant="h6">Palvelut</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Button startIcon={<AddCircleOutlineIcon />} onClick={() => append({ service: "", place: "", persons: 1, readiness: 15 })}/>
+          </Grid>
+          { fields.map((field, index) => (
+            <React.Fragment key={field.id}>
+              <Grid item xs={3}>
+                <HookFormField<OrderFormValues>
+                  control={control}
+                  required
+                  key={`services:${index}:service`}
+                  name={`services.${index}.service`}
+                  label="Tapahtuma"
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <HookFormField<OrderFormValues>
+                  control={control}
+                  required
+                  key={`services:${index}:place`}
+                  name={`services.${index}.place`}
+                  label="Paikka"
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <HookFormField<OrderFormValues>
+                  control={control}
+                  required
+                  name={`services.${index}.persons`}
+                  label="Määrä"
+                  type="number"
+                  sx={{ maxWidth: 70 }}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <HookFormField<OrderFormValues>
+                  control={control}
+                  required
+                  name={`services.${index}.readiness`}
+                  label="Valmius"
+                  type="number"
+                  sx={{ maxWidth: 70 }}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Button onClick={() => remove(index)} endIcon={<DeleteIcon />} />
+              </Grid>
+            </React.Fragment>
+          ))}
         </Grid>
-      </form>
-      <form>
-        <Services control={control}/>
       </form>
     </>
   );
