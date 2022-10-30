@@ -16,7 +16,13 @@ function HookFormField<TFormValues>({ control, name, rules, ...props }: HookForm
       variant="standard"
       sx={{ maxWidth: 200 }}
       { ...props }
-      onChange={onChange}
+      onChange={(e) => {
+        if(props.type=== "number"){
+          onChange(parseInt(e.target.value));
+        }else{
+          onChange(e);
+        }
+      }}
       onBlur={onBlur}
       value={value}
       label={props.label? props.label: fieldName}
