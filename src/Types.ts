@@ -15,6 +15,8 @@ import {
   PostOrder,
   OrderFormHourly,
   OrderFormEvent,
+  OrderTemplate,
+  FirebaseOrderTemplate,
 } from "utils/ZodSchemas";
 
 export interface OrderTemplateValues {
@@ -22,6 +24,13 @@ export interface OrderTemplateValues {
   friday: OrderTemplate[],
   saturday: OrderTemplate[],
   sunday: OrderTemplate[]
+}
+export enum TemplateDayOfWeek {
+  workday = "Workday",
+  friday = "Friday",
+  saturday = "Saturday",
+  sunday = "Sunday",
+
 }
 export interface OrderTemplate {
   ship: string,
@@ -35,7 +44,7 @@ export interface OrderTemplate {
 export type OrderTypesI = z.infer<typeof OrderTypes>;
 export type ClientI = z.infer<typeof ClientType>;
 export type StatusI = z.infer<typeof Status>
-
+export type OrderTemplateI = z.infer<typeof OrderTemplate>;
 export type ServiceI = zService;
 export type Services = z.infer<typeof Services>;
 export type OrderBaseI = z.infer<typeof OrderBase>;
@@ -46,5 +55,6 @@ export type NewOrderByEventI = z.infer<typeof NewOrderByEvent>;
 export type NewOrderByHourlyWorkI = z.infer<typeof NewOrderByHourlyWork>;
 export type NewOrderI = z.infer<typeof NewOrder>;
 export type PostOrderI = z.infer<typeof PostOrder>;
-export type OrderFormEventI = z.infer<typeof OrderFormEvent>
+export type OrderFormEventI = z.infer<typeof OrderFormEvent>;
+export type FirebaseOrderTemplateI = z.infer<typeof FirebaseOrderTemplate>;
 export type OrderFormHourlyI = z.infer<typeof OrderFormHourly>

@@ -67,6 +67,25 @@ const FirebaseOrderHourly = FirebaseOrdersBase.extend({
   duration: z.number(),
   persons: z.number(),
 });
+export const OrderTemplate = z.object({
+  services: Services,
+  ship: z.string(),
+  time: z.date(),
+  port: z.string(),
+  dock: z.string().optional(),
+  event: z.string().optional(),
+  dayOfWeek: z.string(),
+});
+export const FirebaseOrderTemplate = z.object({
+  services: Services,
+  ship: z.string(),
+  time: z.string(),
+  port: z.string(),
+  dock: z.string().optional(),
+  event: z.string().optional(),
+  dayOfWeek: z.string(),
+});
+
 export const FirebaseOrders = z.union([ FirebaseOrderEvent, FirebaseOrderHourly ]);
 export const OrderUnion = z.union([OrderByEvent, OrderByHourlyWork]);
 export const PostOrder = z.union([ OrderByEvent.omit({ dateOrdered: true }), OrderByHourlyWork.omit({ dateOrdered: true }) ]);

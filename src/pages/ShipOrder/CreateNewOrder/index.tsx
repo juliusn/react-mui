@@ -9,30 +9,23 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import NewOrdersList from "./NewOrdersList";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
-import { v4 as uuid } from "uuid";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate, Outlet } from "react-router-dom";
 import useOrdersStore from "./useOrdersStore";
 import { PostOrderI } from "Types";
+import { useModifyStorage } from "hooks/useStorage";
 
 
-import { db } from "../../../firebase";
-import { writeBatch, serverTimestamp, doc } from "firebase/firestore";
 
 const CreateNewOrder = () => {
   const navigate = useNavigate();
   const orders = useOrdersStore(state => state.orders);
   const clearOrders = useOrdersStore(state => state.removeAllOrders);
+  const { postOrders } = useModifyStorage();
 
   const onSubmit = () => {
-    const batch = writeBatch(db);
     const order: PostOrderI[] = orders.map(o => ({ ...o, status: "pending" }));
-    order.forEach((o : PostOrderI) => {
-      const id = uuid();
-      const orderRef = doc(db, "orders", id);
-      batch.set(orderRef, { ...o, dateOrdered: serverTimestamp() });
-    });
-    batch.commit().catch(e => console.log(e));
+    postOrders(order);
     // tarksita että onko samat talletettu jo listalle
     clearOrders();
     navigate("/ship-order");
