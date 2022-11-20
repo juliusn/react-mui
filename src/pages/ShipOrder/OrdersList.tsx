@@ -24,6 +24,8 @@ import { OrderByEventI, StatusI, OrderI, OrderByHourlyWorkI } from "Types";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { useModifyStorage, useSubscribeOrders } from "hooks/useStorage";
+import TableFooter from "@mui/material/TableFooter";
+import TablePagination from "@mui/material/TablePagination";
 
 
 interface RowMenuProps {
@@ -58,7 +60,7 @@ const RowMenu = ({ id, anchorEl, onClose }: RowMenuProps ) => {
 };
 function RenderStatus (status: StatusI) {
   if(status === "pending") return <Chip color="warning" label="Pending"/>;
-  return <Chip  color="success" label="Accepted" />;
+  return <Chip color="success" label="Accepted" />;
 }
 
 function Row(props: { order : OrderI }) {
@@ -207,11 +209,32 @@ const Hourly = (props :{ order: OrderByHourlyWorkI }) => {
 
 export default function OrdersList() {
 
-  const { orders } = useSubscribeOrders();
+  const { orders, nextPage } = useSubscribeOrders();
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - orders.length) : 0;
+
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number,
+  ) => {
+    // laita tänne uuden datan haku
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   return (
     <TableContainer>
-      <Table aria-label="collapsible table">
+      <Table size="small" aria-label="collapsible table">
         <TableHead>
           <TableRow>
             <TableCell></TableCell>
@@ -224,12 +247,30 @@ export default function OrdersList() {
             <TableCell>Laituri</TableCell>
             <TableCell>Tapahtuma</TableCell>
             <TableCell>Henkilöt</TableCell>
-            <TableCell></TableCell>
+            <TableCell onClick={() => nextPage()}></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          { orders.map((row) => <Row key={row.id} order={row}/>)}
+          { orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => <Row key={row.id} order={row}/>)}
         </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+              count={orders.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              SelectProps={{
+                inputProps: {
+                  "aria-label": "rows per page",
+                },
+                native: true,
+              }}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </TableRow>
+        </TableFooter>
       </Table>
     </TableContainer>
   );

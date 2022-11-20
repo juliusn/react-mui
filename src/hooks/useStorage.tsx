@@ -1,33 +1,67 @@
-import { useCallback, useEffect, useState } from "react";
-import { isFriday, isWeekend, format, parse } from "date-fns";
-import { addDoc, writeBatch, where, getDocs, updateDoc, doc, deleteDoc, onSnapshot, query, collection, serverTimestamp } from "firebase/firestore";
+import { useCallback, useRef, useEffect, useState } from "react";
+import { compareAsc, isFriday, isWeekend, format, parse } from "date-fns";
+import { Unsubscribe, QueryDocumentSnapshot, DocumentData, startAfter, orderBy, limit, addDoc, writeBatch, where, getDocs, updateDoc, doc, deleteDoc, onSnapshot, query, collection, serverTimestamp } from "firebase/firestore";
 import { TemplateDayOfWeek, PostOrderI, OrderI, OrderTemplateI } from "Types";
 import { FirebaseOrderTemplate, FirebaseOrders, OrderUnion, Status as zStatus } from "utils/ZodSchemas";
 import { db } from "../firebase";
 import { v4 as uuid } from "uuid";
 
+interface listenersI {
+  listener: Unsubscribe,
+  cursor: 
+}
 export const useSubscribeOrders = () => {
   const [ orders, setOrders ] = useState<OrderI[]>([]);
+  const [ after, setAfter ] = useState<QueryDocumentSnapshot<DocumentData>>();
+  const cursor = useRef<QueryDocumentSnapshot<DocumentData>>();
+  const listeners: listenersI[] = []
+  /*
   useEffect(() => {
-    const q = query(collection(db, "orders"));
+    const q = after
+      ? query(collection(db, "orders"), orderBy("dateBegin"), startAfter(after), limit(15))
+      : query(collection(db, "orders"), orderBy("dateBegin"), limit(15));
+    const unsub = onSnapshot(q, (querySnapshot) => {
+      let data : OrderI[] = [];
+      querySnapshot.forEach(a => {
+        try{
+          const parsedOrder = FirebaseOrders.parse(a.data());
+          console.log(parsedOrder);
+          const initialOrder = { id: a.id, ...parsedOrder, status: zStatus.parse(parsedOrder.status),  dateBegin: new Date(parsedOrder.dateBegin.seconds*1000), dateOrdered: parsedOrder.dateOrdered ? new Date(parsedOrder.dateOrdered.seconds*1000): null };
+          data.push(OrderUnion.parse(initialOrder));
+        }catch(e){
+          console.log("Data corrupted", a.data(), e );
+        }
+        if(querySnapshot.docs) cursor.current = querySnapshot.docs[querySnapshot.docs.length-1];
+      });
+      setOrders(r => r.concat(data));
+      data = [];
+    });
+    return () => unsub();
+  }, [after]);
+  */
+
+  const newListener = (last) => {
+    const q = query(collection(db, "orders"), orderBy("dateBegin"), limit(15));
     const unsub = onSnapshot(q, (querySnapshot) => {
       const data : OrderI[] = [];
       querySnapshot.forEach(a => {
         try{
           const parsedOrder = FirebaseOrders.parse(a.data());
-          const order = { id: a.id, ...parsedOrder, status: zStatus.parse(parsedOrder.status),  dateBegin: new Date(parsedOrder.dateBegin.seconds*1000), dateOrdered: parsedOrder.dateOrdered ? new Date(parsedOrder.dateOrdered.seconds*1000): null };
-          data.push(OrderUnion.parse(order));
+          console.log(parsedOrder);
+          const initialOrder = { id: a.id, ...parsedOrder, status: zStatus.parse(parsedOrder.status),  dateBegin: new Date(parsedOrder.dateBegin.seconds*1000), dateOrdered: parsedOrder.dateOrdered ? new Date(parsedOrder.dateOrdered.seconds*1000): null };
+          data.push(OrderUnion.parse(initialOrder));
         }catch(e){
           console.log("Data corrupted", a.data(), e );
         }
+        if(querySnapshot.docs) cursor.current = querySnapshot.docs[querySnapshot.docs.length-1];
       });
-      setOrders(data);
     });
-
-    return () => unsub();
-  }, []);
-
-  return { orders };
+    return unsub;
+  }
+  function nextPage() {
+    setAfter(cursor.current);
+  }
+  return { orders, nextPage };
 };
 export const useSubscribeOrderById = (id : string) => {
   const [ order, setOrder ] = useState<OrderI>();
