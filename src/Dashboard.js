@@ -1,20 +1,18 @@
+import React from "react";
 import { logout } from "./firebase";
 import Button from "@mui/material/Button";
-import { Box, Container, Fade, LinearProgress, Paper, Stack } from "@mui/material";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import Fade from "@mui/material/Fade";
+import LinearProgress from "@mui/material/LinearProgress";
+import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
 import { useUserProfileContext } from "./UserContextProvider";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 
 function Dashboard() {
   const { userProfile, loadingUserProfile } = useUserProfileContext();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (loadingUserProfile) return;
-    if (!userProfile) {
-      navigate("/");
-    }
-  }, [userProfile, loadingUserProfile, navigate]);
 
   return (
     <Container maxWidth="sm" sx={{ pl: 0, pr: 0 }}>
@@ -37,7 +35,7 @@ function Dashboard() {
               disabled={loadingUserProfile}
               onClick={async () => {
                 await logout();
-                navigate("/");
+                navigate("/login");
               }}
             >
               Logout
